@@ -12,11 +12,14 @@
     <link rel="stylesheet" type="text/css" href="css/custom.css">
 
 	<!--jQuery-->
-	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<script src="/yinji/js/jquery/jquery.js"></script>
+    <!-- vue -->
+    <script type="text/javascript" src="/yinji/js/vue/vue.min.js"></script>
 	<script type="text/javascript" src="js/jquery.filer.min.js"></script>
 	<script type="text/javascript" src="js/custom.js"></script>
     <script src="js/prettify.js" type="text/javascript"></script>
     <script src="js/scripts.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/yinji/js/utils.js"></script>
     
 	<!--[if IE]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -49,38 +52,63 @@
 </head>
 
 <body>
-    <div id="header">
-        <h1>jQuery.filer 1.0.4</h1>
-        <p>jQuery.filer - Simple HTML5 file uploader, a plugin tool for jQuery which change completely file input and make it with multiple file selection, drag&amp;drop support, different validations, thumbnails, icons, instant upload, print-screen upload and many other features and options.</p>
-    </div>
     
-    <hr />
-    
-    <div id="content">
-
+    <div id="app">
 
         <h4>Example 1:</h4>
         <form action="/yinji/api/audio/update" method="post" enctype="multipart/form-data">
             <!-- 多文件 ， 那么他的名字必须带有 audio -->
               <input type="file" name="audio[]" id="demo-fileInput-3" >
+                <div>id:<input type="number" name="id" :value="id"  /></div>
                 <!-- 文件的标题，名称 -->
-              <div>title:<input type="text" name="name" /></div>
-
-              <div>length<input type="number" name="length" style="display: none" min="1" max="20" value="12" /></div>
+              <div>title:<input type="text" name="name" :value="audio.name"/></div>
+                
+              <div>length<input type="number" name="length"  disabled="disabled" min="1" max="20" :value="audio.timeLength" /></div>
               <input type="file" name="image" id="demo-fileInput-4" /> 
               <input class="btn-custom green" type="submit" value="Submit">
         </form>
         
         <hr>
-        <!--
-        <h4>Example 2:</h4>
-        <form action="/none/test/upload/image" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" id="demo-fileInput-4" /> 
-        
-        <input class="btn-custom green" type="submit" value="Submit">
-        </form>
-        -->
     </div>
+
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                string:"hello , world",
+                id:1574951746746,
+                audio:null
+            },methods:{
+                setAudio:function( audio ){
+                    this.audio = audio;
+                    this.id = this.audio.id;
+                }
+            },created:function(){
+                var vue = this;
+                //获取对应的信息
+                var id = GetQueryString( "id" );
+
+                if( id == null ){
+                    return ;
+                }
+
+                $.ajax({
+                    url:"/yinji/api/audio/find/id",
+                    data:{
+                        id:id
+                    },
+                    async:false,
+                    success:function( result , status , xhr ){
+                        vue.setAudio( result );
+                    },error:function( xhr , status , result ){
+                        alert('hello , world');
+                    }
+                });
+
+
+            }
+        });
+    </script>
 
     </body>
 </html>

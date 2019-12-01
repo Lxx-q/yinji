@@ -54,12 +54,12 @@ func init() {
 	//下面 进行对应的搜索
 	beego.Router(app.GetUrl("/api/audio/search"),audio,"*:SearchByString")
 	beego.Router(app.GetUrl("/api/audio/favorite"),audio,"*:Favorites")
-
-
-
+	beego.Router( app.GetUrl("/api/audio/find/id") , audio ,"*:FindAudioById")
 	//下面是测试api
 
 	//测试对应的上传图片的功能是否有效
 	beego.Router( app.GetUrl("/test/upload/image") , test_controller , "*:UploadImage")
+
+
 
 }

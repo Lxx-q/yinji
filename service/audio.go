@@ -89,6 +89,17 @@ func (self *AudioService) Favorites() []*bean.Audio{
 	return user_list;
 }
 
+func ( self * AudioService ) FindAudioById( id int64) ( *bean.Audio , error ){
+	var audio = bean.Audio{}
+	audio.Id = id
+	var _ , readErr = self.ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var ormErr = o.Read(&audio)
+		return &audio , ormErr
+	})
+
+	return &audio , readErr
+}
+
 //之后我们 便可以开始获取信息
 
 var AUDIO_SERVICE_INSTANCE =&AudioService{db.GetOrmServiceInstance()}

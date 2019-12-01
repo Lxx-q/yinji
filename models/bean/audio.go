@@ -9,11 +9,11 @@ import (
 type Audio struct {
 
 	//Id string `orm:"column(id);pk"`
-	Name string `orm:column(name)`
-	Url string `orm:column(url)"`
-	Image string `orm:column(image)`
-	UserId int64 `orm:column(user_id)`
-	TimeLength int `orm:column(time_length)`
+	Name string `orm:"column(name)"  json:"name"`
+	Url string `orm:"column(url)" json:"url"`
+	Image string `orm:"column(image)" json:"image"`
+	UserId int64 `orm:"column(user_id)" json:"userId"`
+	TimeLength int `orm:"column(time_length)" json:"timeLength"`
 
 	EntityBase
 }

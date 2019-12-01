@@ -10,11 +10,11 @@ import (
 
 type BaseEntity struct {
 
-	Id int64 `orm:"column(id);pk"`
+	Id int64 `orm:"column(id);pk" json:"id"`
 
-	CreateTime time.Time
+	CreateTime time.Time `orm:"column(create_time)" json:"createTime"`
 	//上次修改时间
-	ModifyTime time.Time
+	ModifyTime time.Time `orm:"column(modify_time)" json:"modifyTime"`
 }
 
 func (self *BaseEntity) NewEntity( t time.Time){
@@ -42,7 +42,7 @@ func( self *BaseEntity) RefreshEntity( t time.Time ){
 
 type EntityBase struct {
 	// 简化id
-	Code string
+	Code string `orm:"column(code)" json:"code"`
 	//名称 name
 	// 创建时间
 

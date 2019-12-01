@@ -125,6 +125,8 @@ const AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO = "audio[]"
 
 const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_IMAGE = "image"
 
+const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID = "id"
+
 
 
 /**
@@ -135,8 +137,6 @@ func (self *AudioController) AudioUpload() {
 	var httpFileService = service.GetHttpFileServiceInstance()
 
 	var audio = new(bean.Audio)
-
-
 
 	var name = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_NAME)
 
@@ -212,12 +212,26 @@ func ( self *AudioController ) AudioUpdate() {
 	var ormService = db.GetOrmServiceInstance();
 	var audio = new(bean.Audio)
 	//默认设置httpFileService ,修改的对象
-	audio.Id = 1574951746746;
 
-	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		 o.Read(audio , "Id")
-		 return nil , nil
+	var id , getIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
+
+	if getIdErr != nil {
+		id = 1574951746746
+	}
+
+	audio.Id = id;
+
+
+	var _ ,  readErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		 var err = o.Read(audio , "Id")
+		 return nil , err
 	});
+
+	if readErr != nil {
+		//程序错误 ， 那么 就进行退出程序
+		self.Fail( readErr )
+		return
+	}
 
 	//现根据对应的id 获取对应的 信息
 
@@ -306,7 +320,7 @@ func( self *AudioController) SearchAudioByUserId(){
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 		var tableName = bean.GetAduioTableName()
 		var qs = o.QueryTable( tableName )
-		qs.Filter("user_id" , userId).Limit( offset , startLimit ).All(&audioSlice)
+		qs.Filter("user_id" , userId).Limit( offset , startLimit ).OrderBy("-create_time").All(&audioSlice)
 
 		return nil, nil
 	})
@@ -317,4 +331,26 @@ func( self *AudioController) SearchAudioByUserId(){
 
 func( self *AudioController) AudioPblPage(){
 	self.Resource("pbl/main.html")
+}
+
+func( self *AudioController ) FindAudioById(){
+
+	var id  , getInt64Err = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
+
+	if getInt64Err != nil {
+		//那么返回错误的信息
+		self.Fail( getInt64Err)
+		return
+	}
+
+	var audioService = service.GetAudioServiceInstance();
+
+	var audio , findAudioError = audioService.FindAudioById( id )
+
+	if findAudioError != nil {
+		self.Fail( findAudioError )
+		return
+	}
+
+	self.Json( audio )
 }
