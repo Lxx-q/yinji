@@ -3,6 +3,10 @@ new Vue({
     el: "#app",
     data: {
         jsPlayList: null,
+        latestStartLimit:0,
+        latestEndLimit:0,
+        latestOffset:40,
+        latestContent:null,
         latest: [
 
         /**
@@ -333,7 +337,12 @@ new Vue({
             }
 
             //获取目标的 信息
-            this.searchInput = $("#" + this.searchInputId);
+
+            var vue = this;
+            $(document).ready(function(){
+                vue.searchInput = $("#" + vue.searchInputId);
+            })
+            
 
             this.initjPlayer();
 
@@ -409,24 +418,29 @@ new Vue({
             }
 
         },clickSearchButton: function() {
+            this.latestContent = this.searchInput.val();
+            this.latestStartLimit = 0 ;
+            //为lasted , 加上对应的区间大小等等
+            this.latestEndLimit = this.latestStartLimit + this.latestOffset;
             this.updateLatest();
         },updateLatest: function() {
             //利用对应的 信息 来进行 更换 相对应的 信息
             var url = window.URL_SERVICE.buildUrl(SEARCH_AUDIO_URL);
-            var val = null;
+            var val = this.latestContent;
             //之后我们利用对应的 信息来进行搜索
             var vue = this;
             $.ajax({
                 url: url,
-                async: false,
+                async: true,
                 data: {
-                    content: val
+                    content: val,
+                    startLimit:vue.latestStartLimit,
+                    endLimit:vue.latestEndLimit
                 },
                 success: function(data, status) {
 
                     //之后我们将相对应的 数据 来进行 输出
                     var new_data = window.AJAX_HANDLER.receiveArray(data);
-
                     vue.latest = new_data;
 
                     //之后我们 来进行 得到对应的 信息

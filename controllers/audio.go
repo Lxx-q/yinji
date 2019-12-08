@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"yinji/service"
-	"fmt"
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
@@ -20,7 +19,7 @@ func (controller *AudioController) Player() {
 	controller.TplName = "music/player.html"
 }
 
-func (controller *AudioController) Index() {
+func (controller *AudioController) IndexPage() {
 	controller.Resource("index/index.html")
 }
 
@@ -33,12 +32,23 @@ func (self *AudioController) SearchByString() {
 	//获取对应的 xixni
 	var content string = self.GetString("content");
 
+	var startLimit , startLimitError = self.GetInt("startLimit")
+
+	var endLimit , endLimitError = self.GetInt("endLimit")
+
+	if startLimitError != nil {
+		startLimit = 0
+	}
+
+	if endLimitError != nil {
+		endLimit = startLimit + 10
+	}
+
 	//获取对应的 信息 ， 之后 来对对应的 信息 来进行 查询
 	var audio_service = service.GetAudioServiceInstance();
 
 	//获取对应的方法
-	var audioList = audio_service.SearchAudio(content);
-	fmt.Println(len(audioList))
+	var audioList = audio_service.SearchAudio(content , startLimit , endLimit );
 
 	//先暂时 用这个方法 来进行输出 信息
 
@@ -216,7 +226,8 @@ func ( self *AudioController ) AudioUpdate() {
 	var id , getIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
 
 	if getIdErr != nil {
-		id = 1574951746746
+		self.Fail( getIdErr )
+		return
 	}
 
 	audio.Id = id;
@@ -292,8 +303,8 @@ func( self * AudioController ) AudioUpdatePage(){
 
 //获取目标用户的
 func( self *AudioController) SearchAudioByUserId(){
-	//获取目标的 id
 
+	//获取目标的 id
 	var userId , _ = self.GetInt64("userId")
 
 	var startLimit , startLimitError = self.GetInt("startLimit")
@@ -306,22 +317,18 @@ func( self *AudioController) SearchAudioByUserId(){
 	if endLimitError != nil {
 		endLimit = startLimit + 10
 	}
-	var audioSlice []bean.Audio
 
 	var offset = endLimit - startLimit
 
+	var audioSlice []bean.Audio
 
 	//获取对应的
 	var ormService = db.GetOrmServiceInstance()
 
-
-
-
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 		var tableName = bean.GetAduioTableName()
 		var qs = o.QueryTable( tableName )
-		qs.Filter("user_id" , userId).Limit( offset , startLimit ).OrderBy("-create_time").All(&audioSlice)
-
+		qs.Filter("user_id" , userId).Limit( offset , startLimit ).OrderBy("-create_time").All( &audioSlice )
 		return nil, nil
 	})
 
@@ -333,13 +340,14 @@ func( self *AudioController) AudioPblPage(){
 	self.Resource("pbl/main.html")
 }
 
+//
 func( self *AudioController ) FindAudioById(){
 
 	var id  , getInt64Err = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
 
 	if getInt64Err != nil {
 		//那么返回错误的信息
-		self.Fail( getInt64Err)
+		self.Fail( getInt64Err )
 		return
 	}
 

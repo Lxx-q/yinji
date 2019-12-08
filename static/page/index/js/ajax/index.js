@@ -16,14 +16,21 @@
 
 window.AJAX_HANDLER = {
 	//接受某种数据 ， 我们将其转化为某一种数据
-	receive:function( data ){
+	receive:function( data  , index ){
 		var new_data = {};
-		new_data.title = data.Name;
-		new_data.artist = data.Name;
-		new_data.mp3 = data.Url;
-		new_data.poster = data.Image;
 
-		new_data.time = this.formatTimeLength( data.TimeLength)
+		var name = data.name;
+
+		if(name == ""){
+			name = "未命名";
+		}
+
+		new_data.title = name;
+		new_data.artist = name;
+		new_data.mp3 = window.URL_SERVICE.buildUrl(data.url);
+		new_data.poster = window.URL_SERVICE.buildUrl(data.image);
+
+		new_data.time = this.formatTimeLength( data.timeLength)
 		
 		//最后返回对应的数据
 		return new_data;
@@ -33,7 +40,8 @@ window.AJAX_HANDLER = {
 		var new_data_array = [];
 		for( var index = 0 ; index < length ; index++ ){
 			var data = data_array[ index ];
-			var new_data = this.receive( data );
+
+			var new_data = this.receive( data  , index );
 
 			new_data_array[new_data_array.length] = new_data;
 		}

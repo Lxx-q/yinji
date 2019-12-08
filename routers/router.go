@@ -24,9 +24,6 @@ func init() {
 	beego.Router("/test/page/:page",test_controller,"*:FindHtml")
 
 	beego.Router(app.GetUrl("/music/player"),audio , "*:Player")
-	beego.Router(app.GetUrl("/index/page"),audio,"*:Index")
-
-
 
 	beego.Router(app.GetUrl("/user/new") , user , "*:NewToDb")
 	beego.Router(app.GetUrl("/user/new/test"),user,"*:UploadTest")
@@ -35,9 +32,19 @@ func init() {
 
 	//进行对应音频页面更改信息的操作
 	beego.Router(app.GetUrl("/upload/update"),audio,"*:AudioUpdatePage")
+
+	/**
+		这下面便是输出页面的方法
+	 */
+
+	//主要的操作便是主页面操作
+	beego.Router(app.GetUrl("/page/index/main"),audio,"*:IndexPage")
+	//输出瀑布流视图
 	beego.Router(app.GetUrl("/page/pbl/main"),audio,"*:AudioPblPage")
 
-	//对应的 api的接口
+	/**
+		对应的 api的接口
+	 */
 
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload") ,audio , "*:AudioUpload")

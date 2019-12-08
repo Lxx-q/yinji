@@ -70,7 +70,8 @@ new Vue({
 
 		},intoPage:function( item ,  index ){
 			var id = item.id;
-			window.location.href = "/yinji/upload/update" + "?" + "id=" + id; 
+			//暂时使用对应的方法 ， 来进行操作，主要是方便测试
+			window.open("/yinji/upload/update" + "?" + "id=" + id); 
 		},nextPage:function(){
 			this.startLimit = this.endLimit;
 			this.endLimit = this.startLimit + this.space;

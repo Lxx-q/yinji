@@ -3,8 +3,8 @@ package service
 import (
 	"bytes"
 	"yinji/service/db"
-	"github.com/astaxie/beego/orm"
 	"yinji/models/bean"
+	"github.com/astaxie/beego/orm"
 	"yinji/models/bind"
 )
 
@@ -40,12 +40,15 @@ func ( self *AudioService) BuildUrl( audio *bean.Audio) string{
 	return buffer.String();
 }
 
-func (self *AudioService) SearchAudio( content string) [] *bean.Audio{
+/**
+	注意 ， 这个接口 ， 并不是我们寻常所看见的搜搜功能
+ */
+func (self *AudioService) SearchAudio( content string , startLimit int , endLimit int ) [] *bean.Audio{
 	var user_list [] *bean.Audio
-
+	var offset = endLimit - startLimit
 	var _ , error = self.ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 		var qs = o.QueryTable("audio");
-		return qs.All( &user_list );
+		return qs.Filter("name__icontains",content).OrderBy("-modify_time").Limit( offset , startLimit).All( &user_list );
 	});
 
 	if( error != nil){

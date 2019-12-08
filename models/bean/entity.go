@@ -17,10 +17,11 @@ type BaseEntity struct {
 	ModifyTime time.Time `orm:"column(modify_time)" json:"modifyTime"`
 }
 
-func (self *BaseEntity) NewEntity( t time.Time){
+func (self *BaseEntity) NewEntity( t time.Time ){
 
 	self.CreateTime = t;
 	self.ModifyTime = t;
+
 }
 
 func (self *BaseEntity) New(){
