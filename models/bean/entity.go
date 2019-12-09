@@ -54,11 +54,7 @@ func (self *EntityBase) Typeof() reflect.Type{
 	return reflect.TypeOf( self );
 }
 
-func ( self *EntityBase) New(){
-	//新建力所能及的属性
-
-	//获取当前的时间
-	var current = utils.Now()
+func (self * EntityBase ) NewEntity( current time.Time){
 
 	self.BaseEntity.NewEntity( current )
 	//获取当前的时间
@@ -72,7 +68,15 @@ func ( self *EntityBase) New(){
 
 	//注意 ， 这个生成id 的策略 ， 只是暂时生成的
 	self.Code = strconv.FormatInt( self.Id , 10 )
+}
 
+func ( self *EntityBase) New(){
+	//新建力所能及的属性
+
+	//获取当前的时间
+	var current = utils.Now()
+
+	self.NewEntity( current )
 
 }
 

@@ -2,16 +2,22 @@ package bean
 
 type Login struct {
 
-	Id int64  `orm:"column(id);pk"`
-	Password string
+	//Id int64  `orm:"column(id);pk"`
+	Acount string `orm:"column(account)" json:"account"`
+	Password string `orm:"column(password)" json:"password"`
+	Tel int16 `orm:"column(tel)" json:"tel"`
+	Email string `orm:"column(email)" json:"email"`
+	BaseEntity
 }
 
 func (login *Login) TableName() string {
-	return getLoginTableName();
+	return GetLoginTableName();
 }
 
 
-func getLoginTableName() string{
+func GetLoginTableName() string{
 	return "login";
 }
+
+
 

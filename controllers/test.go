@@ -71,3 +71,18 @@ func ( self *TestController ) UploadImage(){
 	self.Json( filePath )
 
 }
+
+const SESSION_TEST_KEY = "TEST_KEY"
+
+const SESSION_TEST_VALUE = "TEST_SESSION_VALUE"
+
+func (self *TestController ) SetSession(){
+	//设置对应的 信息
+	self.StartSession().Set( SESSION_TEST_KEY , SESSION_TEST_VALUE )
+	self.String("helllo , world")
+}
+
+func (self *TestController) GetSession(){
+	var value = self.StartSession().Get( SESSION_TEST_KEY)
+	self.Json( value )
+}

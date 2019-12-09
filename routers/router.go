@@ -17,6 +17,8 @@ func init() {
 
 	var user = &controllers.UserController{}
 
+	var login = &controllers.LoginController{}
+
 
     beego.Router("/", &controllers.MainController{})
     beego.Router("/test/json" , test_controller , "*:JsonResult")
@@ -46,6 +48,9 @@ func init() {
 		对应的 api的接口
 	 */
 
+	 //进行登录的api
+
+	 beego.Router(app.GetUrl("/api/login/by/account"),login , "*:LoginByAccount")
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload") ,audio , "*:AudioUpload")
 
@@ -66,6 +71,9 @@ func init() {
 
 	//测试对应的上传图片的功能是否有效
 	beego.Router( app.GetUrl("/test/upload/image") , test_controller , "*:UploadImage")
+
+	 beego.Router(app.GetUrl("/test/session/set") , test_controller , "*:SetSession")
+	beego.Router(app.GetUrl("/test/session/get") , test_controller , "*:GetSession")
 
 
 

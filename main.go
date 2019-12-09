@@ -7,11 +7,13 @@ import (
 	"yinji/models/bean"
 	_ "github.com/go-sql-driver/mysql"
 	"yinji/service"
+	"github.com/astaxie/beego/session"
 )
 
 
 func Init(){
 	RegistOrm();
+	SessionInit()
 }
 
 func RegistOrm(){
@@ -37,6 +39,24 @@ func RegistOrm(){
 }
 
 func TemplateInit(){
+}
+
+//初始化对应的 session
+func SessionInit(){
+	sessionConfig := &session.ManagerConfig{
+		CookieName:"gosessionid",
+		EnableSetCookie: true,
+		Gclifetime:3600,
+		Maxlifetime: 3600,
+		Secure: false,
+		CookieLifeTime: 3600,
+		ProviderConfig: "./tmp",
+	}
+
+	//这里设置不同对应的方式
+	var globalSession , _ = session.NewManager("memory" , sessionConfig)
+	go globalSession.GC()
+
 }
 
 func main() {
