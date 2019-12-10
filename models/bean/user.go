@@ -9,8 +9,8 @@ import (
 type User struct {
 
 	//Id string `orm:"column(id);pk"`
-	Name string
-	Image string `orm:column(image)`
+	Name string `orm:"column(name)" json:"name"`
+	Image string `orm:"column(image)" json:"image"`
 	EntityBase
 }
 

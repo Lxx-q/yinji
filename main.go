@@ -78,6 +78,9 @@ func main() {
 	//瀑布流界面 ， 音乐显示的布局
 	beego.SetStaticPath(app.GetUrl("/page/pbl"),"static/page/pbl")
 
+	//设置对应的信息
+	beego.SetStaticPath(app.GetUrl("/page/mit"),"static/page/mit")
+
 	beego.Run();
 }
 

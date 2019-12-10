@@ -5,7 +5,7 @@ type Login struct {
 	//Id int64  `orm:"column(id);pk"`
 	Acount string `orm:"column(account)" json:"account"`
 	Password string `orm:"column(password)" json:"password"`
-	Tel int16 `orm:"column(tel)" json:"tel"`
+	Tel string `orm:"column(tel)" json:"tel"`
 	Email string `orm:"column(email)" json:"email"`
 	BaseEntity
 }
