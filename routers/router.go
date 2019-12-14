@@ -25,12 +25,6 @@ func init() {
 
 	beego.Router(app.GetUrl("/user/new"), user, "*:NewToDb")
 	beego.Router(app.GetUrl("/user/new/test"), user, "*:UploadTest")
-
-	beego.Router(app.GetUrl("/upload/audio"), audio, "*:AudioUploadPage")
-
-	//进行对应音频页面更改信息的操作
-	beego.Router(app.GetUrl("/upload/update"), audio, "*:AudioUpdatePage")
-
 	/**
 		这下面便是输出页面的方法
 	 */
@@ -48,6 +42,12 @@ func init() {
 
 	//对应的登录注册协议的页面
 	beego.Router(app.GetUrl("/page/mit/policy"), login, "*:PolicePage")
+
+	//上传信息的页面
+	beego.Router(app.GetUrl("/page/upload/audio"), audio, "*:AudioUploadPage")
+
+	//修改音频信息的页面
+	beego.Router(app.GetUrl("/page/upload/update"), audio, "*:AudioUpdatePage")
 
 	/**
 		对应的 api的接口
@@ -80,6 +80,20 @@ func init() {
 	beego.Router(app.GetUrl("/api/audio/search"), audio, "*:SearchByString")
 	beego.Router(app.GetUrl("/api/audio/favorite"), audio, "*:Favorites")
 	beego.Router(app.GetUrl("/api/audio/find/id"), audio, "*:FindAudioById")
+
+	//api测试输出
+	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
+
+
+
+	/*
+		对应的 web 的接口， 该接口的主要目的 ， 只是服务与 web 前端服务 交互的前端
+	*/
+
+	//在用户的模拟下 ， 开始获取对应的信息
+	//beego.Router(app.GetUrl("/web/audio/audio/user") , audio,"")
+	beego.Router(app.GetUrl("/web/test"),test_controller,"*:WebTest")
+
 	//下面是测试api
 
 	//测试对应的上传图片的功能是否有效

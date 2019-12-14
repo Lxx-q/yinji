@@ -67,19 +67,18 @@ func main() {
 
 	beego.SetStaticPath(app.GetUrl("/resources") , "static/resources")
 	beego.SetStaticPath(app.GetUrl("/framework"),"static/framework")
-	beego.SetStaticPath(app.GetUrl("/upload"), "static/upload")
 	beego.SetStaticPath(app.GetUrl("/audio"),"static/audio")
 	beego.SetStaticPath(app.GetUrl("/image"),"static/image")
 	beego.SetStaticPath(app.GetUrl("/js"),"static/js")
 
 	//主界面布局
 	beego.SetStaticPath(app.GetUrl("/page/index") , "static/page/index")
-
 	//瀑布流界面 ， 音乐显示的布局
 	beego.SetStaticPath(app.GetUrl("/page/pbl"),"static/page/pbl")
-
 	//设置对应的信息
 	beego.SetStaticPath(app.GetUrl("/page/mit"),"static/page/mit")
+	//对应的上传信息
+	beego.SetStaticPath(app.GetUrl("/page/upload"), "static/page/upload")
 
 	beego.Run();
 }

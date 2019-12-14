@@ -24,6 +24,7 @@
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script type="text/javascript" src="/yinji/js/protocal.js"></script>
   </head>
   <body>
     <div class="login-page">
@@ -105,7 +106,62 @@
         //之后开启对应的时间
 
         $("#register").on("click",function(){
-          alert("hello , world")
+
+          var username = register_username.val();
+          var password = register_password.val();
+          var password_again = register_password_again.val();
+
+          //检查确认键是否被点击
+          var agree = register_agree.is(':checked')
+
+          if( !agree ){
+            //
+            alert("你尚未确认政策条例哦，请认真的阅读之后再进行确认哦");
+            return ;
+          }
+
+          //确定资料是否填写正确
+          if( username == "" || password == "" || password_again =="" ){
+            alert("您有资料尚未填写完全")
+            return ;
+          }
+
+          console.log( password )
+          console.log( password_again);
+          //是否password , 与 password_again 一致
+
+          if( password != password_again ){
+            alert("两次密码输入不一致");
+            return;
+          }
+
+          //下面
+          $.ajax({
+            url:"/yinji/api/register/by/account",
+            data:{
+              account:username,
+              password:password
+            },
+            async:true,
+            dataType:"json",
+            success:function( data , status , xhr ){
+              console.log(data);
+              //可能出现的错误
+              if( data.type == 2 ){
+                alert("xx");
+              }
+              //
+              register_username.val("");
+              register_password.val("");
+              register_password_again.val("");
+              register_agree.checked = false;
+              //下面便可以开始设置对应的方法
+
+              //对应的程序页面进行对应的跳转
+              window.location.href  ="/yinji/page/index/main";
+            }
+          });
+
         })
       })
     </script>

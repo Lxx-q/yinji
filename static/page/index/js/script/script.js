@@ -429,7 +429,7 @@ new Vue({
             var val = this.latestContent;
             //之后我们利用对应的 信息来进行搜索
             var vue = this;
-            $.ajax({
+            window.AJAX_ENGINE.ajax({
                 url: url,
                 async: true,
                 data: {

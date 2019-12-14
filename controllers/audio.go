@@ -5,7 +5,6 @@ import (
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
-	"yinji/models"
 )
 
 type AudioController struct {
@@ -67,8 +66,7 @@ func (self *AudioController) Delete() {
 	var id , err = self.GetInt64("id" )
 
 	if err != nil {
-		var response = models.FailResponse( err )
-		self.Json( response )
+		self.FailJson(err)
 		return
 	}
 
@@ -85,8 +83,7 @@ func (self *AudioController) Delete() {
 
 	//这里说明读取出错 ， 数据库中并不存在该属性
 	if readErr != nil  {
-		var response = models.FailResponse(readErr)
-		self.Json( response )
+		self.FailJson(readErr)
 		return ;
 	}
 
@@ -119,8 +116,7 @@ func (self *AudioController) Delete() {
 	})
 
 	if tranErr != nil {
-		var response = models.FailResponse( tranErr )
-		self.Json( response )
+		self.FailJson(tranErr)
 		return
 	}
 
@@ -170,7 +166,7 @@ func (self *AudioController) AudioUpload() {
 
 
 	if( err != nil ){
-		self.Fail( err )
+		self.FailJson( err )
 		return
 	}
 
@@ -183,7 +179,7 @@ func (self *AudioController) AudioUpload() {
 	var audioUrl , uploadAudioErr = httpFileService.UploadAudio( fileName , file )
 
 	if uploadAudioErr != nil {
-		self.Fail( err )
+		self.FailJson( err )
 		return
 	}
 
@@ -226,7 +222,7 @@ func ( self *AudioController ) AudioUpdate() {
 	var id , getIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
 
 	if getIdErr != nil {
-		self.Fail( getIdErr )
+		self.FailJson( getIdErr )
 		return
 	}
 
@@ -240,7 +236,7 @@ func ( self *AudioController ) AudioUpdate() {
 
 	if readErr != nil {
 		//程序错误 ， 那么 就进行退出程序
-		self.Fail( readErr )
+		self.FailJson( readErr )
 		return
 	}
 
@@ -340,14 +336,13 @@ func( self *AudioController) AudioPblPage(){
 	self.Resource("pbl/main.html")
 }
 
-//
 func( self *AudioController ) FindAudioById(){
 
 	var id  , getInt64Err = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID )
 
 	if getInt64Err != nil {
 		//那么返回错误的信息
-		self.Fail( getInt64Err )
+		self.FailJson( getInt64Err )
 		return
 	}
 
@@ -356,7 +351,7 @@ func( self *AudioController ) FindAudioById(){
 	var audio , findAudioError = audioService.FindAudioById( id )
 
 	if findAudioError != nil {
-		self.Fail( findAudioError )
+		self.FailJson( findAudioError )
 		return
 	}
 

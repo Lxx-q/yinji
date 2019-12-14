@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="js/custom.js"></script>
     <script src="js/prettify.js" type="text/javascript"></script>
     <script src="js/scripts.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/yinji/js/protocal.js"></script>
     <script type="text/javascript" src="/yinji/js/utils.js"></script>
     
 	<!--[if IE]>
@@ -75,8 +76,7 @@
         new Vue({
             el:"#app",
             data:{
-                string:"hello , world",
-                id:1574951746746,
+                id:null,
                 audio:null
             },methods:{
                 setAudio:function( audio ){
@@ -92,7 +92,7 @@
                     return ;
                 }
 
-                $.ajax({
+                window.AJAX_ENGINE.ajax({
                     url:"/yinji/api/audio/find/id",
                     data:{
                         id:id
@@ -100,12 +100,10 @@
                     async:false,
                     success:function( result , status , xhr ){
                         vue.setAudio( result );
-                    },error:function( xhr , status , result ){
+                    },error:function( xhr , status , result , result ){
                         alert('hello , world');
                     }
                 });
-
-
             }
         });
     </script>

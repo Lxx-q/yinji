@@ -5,7 +5,8 @@ import (
 	"github.com/astaxie/beego/orm"
 	"yinji/service/db"
 	"yinji/service"
-	"yinji/models"
+	"github.com/astaxie/beego/httplib"
+	"yinji/service/url"
 )
 
 type TestController struct {
@@ -56,7 +57,7 @@ func ( self *TestController ) UploadImage(){
 	var file , fileHeader , getFileErr = self.GetFile("image")
 
 	if getFileErr !=  nil {
-		models.FailResponse( getFileErr )
+		self.FailJson(getFileErr)
 		return
 	}
 
@@ -64,7 +65,7 @@ func ( self *TestController ) UploadImage(){
 	var filePath , uploadImageErr = httpFileService.UploadImage( fileHeader.Filename , file )
 
 	if uploadImageErr != nil {
-		self.Fail( uploadImageErr )
+		self.FailJson( uploadImageErr )
 		return
 	}
 
@@ -85,4 +86,20 @@ func (self *TestController ) SetSession(){
 func (self *TestController) GetSession(){
 	var value = self.StartSession().Get( SESSION_TEST_KEY)
 	self.Json( value )
+}
+
+func (self *TestController) WebTest(){
+	var urlString = url.BuildApiUrl("api/test")
+	var req = httplib.Post( urlString )
+	var string , err = req.String()
+
+	if err != nil {
+		self.FailJson(err)
+	}
+
+	self.String( string )
+}
+
+func (self *TestController) ApiTest(){
+	self.String("hello , world")
 }

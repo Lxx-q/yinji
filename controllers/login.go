@@ -25,7 +25,7 @@ func ( self *LoginController ) RegisterByAccount(){
 
 	if account == "" || password == "" {
 		//不允许对应的信息为空
-		self.Fail(errors.New(" account and password is not nil "))
+		self.FailJson(errors.New(" account and password is not nil "))
 		return
 	}
 
@@ -74,7 +74,7 @@ func ( self *LoginController ) RegisterByAccount(){
 
 	//最后对结果进行判断
 	if transactionErr != nil {
-		self.Fail( transactionErr )
+		self.FailJson( transactionErr )
 		return
 	}
 
@@ -99,11 +99,11 @@ func ( self *LoginController ) LoginByAccount(){
 	//获取对应的账号密码 , 并且进行组装到对应的 login 之中
 	var account = self.GetString(LOGIN_CONTROLLER_PARAMTER_ACCOUNT)
 
-	var password = self.GetString(LOGIN_CONTROLLER_PARAMTER_ACCOUNT)
+	var password = self.GetString(LOGIN_CONTROLLER_PARAMTER_PASSWORD)
 
 	//测试对应的信息是否为空
 	if account == "" || password == "" {
-		self.Fail(errors.New("account and password have nil"))
+		self.FailJson(errors.New("account and password have nil"))
 		return
 	}
 
@@ -144,7 +144,7 @@ func ( self *LoginController ) LoginByAccount(){
 
 	//倘若jdbc 出现错误 ， 则进行替换
 	if jdbcErr != nil {
-		self.Fail( jdbcErr )
+		self.FailJson( jdbcErr )
 		return
 	}
 
@@ -162,7 +162,7 @@ func ( self *LoginController ) CurrentUser(){
 
 	//是否
 	if user == nil {
-		self.Fail(errors.New(" user is nil "))
+		self.FailJson(errors.New(" user is nil "))
 		return
 	}
 

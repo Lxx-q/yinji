@@ -24,6 +24,8 @@
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/yinji/js/protocal.js"></script>
   </head>
   <body>
     <div class="login-page">
@@ -89,7 +91,12 @@
             var username = login_username.val();
             var password = login_password.val();
 
-            $.ajax({
+            if( username == "" || password == ""  ){
+            alert("您有资料尚未填写完全")
+            return ;
+          }
+
+            window.AJAX_ENGINE.ajax({
               url:"/yinji/api/login/by/account",
               data:{
                 //对应的账号密码

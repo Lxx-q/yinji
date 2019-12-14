@@ -7,20 +7,28 @@ new Vue({
 		],
 		startLimit:0,
 		endLimit:0,
-		space:10
+		space:10,
+		userId:2
 	},methods:{
 
 		ajaxAudio:function(){
 
 			var vue = this;
+
+			if( vue.userId == null ){
+				alert("并未查找到该用户");
+				return ;
+			}
+
 			//进入下一页
 			this.nextPage();
-			$.ajax({
+			//$.ajax({
+			window.AJAX_ENGINE.ajax({
 				url:"/yinji/api/audio/user",
 				async:false,
 				dataType:"json",
 				data:{
-					userId:2,
+					userId:vue.userId,
 					startLimit:vue.startLimit,
 					endLimit:vue.endLimit
 				},success:function( result , status , xhr ){
@@ -71,7 +79,7 @@ new Vue({
 		},intoPage:function( item ,  index ){
 			var id = item.id;
 			//暂时使用对应的方法 ， 来进行操作，主要是方便测试
-			window.open("/yinji/upload/update" + "?" + "id=" + id); 
+			window.open("/yinji/page/upload/update" + "?" + "id=" + id); 
 		},nextPage:function(){
 			this.startLimit = this.endLimit;
 			this.endLimit = this.startLimit + this.space;
@@ -82,7 +90,8 @@ new Vue({
 		vue.startLimit = 0;
 		vue.endLimit = 0;
 
-
+		//获取连接之中是否有对应的 userId
+		vue.userId = GetQueryString("userId");
 
 		vue.ajaxAudio();
 		$(document).ready(function(){
