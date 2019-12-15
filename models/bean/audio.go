@@ -14,6 +14,8 @@ type Audio struct {
 	Image string `orm:"column(image)" json:"image"`
 	UserId int64 `orm:"column(user_id)" json:"userId"`
 	TimeLength int `orm:"column(time_length)" json:"timeLength"`
+	//商业介绍
+	Introduction string `orm:"column(introduction)" json:"introduction"`
 
 	EntityBase
 }

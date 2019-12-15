@@ -131,6 +131,10 @@ const AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO = "audio[]"
 
 const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_IMAGE = "image"
 
+const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION ="introduction"
+
+const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_USERID = "userId"
+
 const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID = "id"
 
 
@@ -148,22 +152,35 @@ func (self *AudioController) AudioUpload() {
 
 	var length , _ = self.GetInt( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_LENGTH )
 
+	var introduction = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION)
+
+	//获取对应的 userId 的 信息
+	var userId , getUserIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_USERID )
+
+	if getUserIdErr != nil {
+		//当出现 getUserId 的错误 ,
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	//获取对应相对应的 信息
+
 	var instance = db.GetOrmServiceInstance()
 
+	//下面输入对应的信息
 	audio.New()
 	audio.Name = name
 	audio.Image = ""
-	audio.UserId = 2
+	audio.UserId = userId
 	audio.Url = ""
 	audio.TimeLength = length
+	audio.Introduction = introduction
 
 	//直接获取对应的 信息
 
 	var file , fileHeader ,  err = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO )
 
-
 	defer httpFileService.CloseMultipart( file )
-
 
 	if( err != nil ){
 		self.FailJson( err )
@@ -260,11 +277,15 @@ func ( self *AudioController ) AudioUpdate() {
 
 	}
 
-	audio.TimeLength = 30
-
 	audio.Refresh()
 
 	var name = self.GetString( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_NAME )
+
+	var introduction = self.GetString( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION )
+
+	//下次输入对应的 信息
+
+	audio.Introduction = introduction
 
 	audio.Name = name
 
