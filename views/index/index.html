@@ -27,6 +27,7 @@
   <script type="text/javascript" src="js/vue/vue.min.js"></script>
   <script type="text/javascript" src="js/config.js"></script>
   <script type="text/javascript" src="js/ajax/index.js"></script>
+  <script type="text/javascript" src="/yinji/js/utils.js"></script>
   <script type="text/javascript" src="/yinji/js/protocal.js"></script>
 </head>
 
@@ -181,56 +182,25 @@
                   <section class="vbox">
                     <section class="scrollable hover">
                       <div class="m-t-n-xxs">
-                        <div class="item pos-rlt">
-                          <a href="#" class="item-overlay active opacity wrapper-md font-xs">
-                          <span class="block h3 font-bold text-info">Search</span>
-                          <span class="text-muted">Search the music you like</span>
-                          <span class="bottom wrapper-md block"> <i class="icon-arrow-right i-lg pull-right"></i></span>
+                      
+                      <template v-for="( item , index ) in links">
+                      <!-- 下面便是设置对应的 信息的东西 -->
+                      <div class="item pos-rlt">
+                          <a href="#" class="item-overlay active opacity wrapper-md font-xs" @click="clickLinks(item.link)">
+                          <span class="block h3 font-bold text-info">{{ item.title }}</span>
+                          <span class="text-muted">{{ item.text }}</span>
+                          <span class="bottom wrapper-md block"> 
+                          <i class="icon-arrow-right i-lg pull-right" v-if="index % 2 == 0 "></i>
+                          <i class="icon-arrow-right i-lg pull-left" v-else></i>
+                          </span>
                         </a>
                           <a href="#">
-                          <img class="img-full" src="images/314601.jpg" alt="...">
+                          <img class="img-full" :src="item.image" alt="...">
                         </a>
                         </div>
-                        <div class="item pos-rlt">
-                          <a href="#" class="item-overlay active opacity wrapper-md font-xs text-right">
-                          <span class="block h3 font-bold text-warning text-u-c">Listen</span>
-                          <span class="text-muted">Find the peace in your heart</span>
-                          <span class="bottom wrapper-md block"><i class="icon-arrow-right i-lg pull-left"></i> </span>
-                        </a>
-                          <a href="#">
-                          <img class="img-full" src="images/316718.jpg" alt="...">
-                        </a>
-                        </div>
-                        <div class="item pos-rlt">
-                          <a href="#" class="item-overlay active opacity wrapper-md font-xs">
-                          <span class="block h3 font-bold text-success text-u-c">Share</span>
-                          <span class="text-muted">Share the good songs with your loves</span>
-                          <span class="bottom wrapper-md block"> <i class="icon-arrow-right i-lg pull-right"></i></span>
-                        </a>
-                          <a href="#">
-                          <img class="img-full" src="images/317839.jpg" alt="...">
-                        </a>
-                        </div>
-                        <div class="item pos-rlt">
-                          <a href="#" class="item-overlay active opacity wrapper-md font-xs text-right">
-                          <span class="block h3 font-bold text-white text-u-c">Show</span>
-                          <span class="text-muted">Find, Listen & Share</span>
-                          <span class="bottom wrapper-md block"><i class="icon-arrow-right i-lg pull-left"></i> </span>
-                        </a>
-                          <a href="#">
-                          <img class="img-full" src="images/318897.jpg" alt="...">
-                        </a>
-                        </div>
-                        <div class="item pos-rlt">
-                          <a href="#" class="item-overlay active opacity wrapper-md font-xs">
-                          <span class="block h3 font-bold text-danger-lter text-u-c">Feeling</span>
-                          <span class="text-muted">Selected songs</span>
-                          <span class="bottom wrapper-md block"> <i class="icon-arrow-right i-lg pull-right"></i></span>
-                        </a>
-                          <a href="#">
-                          <img class="img-full" src="images/318334.jpg" alt="...">
-                        </a>
-                        </div>
+                      </template>
+
+                        
                       </div>
                     </section>
                   </section>

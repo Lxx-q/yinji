@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<title></title>
+	
+      <link rel="stylesheet" href="http://libs.baidu.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
+	<script src="http://libs.baidu.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/yinji/js/import.js"></script>
+	<script type="text/javascript" src="/yinji/js/confirm/import.js">
+	</script>
+	<!--
+	<script src="js/jquery.sticky.min.js"></script>
+	<script src="demo/libs/pretty.js"></script>
+	<script type="text/javascript" src="js/jquery-confirm.js"></script>
+
+	-->
+	<style type="text/css">
+            .space10{
+                height: 10px;
+            }
+            body{
+                font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+                position: relative;
+            }
+    </style>
+</head>
+	<body>
+		
+		<!-- 删除对应的信息 -->
+		<button id="example">测试</button>
+		<script>
+			$(document).ready(function(){
+				//点击登录按钮
+				$("#example").on("click",function(){
+					$.alert({
+						title:"测试",
+						content:"这是一场测试"
+					})
+				})
+			})
+		</script>
+	</body>
+
+</html>

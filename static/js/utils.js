@@ -1,4 +1,5 @@
 
+
 //获取当前页面中的参数
 function GetQueryString(name){
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -16,4 +17,8 @@ function ParseTime(date){
      var marr = tarr[0].split(':');
      var dd = parseInt(darr[0])+"/"+parseInt(darr[1])+"/"+parseInt(darr[2])+" "+parseInt(marr[0])+":"+parseInt(marr[1])+":"+parseInt(marr[2]);
      return dd;
+}
+
+function getServerUrl( url ){
+	return "/yinji" + "/" + url;
 }

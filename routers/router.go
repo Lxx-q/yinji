@@ -15,6 +15,9 @@ func init() {
 	var user = &controllers.UserController{}
 
 	var login = &controllers.LoginController{}
+	var audioComment = &controllers.AudioCommentController{}
+
+	var audioCommentReply = &controllers.AudioCommentReplyController{}
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
@@ -81,6 +84,14 @@ func init() {
 	beego.Router(app.GetUrl("/api/audio/favorite"), audio, "*:Favorites")
 	beego.Router(app.GetUrl("/api/audio/find/id"), audio, "*:FindAudioById")
 
+	//获取某个audio的 评论
+	beego.Router(app.GetUrl("/api/comment/find/audio"),audioComment,"*:ByAudioId")
+
+	beego.Router(app.GetUrl("/api/comment/insert"),audioComment,"*:InsertComment")
+
+	//插入对应的 时间
+	beego.Router(app.GetUrl("/api/comment/reply/insert"), audioCommentReply,"*:InsertCommentReply")
+
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 
@@ -101,5 +112,7 @@ func init() {
 
 	beego.Router(app.GetUrl("/test/session/set"), test_controller, "*:SetSession")
 	beego.Router(app.GetUrl("/test/session/get"), test_controller, "*:GetSession")
+
+	beego.Router(app.GetUrl("/test/audio/comments"),test_controller,"*:ApiAudioComment")
 
 }

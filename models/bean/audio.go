@@ -16,14 +16,14 @@ type Audio struct {
 	TimeLength int `orm:"column(time_length)" json:"timeLength"`
 	//商业介绍
 	Introduction string `orm:"column(introduction)" json:"introduction"`
+	FolderId int64 `orm:"column(folder_id)" json:"folderId"`
 
 	EntityBase
 }
 
 
 func ( self *Audio) TableName() string {
-
-	return GetAduioTableName();
+	return GetAduioTableName()
 }
 
 func GetAduioTableName() string{

@@ -8,7 +8,11 @@ new Vue({
 		startLimit:0,
 		endLimit:0,
 		space:10,
-		userId:2
+		userId:2,
+		//对应的分组信息
+		groups:[
+			{ name:"默认分组" , "id":null }
+		]
 	},methods:{
 
 		ajaxAudio:function(){
@@ -79,7 +83,7 @@ new Vue({
 		},intoPage:function( item ,  index ){
 			var id = item.id;
 			//暂时使用对应的方法 ， 来进行操作，主要是方便测试
-			window.open("/yinji/page/upload/update" + "?" + "id=" + id); 
+			window.open("/yinji/page/upload/update" + "?" + "id=" + id + "&" + "userId" + "=" + this.userId); 
 		},nextPage:function(){
 			this.startLimit = this.endLimit;
 			this.endLimit = this.startLimit + this.space;

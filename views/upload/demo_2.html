@@ -92,7 +92,8 @@
                 inputArr:[
                     { name:"name" , label:"文件标题"}
                 ],url:"/yinji/api/audio/update",
-                audio:null
+                audio:null,
+                userId:null
             },methods:{
                 //进行下载的信息
                 ajaxAudio:function(fromData){
@@ -109,7 +110,7 @@
                         async:true,
                         success:function( result , status , xhr ){
                             //等单曲信息也出来之后 ， 再进行对应的修改
-                            window.location.href = "http://localhost:8080/yinji/page/pbl/main"
+                            window.location.href = "http://localhost:8080/yinji/page/pbl/main"+ "?" + "userId" + "=" + vue.userId;
                         },error:function( xhr , status , context , result ){
                             //进行相对应的 信息 的 信息输出
 
@@ -164,6 +165,14 @@
                 if( id == null ){
                     return ;
                 }
+
+                var userId = GetQueryString("userId");
+
+                if( userId == null ){
+                  return;
+                }
+
+                this.userId = userId;
 
                 window.AJAX_ENGINE.ajax({
                     url:"/yinji/api/audio/find/id",

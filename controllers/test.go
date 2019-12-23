@@ -103,3 +103,20 @@ func (self *TestController) WebTest(){
 func (self *TestController) ApiTest(){
 	self.String("hello , world")
 }
+
+func (self *TestController) ApiAudioComment(){
+
+	var service = db.GetOrmServiceInstance()
+	var comments []*bean.AudioComment
+	service.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var qs = o.QueryTable(bean.GetAudioCommentTableName())
+		qs.All(&comments)
+		return nil,nil
+	})
+	for index:= 0 ; index < len(comments) ; index++ {
+		var comment = comments[index]
+		comment.Parse()
+	}
+
+	self.Json( comments )
+}

@@ -32,13 +32,27 @@ func( self *UserService) FindUsersByIds( codes [] int64) []*bean.User{
 	var ormService = db.GetOrmServiceInstance();
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 
-		var qs = o.QueryTable("user");
-		qs.Filter("user__Id__in" , codes )
-		return qs.All( users)
-
+		var qs = self.OrmFuncByIds( o , codes)
+		return qs.All(&users)
 	});
 
 	return users;
+}
+
+func ( self *UserService ) OrmFuncByIds( o orm.Ormer , codes [] int64 ) orm.QuerySeter {
+	var qs = o.QueryTable("user");
+	qs = qs.Filter("user__Id__in" , codes )
+	return qs
+}
+
+func ( self *UserService ) ParseIdsToMap( users []*bean.User ) map[int64] *bean.User {
+	var userMap = make(map[int64] *bean.User)
+	for index:= 0 ; index < len(users) ; index ++ {
+		var user = users[index]
+		userMap[user.Id] = user;
+	}
+
+	return userMap
 }
 
 

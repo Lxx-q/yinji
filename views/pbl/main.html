@@ -46,6 +46,17 @@
 			<header class="codrops-header">
 				<h1 class="codrops-header__title">音频管理</h1>
 			</header>
+			<div class="content content--side">
+				<div class="control control--grids">
+					<span class="control__title">文件分组</span>
+					<template v-for="item in groups">
+					<div class="control__item">
+						<input class="control__radio" type="radio" name="grid-type" value="grid--type-a" id="control-grid-a" checked>
+						<label class="control__label" for="control-grid-a">{{item.name}}</label>
+					</div>
+					</template>
+				</div>	
+			</div>
 			<div class="content content--side content--right">
 				<div class="control control--effects">
 					<span class="control__title">run effect</span>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>评论</title>
+<link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/bootstrap-3.3.4.css">
+<script src="/yinji/js/protocal.js"></script>
+<style>
+	.container{
+		width:100%;
+	}
+	.commentbox{
+		width: 900px;
+		margin: 20px auto;
+	}
+	.mytextarea {
+	    width: 100%;
+	    overflow: auto;
+	    word-break: break-all;
+	    height: 100px;
+	    color: #000;
+	    font-size: 1em;
+	    resize: none;
+	}
+	.comment-list{
+		width: 900px;
+		margin: 20px auto;
+		clear: both;
+		padding-top: 20px;
+	}
+	.comment-list .comment-info{
+		position: relative;
+		margin-bottom: 20px;
+		margin-bottom: 20px;
+		border-bottom: 1px solid #ccc;
+	}
+	.comment-list .comment-info header{
+		width: 10%;
+		position: absolute;
+	}
+	.comment-list .comment-info header img{
+		width: 100%;
+		border-radius: 50%;
+		padding: 5px;
+	}
+	.comment-list .comment-info .comment-right{
+		padding:5px 0px 5px 11%; 
+	}
+	.comment-list .comment-info .comment-right h3{
+		margin: 5px 0px;
+	}
+	.comment-list .comment-info .comment-right .comment-content-header{
+		height: 25px;
+	}
+	.comment-list .comment-info .comment-right .comment-content-header span,.comment-list .comment-info .comment-right .comment-content-footer span{
+		padding-right: 2em;
+		color: #aaa;
+	}
+	.comment-list .comment-info .comment-right .comment-content-header span,.comment-list .comment-info .comment-right .comment-content-footer span.reply-btn,.send,.reply-list-btn{
+		cursor: pointer;
+	}
+	.comment-list .comment-info .comment-right .reply-list {
+		border-left: 3px solid #ccc;
+		padding-left: 7px;
+	}
+	.comment-list .comment-info .comment-right .reply-list .reply{
+		border-bottom: 1px dashed #ccc;
+	}
+	.comment-list .comment-info .comment-right .reply-list .reply div span{
+		padding-left: 10px;
+	}
+	.comment-list .comment-info .comment-right .reply-list .reply p span{
+		padding-right: 2em;
+		color: #aaa;
+	}
+</style>
+</head>
+<body>
+
+<div id="app" class="container">
+	{{ string }}
+	<div class="commentbox">
+		<textarea cols="80" rows="50" placeholder="字数不可超过300字" class="mytextarea" id="content"></textarea>
+		<div class="btn btn-info pull-right" id="comment"  @click="writeComment">评论</div>
+	</div>
+	<div class="comment-list">
+		<!--  -->
+		
+		<div class="comment-info" v-for=" comment in comments">
+			<header><img :src="userContainer[comment.userId].image"></header>
+			<div class="comment-right">
+				<h3><!-- 这里输入名字-->{{ userContainer[comment.userId].name }}</h3>
+				<div class="comment-content-header"><span><i class="glyphicon glyphicon-time"></i> <!-- 这里输入对应的时间 --> {{ comment.createTime }}</span><span><i class="glyphicon glyphicon-map-marker"></i><!-- 地址 -->深圳</span></div>
+				<p class="content">
+					<!-- 对应的 内容 -->
+					{{ comment.content }}
+				</p>
+				<div class="comment-content-footer">
+					<div class="row">
+						<!--
+						<div class="col-md-10">
+							<span><i class="glyphicon glyphicon-pushpin"></i> 来自:win10 </span><span><i class="glyphicon glyphicon-globe"></i> chrome 55.0.2883.87</span>
+						</div>
+						-->
+						<div class="col-md-2"><span class="reply-btn" @click="replyClick(event,comment.userId,comment.id)">回复</span></div>
+					</div>
+				</div>
+				<!-- 利用对方的 id 来作为 key键 -->
+				<div class="reply-list">
+					
+					<!-- 内部是对应的 回复数据 -->
+					<div class="reply" v-for="reply in replyContainer[comment.id]">
+						<div><a href="javascript:void(0)">{{  }}</a>:<a href="javascript:void(0)">@匿名</a><span>{{ reply.content }}</span></div>
+						<p><span>{{ reply.createTime }}</span> <span class="reply-list-btn" @click="replyClick(event,reply.userId,comment.id)">回复</span></p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="comment-info">
+			<header><img src="./images/img.jpg"></header>
+			<div class="comment-right">
+				<h3>匿名</h3>
+				<div class="comment-content-header"><span><i class="glyphicon glyphicon-time"></i> 2017-10-17 11:42:53</span><span><i class="glyphicon glyphicon-map-marker"></i>深圳</span></div>
+				<p class="content">mongodb 副本集配置副本集概念：就我的理解就是和主从复制 差不多，就是在主从复制的基础上多加了一个选举的机制。
+				复制集 特点：数据一致性 主是唯一的，没有Mysql 那样的双主结构大多数原则，集群存活节点小于二分之一是集群不可写，
+				只可读从库无法写入数据自动容灾通过下面的一个图来简单的了解下
+				 配置过程：一、安装mongodb安装过程略，不懂得可以看前面的教程二、创建存储目录与配置文件创...</p>
+				<div class="comment-content-footer">
+					<div class="row">
+						<!-- 对应其他的 一些信息 ， 暂时不需要 -->
+						<!--
+
+						<div class="col-md-10">
+							<span><i class="glyphicon glyphicon-pushpin"></i> 来自:win10 </span><span><i class="glyphicon glyphicon-globe"></i> chrome 55.0.2883.87</span>
+						</div>
+						-->
+						<div class="col-md-2"><span class="reply-btn">回复</span></div>
+					</div>
+				</div>
+				<div class="reply-list">
+					<div class="reply">
+						<div><a href="javascript:void(0)">匿名</a>:<a href="javascript:void(0)">@匿名</a><span>这写的是什么鬼东西。。。。</span></div>
+						<p><span>2017-10-17 11:42:53</span> <span class="reply-list-btn">回复</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="comment-info">
+			<header><img src="./images/img.jpg"></header>
+			<div class="comment-right">
+				<h3>匿名</h3>
+				<div class="comment-content-header"><span><i class="glyphicon glyphicon-time"></i> 2017-10-17 11:42:53</span><span><i class="glyphicon glyphicon-map-marker"></i>深圳</span></div>
+				<p class="content">mongodb 副本集配置副本集概念：就我的理解就是和主从复制 差不多，就是在主从复制的基础上多加了一个选举的机制。
+				复制集 特点：数据一致性 主是唯一的，没有Mysql 那样的双主结构大多数原则，集群存活节点小于二分之一是集群不可写，
+				只可读从库无法写入数据自动容灾通过下面的一个图来简单的了解下
+				 配置过程：一、安装mongodb安装过程略，不懂得可以看前面的教程二、创建存储目录与配置文件创...</p>
+				<div class="comment-content-footer">
+					<div class="row">
+						<div class="col-md-10">
+							<span><i class="glyphicon glyphicon-pushpin"></i> 来自:win10 </span><span><i class="glyphicon glyphicon-globe"></i> chrome 55.0.2883.87</span>
+						</div>
+						<div class="col-md-2"><span class="reply-btn" @click="replyClick">回复</span></div>
+					</div>
+				</div>
+				<div class="reply-list">
+					<div class="reply">
+						<div><a href="javascript:void(0)">匿名</a>:<a href="javascript:void(0)">@匿名</a><span>这写的是什么鬼东西。。。。</span></div>
+						<p><span>2017-10-17 11:42:53</span> <span class="reply-list-btn">回复</span></p>
+					</div>
+					<div class="reply">
+						<div><a href="javascript:void(0)">匿名</a>:<a href="javascript:void(0)">@匿名</a><span>这写的是什么鬼东西。。。。</span></div>
+						<p><span>2017-10-17 11:42:53</span> <span class="reply-list-btn">回复</span></p>
+					</div>
+					<div class="reply">
+						<div><a href="javascript:void(0)">匿名</a>:<a href="javascript:void(0)">@匿名</a><span>这写的是什么鬼东西。。。。</span></div>
+						<p><span>2017-10-17 11:42:53</span> <span class="reply-list-btn">回复</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+</div>
+<script src="/yinji/js/jquery/jquery.js"></script>
+<script src="./js/jquery.comment.js" ></script>
+<script src="/yinji/js/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="js/vue/vue.min.js"></script>
+<script type="text/javascript" src="js/vue/script.js"></script>
+<script>
+	
+</script>
+</body>
+</html>

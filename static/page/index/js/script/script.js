@@ -255,7 +255,15 @@ new Vue({
         }],
         searchInput: null,
         searchInputId: "searchInput",
-        test: "helloworld"
+        test: "helloworld",
+        //尾部的link信息的 信息
+        links:[
+            { title:"作品集",text:"个人作品集合",image:"images/314601.jpg",link:"page/pbl/main"},
+            { title:"数据中心",text:"可爱的基友在哪里？？",image:"images/316718.jpg",link:null},
+            { title:"上传作品",text:"哦,你有什么宝贝 , 者行孙！！",image:"images/317839.jpg" , link:"page/upload/audio"}
+        ],
+        //当前userId
+        userId:null
     },
     methods: {
         format: function(item) {
@@ -449,9 +457,30 @@ new Vue({
                     //对应错误之后的操作
                 }
             })
+        },clickLinks:function( link ){
+            //点击对应的 链接页面
+            var userId = this.userId;
+            if( userId == null ){
+                //那么 我们便开始进入 loca
+                //这里需要插入对应的 是否愿意的参数
+                this.locationLogin();
+                return ;
+            }
+
+            if( link == null ){
+                //倘若连接为空 ， 则返回自己
+                return ;
+            }
+            var url = getServerUrl(link) + "?" + "userId" + "=" + this.userId;
+            window.open( url );
+        },locationLogin:function(){
+            var url = getServerUrl("page/mit/login");
+            // 转移到对应的 登录页面
+            window.open( url );
         }
     },
     created: function() {
+        this.userId = GetQueryString("userId");
         this.init();
     }
 });

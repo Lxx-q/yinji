@@ -32,6 +32,8 @@ func RegistOrm(){
 		new(bean.Login),
 		new(bean.User),
 		new(bean.Audio),
+		new(bean.AudioComment),
+		new(bean.AudioCommentReply),
 		);
 
 	orm.Debug = true;
@@ -71,14 +73,7 @@ func main() {
 	beego.SetStaticPath(app.GetUrl("/image"),"static/image")
 	beego.SetStaticPath(app.GetUrl("/js"),"static/js")
 
-	//主界面布局
-	beego.SetStaticPath(app.GetUrl("/page/index") , "static/page/index")
-	//瀑布流界面 ， 音乐显示的布局
-	beego.SetStaticPath(app.GetUrl("/page/pbl"),"static/page/pbl")
-	//设置对应的信息
-	beego.SetStaticPath(app.GetUrl("/page/mit"),"static/page/mit")
-	//对应的上传信息
-	beego.SetStaticPath(app.GetUrl("/page/upload"), "static/page/upload")
+	beego.SetStaticPath(app.GetUrl("/page/"),"static/page")
 
 	beego.Run();
 }
