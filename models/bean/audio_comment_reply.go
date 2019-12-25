@@ -11,7 +11,6 @@ type AudioCommentReply struct{
 	AudioCommentId int64 `orm:"column(audio_comment_id)" json:"audioCommentId"`
 	Content string `orm:"column(content)" json:"content"`
 	TargetId int64 `orm:"column(target_id)" json:"targetId"`
-
 	base.IdStruct
 	//设置对应的 创造时间
 	base.CreateTimeStruct
@@ -30,4 +29,19 @@ func ( self *AudioCommentReply ) New(){
 	var t = time.Now()
 	self.CreateTimeStruct.NewEntity(t)
 	self.IdStruct.NewEntity(t)
+}
+
+//输入相对应的信息
+type AudioCommentReplyAndUser struct {
+	*AudioCommentReply
+	User *UserBrief `json:"user"`
+	Target *UserBrief `json:"target"`
+}
+
+func (self *AudioCommentReplyAndUser) BindUser( user *User ){
+	self.User = &user.UserBrief
+}
+
+func (self *AudioCommentReplyAndUser ) BindTarget( target *User ){
+	self.Target = &target.UserBrief
 }

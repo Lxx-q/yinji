@@ -9,8 +9,12 @@ import (
 type User struct {
 
 	//Id string `orm:"column(id);pk"`
+
+	/*
 	Name string `orm:"column(name)" json:"name"`
 	Image string `orm:"column(image)" json:"image"`
+	*/
+	UserBrief
 	EntityBase
 }
 
@@ -49,4 +53,10 @@ func ( self *User) RefreshToDbFunc() func(o orm.Ormer) (interface{}, error){
 func (self *User) RefreshToDb(){
 	var ormService = db.GetOrmServiceInstance();
 	ormService.Transaction(self.RefreshToDbFunc());
+}
+
+//简化的信息
+type UserBrief struct {
+	Name string `orm:"column(name)" json:"name"`
+	Image string `orm:"column(image)" json:"image"`
 }

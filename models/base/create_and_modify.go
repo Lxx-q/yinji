@@ -9,7 +9,7 @@ import (
  */
 type CreateTimeStruct struct {
 	CreateTime time.Time `orm:"column(create_time)" json:"createTime"`
-	CreateTimeStruct TimeStruct `orm:"-" json:createTimeStruct`
+	CreateTimeStruct TimeStruct `orm:"-" json:"createTimeStruct"`
 }
 
 func(self *CreateTimeStruct) Parse( ){
@@ -30,7 +30,7 @@ func (self *CreateTimeStruct ) New(){
 	修改时间的 struct
  */
 type ModifyTimeStruct struct {
-	ModifyTime time.Time `orm:"column(modify_time)" json:"createTime"`
+	ModifyTime time.Time `orm:"column(modify_time)" json:"modifyTime"`
 	ModifyTimeStruct TimeStruct `orm:"-" json:"modifyTimeStruct"`
 }
 

@@ -3,6 +3,7 @@ package controllers
 import (
 	"yinji/models/bean"
 	"yinji/service"
+	"github.com/astaxie/beego/orm"
 )
 
 type AudioCommentReplyController struct {
@@ -54,4 +55,25 @@ func ( self *AudioCommentReplyController ) InsertCommentReply(){
 	}
 
 	self.Json( commentReply )
+}
+
+//根据对应的 commentId 来加载对应的信息
+func ( self *AudioCommentReplyController ) ByCommentId(){
+	//得到对应的 信息
+	var commentId , commentIdErr = self.GetInt64("commentId")
+
+	if commentIdErr != nil {
+		self.FailJson( commentIdErr )
+		return
+	}
+
+	var instance = service.GetAudioCommentReplyServiceInstance()
+	
+	var result = instance.FindAudoCommentReplyAndUser(func( qs  orm.QuerySeter ) orm.QuerySeter {
+		return qs.Filter("audioCommentId", commentId)
+	})
+
+	self.Json( result )
+
+
 }

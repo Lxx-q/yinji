@@ -52,6 +52,9 @@ func init() {
 	//修改音频信息的页面
 	beego.Router(app.GetUrl("/page/upload/update"), audio, "*:AudioUpdatePage")
 
+	//详细页面
+	beego.Router(app.GetUrl("/page/details/main"),audioComment , "*:PageDetails")
+
 	/**
 		对应的 api的接口
 	 */
@@ -89,8 +92,10 @@ func init() {
 
 	beego.Router(app.GetUrl("/api/comment/insert"),audioComment,"*:InsertComment")
 
-	//插入对应的 时间
-	beego.Router(app.GetUrl("/api/comment/reply/insert"), audioCommentReply,"*:InsertCommentReply")
+	//书写对应的评论的回复
+	beego.Router(app.GetUrl("/api/reply/comment/insert"), audioCommentReply,"*:InsertCommentReply")
+	beego.Router(app.GetUrl("/api/reply/comment/find/comment") , audioCommentReply , "*:ByCommentId")
+
 
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")

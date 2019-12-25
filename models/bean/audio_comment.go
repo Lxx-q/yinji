@@ -36,13 +36,11 @@ func (self *AudioComment) New(){
  */
 type AudioCommentAndUser struct {
 	*AudioComment
-	UserId int64 `json:"userId"`
 	UserName string `json:"userName"`
 	UserImage string `json:"userImage"`
 }
 
 func ( self *AudioCommentAndUser ) Bind( user *User ){
-	self.UserId = user.Id
 	self.UserName = user.Name
 	self.UserImage = user.Image
 }

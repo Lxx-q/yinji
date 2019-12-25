@@ -67,3 +67,7 @@ func (self *AudioCommentController) InsertComment(){
 
 	self.Json( audioComment )
 }
+
+func (self *AudioCommentController ) PageDetails(){
+	self.Resource("details/main.html")
+}

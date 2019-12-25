@@ -3,17 +3,7 @@ new Vue({
     data: {
         string: "hello , world",
         //评论区信息
-        comments: [{
-            id: 1,
-            createTime: "2019-10-17 10:15:16",
-            content: "我觉得，你说的很对， 但是我不听你的",
-            userId: 1
-        },{
-        	id:2,
-        	createTime: "2019-10-17 10:15:16",
-        	content:"今天是个好日子？？",
-        	userId:1
-        }],
+        comments: [],
         //用户信息
         userContainer: {
             //当前评论区出现的所有的user用户
@@ -26,12 +16,8 @@ new Vue({
         },replyContainer:{
         	//根据不同的用户信息来获取不同的用户信息内容
         	//其中每个人的内容根据对应的回复时间而定
-        	2:[
-        		{id:"xx",name:"",createTime: "2019-10-17 10:15:16",content:"加油， 奥利给",userId:2}
-        	]
-     
         },
-        currentUserId:2,
+        userId:2,
         audioId:1574954699699,
         $commentTextarea:null,
 
@@ -45,13 +31,13 @@ new Vue({
             var $commentTextarea = this.$commentTextarea;
     		//获取对应的信息内容然后将其输出
     		var content = $commentTextarea.val();
-    		//之后进行一次 ajax ， 将对应的 this.currentUserId ， 发送出去
+    		//之后进行一次 ajax ， 将对应的 this.userId ， 发送出去
             var vue = this;
             window.AJAX_ENGINE.ajax({
                 url:"/yinji/api/comment/insert",
                 data:{
                     audioId:vue.audioId,
-                    userId:vue.currentUserId,
+                    userId:vue.userId,
                     content:content
                 },success:function( result , status , xhr){
                     alert("插入成功");
@@ -67,11 +53,11 @@ new Vue({
             var vue = this;
 
             var targetId = vue.currentTargetId;
-            var userId = vue.currentUserId;
+            var userId = vue.userId;
             var audioCommentId = vue.currentAudioCommentId;
 
             window.AJAX_ENGINE.ajax({
-                url:"/yinji/api/comment/reply/insert",
+                url:"/yinji/api/reply/comment/insert",
                 data:{
                     userId:userId,
                     targetId:targetId,
@@ -83,9 +69,6 @@ new Vue({
                     alert("插入失败")
                 }
             })
-        },parseComment: function(data) {
-            //对应的 数据库信息 ， 转化为 当前内部的 comment
-            var comment = {};
         },replyClick:function( event , targetId ,commentId){
 
             //先将目标target存储
@@ -165,19 +148,77 @@ new Vue({
                 data:{
                     audioId:vue.audioId
                 },
-                async:true,
+                async:false,
                 dataType:"json",
                 success:function( data , status , xhr ){
-                    
+                    var length = data.length;
+                    for( var index = 0 ; index < length ; index ++ ){
+                        var item = data[index];
+                        var audioComment = window.AJAX_FORMAT.toAudioComment(item);
+                        var user = window.AJAX_FORMAT.toUser(item);
+                        //输入对应的信息
+                        vue.comments.push( audioComment );
+                        vue.userContainer[user.id] = user;
+                        //加载对应的信息
+                        vue.loadReplies( audioComment.id );
+                    }
+                },error:function( xhr , status , data ){
+                    //程序出现错误
+
+                }
+            })
+
+        },loadReplies:function( commentId ){
+            //通过对方的 commentid 来加载对应的 audio 的数据
+            var vue = this;
+
+            window.AJAX_ENGINE.ajax({
+                url:"/yinji/api/reply/comment/find/comment",
+                data:{
+                    commentId:commentId
+                },
+                async:false 
+                ,success:function( data , status , xhr ){
+                    var length = data.length;
+                    var replys = [];
+                    for( var index = 0 ; index < length ;  index++ ){
+                        var item = data[index];
+                        var reply = window.AJAX_FORMAT.toAudioCommentReply(item);
+                        
+                        var target = window.AJAX_FORMAT.toReplyUser( item.target );
+                        var user = window.AJAX_FORMAT.toReplyUser( item.user );
+
+                        vue.$set(vue.userContainer[item.userId], user);
+                        vue.$set(vue.userContainer[item.targetId] , target);
+
+                        //插入对应的数据
+                        replys.push(reply);
+                    }
+
+                    //vue.replyContainer[commentId] = replys;
+                    //vue.$set(vue.replyContainer[commentId],replys);
+                    vue.replyContainer[commentId] = replys;
+
+                },error:function( xhr , status , data ){
+
                 }
             })
         }
     },created:function(){
     	var vue = this;
+
+        //获取对应的开始的信息
+        var audioId = GetQueryString("audioId");
+        var userId = GetQueryString("userId");
+        
+        this.audioId = audioId;
+        this.userId = userId;
+        
     	$(document).ready(function(){
     		//将对应的评论框对象进行输入
     		vue.$commentTextarea = $("#content");
     	})
+        vue.loadAudioComments();
     	
     }
 })

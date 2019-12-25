@@ -1,4 +1,5 @@
 
+const DEFAULT_IMAGE_PATH = "/yinji/resources/image/none.jpg";
 
 //获取当前页面中的参数
 function GetQueryString(name){
@@ -21,4 +22,8 @@ function ParseTime(date){
 
 function getServerUrl( url ){
 	return "/yinji" + "/" + url;
+}
+
+function parseImage( path ){
+	return path != null  && path != "" ? "/yinji" + "/" +  path : DEFAULT_IMAGE_PATH;  
 }

@@ -7,26 +7,26 @@ import (
 
 type TimeStruct struct {
 	//毫秒
-	MilliTimes int64
+	MilliTime int64 `json:"millTime"`
 	//下面显示基本的信息
-	Year int
-	Month int
-	Day int
+	Year int `json:"year"`
+	Month int `json:"month"`
+	Day int `json:"day"`
 
-	Hours int
-	Minutes int
-	Second int
-	WeekDay int
+	Hour int `json:"hour"`
+	Minute int `json:"minute"`
+	Second int `json:"second"`
+	WeekDay int `json:"weekDay"`
 }
 
 // 根据对应的时间 来得到 相对应的时间
 func ( self *TimeStruct) ParseTime( t time.Time ){
 	//利用对应的方法进行输出
-	self.MilliTimes = t.Unix()
+	self.MilliTime = t.Unix()
 	self.Year , _ , self.Day = t.Date()
 	self.Month = int(t.Month())
-	self.Hours = t.Hour()
-	self.Minutes = t.Minute()
+	self.Hour = t.Hour()
+	self.Minute = t.Minute()
 	self.Second = t.Second()
 	self.WeekDay = int( t.Weekday() )
 }

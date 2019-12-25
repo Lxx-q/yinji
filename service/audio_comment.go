@@ -28,25 +28,18 @@ func (self *AudioCommentService) FindAudoComments( function func(o orm.Ormer) or
 		qs.All(&comments)
 		return nil,nil
 	})
-
-	self.Parse( comments )
-
 	return comments;
 }
 
 func (self *AudioCommentService ) FindAudioCommentsAndUser( function func(o orm.Ormer) orm.QuerySeter ) [] *bean.AudioCommentAndUser{
-	var service = db.GetOrmServiceInstance()
+
 	var userService = GetUserServiceInstance()
 
-	var comments []*bean.AudioComment
-	service.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		var qs = function( o ).OrderBy()
-		return qs.All(&comments)
-		//在 comment 查询之后
-	})
+	var comments []*bean.AudioComment = self.FindAudoComments( function )
 
 	var bindUser = make([] *bean.AudioCommentAndUser , 0 , 0 )
 
+	//之后输出对应的信息
 	for index:= 0 ; index < len(comments) ; index ++ {
 
 		var comment = comments[ index ];
@@ -55,6 +48,7 @@ func (self *AudioCommentService ) FindAudioCommentsAndUser( function func(o orm.
 
 		commentAndUser.AudioComment = comment
 		commentAndUser.Bind( user )
+		comment.Parse()
 
 		bindUser = append( bindUser, commentAndUser  )
 
