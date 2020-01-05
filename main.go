@@ -34,6 +34,10 @@ func RegistOrm(){
 		new(bean.Audio),
 		new(bean.AudioComment),
 		new(bean.AudioCommentReply),
+
+		new(bean.Resource),
+		new(bean.ResourceImage),
+		new(bean.ResourceAudio),
 		);
 
 	orm.Debug = true;

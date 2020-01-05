@@ -11,7 +11,7 @@ type AudioComment struct {
 	AudioId int64 `orm:"column(audio_id)" json:"audioId"`
 	Content string `orm:"column(content)" json:"content"`
 
-	base.IdStruct
+	base.IdAndCodeStruct
 	//设置对应的 创造时间
 	base.CreateTimeStruct
 }
@@ -27,7 +27,7 @@ func GetAudioCommentTableName() string{
 func (self *AudioComment) New(){
 	var t = time.Now()
 	self.CreateTimeStruct.NewEntity(t)
-	self.IdStruct.NewEntity(t)
+	self.IdAndCodeStruct.NewEntity(t)
 }
 
 

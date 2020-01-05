@@ -126,4 +126,3 @@ var FILE_SERVICE_INSTANCE = &FileService{}
 func GetFileServiceInstance() *FileService {
 	return FILE_SERVICE_INSTANCE
 }
-

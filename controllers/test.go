@@ -120,3 +120,7 @@ func (self *TestController) ApiAudioComment(){
 
 	self.Json( comments )
 }
+
+func (self *TestController) TestResourceRedirect(){
+	self.Redirect("/yinji/resources/image/none.jpg",302)
+}

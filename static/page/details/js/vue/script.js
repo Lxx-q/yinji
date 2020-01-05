@@ -4,6 +4,8 @@ new Vue({
         string: "hello , world",
         //评论区信息
         comments: [],
+        maxComments:10,
+        maxReplies:5,
         //用户信息
         userContainer: {
             //当前评论区出现的所有的user用户
@@ -148,7 +150,6 @@ new Vue({
                 data:{
                     audioId:vue.audioId
                 },
-                async:false,
                 dataType:"json",
                 success:function( data , status , xhr ){
                     var length = data.length;

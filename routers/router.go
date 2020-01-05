@@ -120,4 +120,5 @@ func init() {
 
 	beego.Router(app.GetUrl("/test/audio/comments"),test_controller,"*:ApiAudioComment")
 
+	beego.Router(app.GetUrl("/test/resource/redirec"),test_controller,"*:TestResourceRedirect")
 }

@@ -60,7 +60,7 @@
                     <button id="login-submit" type="button" class="btn btn-primary">Login</button>
                     <button type="reset" class="btn btn-primary">reset</button>
                   </form>
-                  <a href="#" class="forgot-pass">Forgot Password?</a><br><small>Do not have an account? </small><a href="register.html" class="signup">Signup</a>
+                  <a href="#" class="forgot-pass">Forgot Password?</a><br><small>Do not have an account? </small><a href="register" class="signup">Signup</a>
                 </div>
               </div>
             </div>
@@ -81,20 +81,15 @@
     <script src="js/front.js"></script>
 
     <script>
-      $(document).ready(function(){
-          
-          //获取对应节点的数据
-          var login_username = $("#login-username");
-          var login_password = $("#login-password");
-          //下面开启事件
-          $("#login-submit").on("click",function(){
-            var username = login_username.val();
+
+      function login( login_username , login_password ){
+           var username = login_username.val();
             var password = login_password.val();
 
             if( username == "" || password == ""  ){
             alert("您有资料尚未填写完全")
             return ;
-          }
+            }
 
             window.AJAX_ENGINE.ajax({
               url:"/yinji/api/login/by/account",
@@ -116,9 +111,33 @@
                 login_password.val("");
                 //将对应的信息关闭
                 window.location.href  ="/yinji/page/index/main" + "?" + "userId" + "=" + result.id;
+              },error:function( xhr , status , err){
+                login_username.val("");
+                //这时候 ， 我们就将当前的页面的地址进行转化
+                login_password.val("");
+                alert("登录失败，请检查您的信息")
               }
-            })
-          })
+            });
+      }
+
+      $(document).ready(function(){
+          
+          //获取对应节点的数据
+          var login_username = $("#login-username");
+          var login_password = $("#login-password");
+          //下面开启事件
+          $("#login-submit").on("click",function(){
+            login(login_username,login_password);
+          });
+
+          
+          document.onkeydown = function(e){
+            //设置回车事件
+            if((e.keyCode || e.which) == 13){
+              login(login_username,login_password);
+            }
+          }
+
       })
     </script>
   </body>

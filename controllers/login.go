@@ -122,6 +122,8 @@ func ( self *LoginController ) LoginByAccount(){
 
 	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 
+		//这里 之后要加上对应的 验证是否已经登录的信息
+
 		var readLoginErr = o.Read(&login , "account","password")
 
 		if readLoginErr != nil {
