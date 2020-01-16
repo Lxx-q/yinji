@@ -19,6 +19,10 @@ func init() {
 
 	var audioCommentReply = &controllers.AudioCommentReplyController{}
 
+	var collection = &controllers.CollectionController{}
+
+	var dashborad = &controllers.DashboardContrlller{}
+
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
 	beego.Router("/test/xml", test_controller, "*:XmlResult");
@@ -96,6 +100,14 @@ func init() {
 	beego.Router(app.GetUrl("/api/reply/comment/insert"), audioCommentReply,"*:InsertCommentReply")
 	beego.Router(app.GetUrl("/api/reply/comment/find/comment") , audioCommentReply , "*:ByCommentId")
 
+	//收藏的接口
+	beego.Router(app.GetUrl("/api/collection/insert") ,collection ,"*:InsertCollection")
+	beego.Router(app.GetUrl("/api/collection/delete"),collection,"*:DeleteCollection")
+	//根据对应的信息， 来获取对应的信息
+	beego.Router(app.GetUrl("/api/collection/find/relationship"),collection , "*:FindByUserAndAudio")
+
+	//仪表板输出格式相关的接口
+	beego.Router(app.GetUrl("/api/dashborad/audio") , dashborad , "*:FindByAudioId")
 
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")

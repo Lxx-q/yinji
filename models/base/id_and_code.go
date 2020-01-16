@@ -9,7 +9,7 @@ import (
 
 //开始设置对应的 id struct 体
 type IdStruct struct {
-	Id int64 `orm:"column(id)" json:"id"`
+	Id int64 `orm:"column(id);pk" json:"id"`
 }
 
 //对应的信息

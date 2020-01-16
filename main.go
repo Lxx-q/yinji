@@ -35,9 +35,14 @@ func RegistOrm(){
 		new(bean.AudioComment),
 		new(bean.AudioCommentReply),
 
+		//对应的信息
 		new(bean.Resource),
 		new(bean.ResourceImage),
 		new(bean.ResourceAudio),
+
+		//
+		new(bean.AudioUserCollection),
+		new(bean.AudioUserDashboard),
 		);
 
 	orm.Debug = true;

@@ -24,4 +24,3 @@ func( self *ModelService ) doJdbcFunction(  function func( ormer orm.Ormer) (int
 	return result;
 
 }
-

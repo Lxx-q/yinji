@@ -63,7 +63,9 @@ func ( self *LoginController ) RegisterByAccount(){
 		//移植对应的user
 		login.Id = user.Id
 
-		var _ , insertLoginError = o.Insert( &login )
+		var _login = &login
+
+		var _ , insertLoginError = o.Insert( _login )
 
 		if insertLoginError != nil {
 			return nil , insertLoginError

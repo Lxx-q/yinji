@@ -24,7 +24,7 @@ func (self *AudioCommentController) ByAudioId(){
 
 	//之后开始进行对应的参数
 	var comments = instance.FindAudioCommentsAndUser(func(o orm.Ormer) orm.QuerySeter {
-		var qs = o.QueryTable(bean.GetAudioCommentTableName()).Filter("audioId",audioId)
+		var qs = o.QueryTable(bean.GetAudioCommentTableName()).Filter("AudioId",audioId)
 		//之后进行对应的搜索
 		return qs
 	})

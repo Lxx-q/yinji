@@ -14,6 +14,7 @@ type AudioComment struct {
 	base.IdAndCodeStruct
 	//设置对应的 创造时间
 	base.CreateTimeStruct
+
 }
 
 func ( self *AudioComment) TableName() string {

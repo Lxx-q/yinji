@@ -16,7 +16,7 @@ type AudioCommentReply struct{
 	base.CreateTimeStruct
 }
 
-//设置连接苗斌
+
 func ( self *AudioCommentReply ) TableName() string {
 	return GetAudioCommentReplyTableName()
 }
