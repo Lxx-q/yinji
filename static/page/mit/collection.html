@@ -295,14 +295,14 @@
           <li><a :href="'#' + item.connection" aria-expanded="false" data-toggle="collapse"> <i :class="item.iClass"><div class="currentPage">{{ page[item.page] }} </div> </i> {{ item.name }} </a> 
           <ul :id="item.connection" class="collapse list-unstyled "> 
             <li v-for="_item in item.childrens ">
-                <a href="#" @click="selectPage( event , _item )"><div class="currentPage">{{ page[_item.page] }} </div> {{ _item.name }}</a>
+                <a href="#" @click="selectPage"><div class="currentPage">{{ page[_item.page] }} </div> {{ _item.name }}</a>
             </li> 
           </ul> 
           </li>
         </template>
 
         <template v-else>
-        <li><a href="#" @click="selectPage( event , item )"><i :class="item.iClass"><div class="currentPage">{{ page[item.page] }} </div> </i> {{ item.name }} </a></li>
+        <li><a href="#" @click="selectPage"><i :class="item.iClass"><div class="currentPage">{{ page[item.page] }} </div> </i> {{ item.name }} </a></li>
         </template>
 
       </template>
@@ -1563,52 +1563,6 @@
           </div>
         </footer>
       </div>
-      
-      <!-- 收藏页面  -->
-      <div class="page-content" :class="currentPage == 'collection' ? 'show':'hidden' "> 
-          
-          <div class="container-fluid">
-            <div class="row">
-            <template v-for=" (item , index ) in currentCollection">
-            
-
-
-            <div class="col-lg-4">           
-             <!-- 对应的结果 -->
-            <div class="user-block block text-center"> 
-            <div class="avatar">
-             <img src="img/avatar-1.jpg" alt="..." class="img-fluid" /> 
-           </div>
-           <a href="#" class="user-title"> <h3 class="h5">{{ item.audio.name }}</h3><span>@richardnevo</span></a> 
-           <div class="contributions">
-            收藏于{{ item.createTime }}
-           </div> 
-            <div class="details d-flex"> 
-            <!-- 后面三个修改为功能键 ， 分别为取消收藏 ， 移动至 ， 与复制到 -->
-            <div class="item">
-              <i class="icon-info"></i>
-              <strong>取消收藏</strong>
-            </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>移动至</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>复制到</strong>
-           </div> 
-          </div> 
-         </div>
-         </div>
-
-          </template>
-
-
-            </div>
-          </div>
-
-
-       </div>
 
     <!--  page -->
    </div>
@@ -1625,7 +1579,6 @@
   <script src="vendor/jquery-validation/jquery.validate.min.js"></script> 
   <script src="js/charts-home.js"></script> 
   <script src="js/front.js"></script> 
-  <script type="text/javascript" src="/yinji/js/protocal.js"></script>
-  <script src="js/script/script.js"></script> 
+  <script src="js/script/script.js"></script>  
  </body>
 </html>

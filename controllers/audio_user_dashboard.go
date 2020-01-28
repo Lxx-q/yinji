@@ -11,6 +11,7 @@ type DashboardContrlller struct {
 	BeegoController
 }
 
+//查看某一个作品所有的信息
 func ( self *DashboardContrlller ) FindByAudioId( ){
 	var audioId , getAudioIdErr = self.GetInt64("audioId"  )
 

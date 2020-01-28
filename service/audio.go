@@ -6,6 +6,7 @@ import (
 	"yinji/models/bean"
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bind"
+	"fmt"
 )
 
 type AudioService struct {
@@ -101,6 +102,30 @@ func ( self * AudioService ) FindAudioById( id int64) ( *bean.Audio , error ){
 	})
 
 	return &audio , readErr
+}
+
+//根据对应的id 来进行获取对应的信息
+func (self *AudioService ) FindById ( o orm.Ormer , id int64 ) ( *bean.Audio , error ){
+
+	var audio = bean.Audio{}
+	audio.Id = id
+	var  readErr = o.Read(&audio)
+	return &audio , readErr
+
+}
+
+func ( self *AudioService ) AllByCollectionFolder(o orm.Ormer , folderId int64  ){
+	var sql = "SELECT * FROM audio a WHERE a.id IN ( SELECT auc.audio_id FROM audio_user_collection auc WHERE auc.collection_folder_id = ?);"
+
+	//当 folderId 等于 0 的时候
+	if folderId == 0 {
+		sql = "SELECT * FROM audio a WHERE a.id IN ( )"
+	}
+
+
+	fmt.Println(sql)
+
+
 }
 
 //之后我们 便可以开始获取信息

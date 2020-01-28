@@ -9,6 +9,26 @@ type CollectionService struct {
 
 }
 
+func ( self *CollectionService ) InsertCollection( o orm.Ormer , collection *bean.AudioUserCollection ) ( *bean.AudioUserCollection , *bean.AudioUserDashboard , error){
+	//先进行对应的插入数据
+	var _ , insertErr = self.Insert( o , collection )
+
+	if insertErr != nil {
+		return  nil , nil , insertErr
+	}
+
+	//之后我们便开始记录数字
+	var dashboardService = GetDashboardServiceInstance()
+	var dashborad ,  getDashboardErr = dashboardService.AddDashboradCountEvent( o , AUDIO_DASHBOARD_C0LLECTION , collection.AudioId )
+
+	return collection , dashborad , getDashboardErr
+
+}
+
+/**
+	下面是基本的原子操作方法
+ */
+
 /**
 	根据对应的二者的关系 ， 进行插入数据
  */
@@ -63,9 +83,34 @@ func ( self *CollectionService ) FindByUser( o orm.Ormer , userId int64 ) []*bea
 		return nil
 	}
 
+	ForCollection( collections , func(collection *bean.AudioUserCollection, index int) {
+		collection.Parse()
+	} )
+
 	return collections
 }
 
+// 根据对应的 collections 的关系 来进行 获取 信息
+func ( self *CollectionService ) SearchBindsUser( o orm.Ormer , collections []*bean.AudioUserCollection) {
+
+	ForCollection( collections , func(collection *bean.AudioUserCollection, index int) {
+
+	})
+
+
+}
+
+//进行对应的循环的操作
+func ForCollection( array []*bean.AudioUserCollection ,function func( collection *bean.AudioUserCollection , index int)){
+	var _array = array
+	var _Len = len( _array )
+
+	for index:= 0 ; index < _Len ; index ++ {
+		var item = _array[ index ]
+		function( item , index )
+	}
+
+}
 var COLLECTION_SERVICE_INSTANCE = &CollectionService{}
 
 func GetCollectonServiceInstance() *CollectionService{

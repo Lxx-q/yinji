@@ -43,6 +43,7 @@ func RegistOrm(){
 		//
 		new(bean.AudioUserCollection),
 		new(bean.AudioUserDashboard),
+		new(bean.AudioCollectionFolder),
 		);
 
 	orm.Debug = true;

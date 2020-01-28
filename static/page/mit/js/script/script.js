@@ -2,7 +2,10 @@ new Vue({
     el:"#app",
     data:{
         //当前页面情况 
-        page:["index","charts","forms","register","tables"]
+        /**
+            对应的程序逻辑说明
+        */
+        page:["index","charts","forms","register","tables" , "collection"]
         ,currentPage:"index"
         ,navMain:[
             { name:"Index" , iClass:"icon-home",page:0},
@@ -13,14 +16,28 @@ new Vue({
                 { name :"Page" , page:1 },
                 { name: "Page" , page:2 },
                 { name: "Page" , page:3 }
-            ]}
+            ]},{
+                name:"收藏",iClass:"icon-windows" , hasChildren:true , connection:"exampledropdownDropdown_collection" ,childrens:[
+                    { name:" 哈哈" ,page:5 , clickListener:function( item ){
+                        alert("this is item :" + item.name );
+                        alert("this is this :" + this.name  );
+                    }},
+                    { name:"哈哈哈哈" ,page:5 }
+                ]}
         ],navExtras:[
             { name:"Demo" ,iClass:"icon-settings" , page:1 },
             { name:"Demo" ,iClass:"icon-writing-whiteboard",page:0},
             { name:"Demo" ,iClass:"icon-chart",page:0}
+        ],currentCollection:[
+            //输出收藏的信息 ，输出对应的 collection 的信息
+            { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
+            { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
+            { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
+            { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
+            { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }}
         ]
     },methods:{
-        selectPage:function( event ){
+        selectPage:function( event , item ){
             //获取对应的 信息
             var target = $( event.target );
             var currentPage = target.find(".currentPage");
@@ -29,9 +46,42 @@ new Vue({
 
             this.currentPage = pageName;
 
+            if( item.clickListener != undefined ){
+                item.clickListener( item );
+            }
+
+        },created:function(){
+            this.initCollectionFolder();
         },initIndex:function(){
             //初始化 相对应的 时
             
+        },initCollectionFolder:function(){
+            //初始化收藏文件夹的参数
+            var folderObj =  {name:"收藏",iClass:"icon-windows" , hasChildren:true , connection:"exampledropdownDropdown_collection" }
+
+            var childrens = [];
+
+            //下面开始初始化信息
+
+            var userId = 2
+            //开始进行请求
+            window.AJAX_ENGINE.ajax({
+                url:"/yinji/api/collection/folder/all"
+                data:{
+                    userId:userId
+                },async:false,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    //将对应的result转化为信息，然后插入 childrens 之中
+                    var item = {};
+                    
+                }
+            })
+
+            //将对应的结果保存进入对应的信息
+            folderObj.childrens = childrens;
+
+            this.navMain.append(folderObj);
         }
     }
 });

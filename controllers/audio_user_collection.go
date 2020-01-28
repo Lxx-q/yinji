@@ -6,6 +6,7 @@ import (
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
+	"fmt"
 )
 
 type CollectionController struct {
@@ -120,3 +121,41 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 	self.Json( collection )
 }
 
+/**
+	根据对应的 用户信息 ， 来获取 对应的 对应的 信息 ， 并且附带着对应的信息
+ */
+ func ( self *CollectionController ) SearchBindCollection() {
+ 	//先获取对应的信息
+ 	var userId , getUserIdErr = self.GetInt64("userId")
+
+ 	if getUserIdErr != nil {
+		self.FailJson(getUserIdErr)
+		return
+	}
+
+	var ormService = db.GetOrmServiceInstance()
+	var collectionService = service.GetCollectonServiceInstance()
+	var audioService = service.GetAudioServiceInstance()
+	//输出对应的信息
+	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var collections = collectionService.FindByUser( o  , userId )
+		service.ForCollection( collections , func(collection *bean.AudioUserCollection, index int) {
+			//先转化对应的信息
+			collection.Parse()
+
+			//之后根据对应的 id  来进行获取信息
+			var audio , readErr = audioService.FindById( o , collection.AudioId )
+
+			if readErr != nil {
+				return
+			}
+
+		})
+		return nil,nil
+	})
+
+
+
+	fmt.Println(userId)
+
+ }

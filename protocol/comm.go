@@ -17,3 +17,5 @@ type CommStruct struct {
 	Content interface{} `json:"content"`
 	//Time time.Time `json:"time"`
 }
+
+

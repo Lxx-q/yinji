@@ -23,6 +23,10 @@ func init() {
 
 	var dashborad = &controllers.DashboardContrlller{}
 
+	var collectionFolder = &controllers.AudioCollectionFolderController{}
+
+	var page = &controllers.PageController{}
+
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
 	beego.Router("/test/xml", test_controller, "*:XmlResult");
@@ -49,6 +53,9 @@ func init() {
 
 	//对应的登录注册协议的页面
 	beego.Router(app.GetUrl("/page/mit/policy"), login, "*:PolicePage")
+
+	//对应的 index 页面
+	beego.Router(app.GetUrl("/page/mit/index"),page , "*:MitIndexPage")
 
 	//上传信息的页面
 	beego.Router(app.GetUrl("/page/upload/audio"), audio, "*:AudioUploadPage")
@@ -108,6 +115,9 @@ func init() {
 
 	//仪表板输出格式相关的接口
 	beego.Router(app.GetUrl("/api/dashborad/audio") , dashborad , "*:FindByAudioId")
+
+	//对应的文件夹
+	beego.Router( app.GetUrl("/api/collection/folder/all"), collectionFolder , "*:AllByUserId")
 
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
