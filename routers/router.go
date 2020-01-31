@@ -119,6 +119,12 @@ func init() {
 	//对应的文件夹
 	beego.Router( app.GetUrl("/api/collection/folder/all"), collectionFolder , "*:AllByUserId")
 
+	//新建收藏夹
+	beego.Router( app.GetUrl("/api/collection/folder/insert"),collectionFolder,"*:AddCollectionFolder")
+
+	//更改收藏夹的对应的信息
+	beego.Router( app.GetUrl( "/api/collection/folder/update") , collectionFolder ,"*:UpdateCollectionFolder")
+	
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 

@@ -4,13 +4,16 @@ import (
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
 	"yinji/service"
+	"yinji/models/bean"
 )
 
 type AudioCollectionFolderController struct {
 	BeegoController
 }
 
-//根据对应的 用户信息 来进行搜索
+/**
+	根据用户的id 来获取对应的信息体
+ */
 func ( self *AudioCollectionFolderController ) AllByUserId(){
 	//获取对应的 user 的 信息
 
@@ -35,4 +38,90 @@ func ( self *AudioCollectionFolderController ) AllByUserId(){
 
 }
 
+/**
+	新建对应的收藏文件夹
+*/
+func ( self *AudioCollectionFolderController ) AddCollectionFolder(){
+
+	var userId , getUserIdErr = self.GetInt64("userId")
+
+	if getUserIdErr != nil {
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+ 	//先收集对应的数据信息
+ 	var name = self.GetString("name")
+
+ 	var introduction = self.GetString("introduction")
+
+	//下面将对应的信息体存入对应的 bean  结构体
+	var folder = bean.AudioCollectionFolder{}
+
+	folder.Name = name
+	folder.Introduction = introduction
+	folder.UserId = userId
+	folder.New()
+
+	//下面我们准备开始进行对应的数据库操作
+	var ormService = db.GetOrmServiceInstance()
+
+	var _ , tranErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		//下面我们进行插入操作
+		return o.Insert( &folder )
+	})
+
+	if tranErr != nil {
+		self.FailJson(tranErr)
+		return
+	}
+
+	self.Json( folder )
+
+ }
+
+/**
+   更新目标收藏夹的信息
+*/
+func ( self *AudioCollectionFolderController ) UpdateCollectionFolder(){
+
+	var id , getIdErr = self.GetInt64("id")
+
+	if getIdErr != nil {
+		self.FailJson( getIdErr )
+		return
+	}
+
+	//先收集对应的数据信息
+	var name = self.GetString("name")
+
+	var introduction = self.GetString("introduction")
+
+	//下面将对应的信息体存入对应的 bean  结构体
+	var folder = bean.AudioCollectionFolder{}
+
+	folder.Id = id
+
+	//下面我们准备开始进行对应的数据库操作
+	var ormService = db.GetOrmServiceInstance()
+
+	var _ , tranErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		//先根据对应的 id 值 来获取其他的信息 ， 然后更新对应的信息
+		o.Read(&folder)
+		folder.Name = name
+		folder.Introduction = introduction
+		folder.Refresh()
+		//下面我们进行插入操作
+		return o.Update(&folder)
+	})
+
+	folder.Parse()
+
+	if tranErr != nil {
+		self.FailJson(tranErr)
+		return
+	}
+
+	self.Json( folder )
+}
 

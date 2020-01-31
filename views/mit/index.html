@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<!-- 
+   网页中各个区域的快速指引关键字
+
+   1. 栏目去 关键字 ：KEY_NAV
+   2. 收藏界面 ：KEY_COLLECTION_FOLDER
+ -->
 <html>
  <head> 
   <meta charset="utf-8" /> 
@@ -289,7 +296,10 @@
      <span class="heading">Main</span> 
      <ul class="list-unstyled"> 
   
-
+      <!-- 
+        栏目指引区
+        KEY_NAV 
+      -->
       <template v-for=" item in navMain">
         <template v-if="item.hasChildren">
           <li><a :href="'#' + item.connection" aria-expanded="false" data-toggle="collapse"> <i :class="item.iClass"><div class="currentPage">{{ page[item.page] }} </div> </i> {{ item.name }} </a> 
@@ -1564,15 +1574,32 @@
         </footer>
       </div>
       
+      <!-- 
+        对应的收藏界面的链接方式 
+        KEY_COLLECTION_FOLDER
+       -->
+
       <!-- 收藏页面  -->
       <div class="page-content" :class="currentPage == 'collection' ? 'show':'hidden' "> 
           
           <div class="container-fluid">
+
+            <!--  头部 ： 对应的收藏夹的对应的信息 -->
+
+            <div class="row">
+              <!-- 暂时的demo 设计 -->
+              <div class="col-lg-3 col-md-4">{{ currentFolder.name }}</div>
+              <div class="col-lg-3 col-md-4">{{ currentFolder.introduction }}</div>
+              <div class="col-lg-3 col-md-4">
+                <button @click="readyAddFolder">对应的信息</button>
+              </div>
+            </div>
+            
+            <!-- 对应的空白栏目 , 我们使用这个栏目 ， 来空出对应的界面信息 -->
+            <div class="row"></div>
             <div class="row">
             <template v-for=" (item , index ) in currentCollection">
             
-
-
             <div class="col-lg-4">           
              <!-- 对应的结果 -->
             <div class="user-block block text-center"> 

@@ -1,6 +1,9 @@
 package bean
 
-import "yinji/models/base"
+import (
+	"yinji/models/base"
+	"time"
+)
 
 type AudioCollectionFolder struct {
 	base.IdStruct
@@ -9,6 +12,17 @@ type AudioCollectionFolder struct {
 	base.CreateTimeAndModifyTimeStruct
 	UserId int64 `orm:"column(user_id)" json:"userId"`
 }
+
+func ( self *AudioCollectionFolder ) NewEntity( t time.Time){
+	self.IdStruct.NewEntity( t )
+	self.CreateTimeAndModifyTimeStruct.NewEntity(t)
+}
+
+func ( self *AudioCollectionFolder ) New(){
+	var t = time.Now()
+	self.NewEntity( t )
+}
+
 
 func ( self *AudioCollectionFolder) TableName() string {
 	return GetAudioCollectionFolderTableName()

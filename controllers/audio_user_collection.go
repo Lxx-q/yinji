@@ -6,7 +6,6 @@ import (
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
-	"fmt"
 )
 
 type CollectionController struct {
@@ -121,10 +120,13 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 	self.Json( collection )
 }
 
+
 /**
-	根据对应的 用户信息 ， 来获取 对应的 对应的 信息 ， 并且附带着对应的信息
+	获取某个文件夹下面的收藏信息
  */
  func ( self *CollectionController ) SearchBindCollection() {
+
+ 	/*
  	//先获取对应的信息
  	var userId , getUserIdErr = self.GetInt64("userId")
 
@@ -133,12 +135,28 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 		return
 	}
 
+	*/
+	var folderId , getFolderIdErr = self.GetInt64("folderId")
+
+	if getFolderIdErr != nil {
+		self.FailJson( getFolderIdErr )
+		return
+	}
+
 	var ormService = db.GetOrmServiceInstance()
-	var collectionService = service.GetCollectonServiceInstance()
 	var audioService = service.GetAudioServiceInstance()
+
+	var shuchulist = make([]interface{} , 0)
 	//输出对应的信息
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		var collections = collectionService.FindByUser( o  , userId )
+
+		var collections []*bean.AudioUserCollection
+
+		//计算并且得出最后的时间
+		var qt = o.QueryTable( bean.GetAudioUserCollectionTableName())
+
+		qt.Filter("folderId" , folderId ).OrderBy("-create_time").All(&collections)
+
 		service.ForCollection( collections , func(collection *bean.AudioUserCollection, index int) {
 			//先转化对应的信息
 			collection.Parse()
@@ -150,12 +168,18 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 				return
 			}
 
+			//设置对应的信息体进入对应的信息
+			var chunchumap = make(map[string] interface{})
+
+			chunchumap["collection"] = collection
+			chunchumap["audio"] = audio
+
+			shuchulist = append(shuchulist,chunchumap)
 		})
-		return nil,nil
+
+		return shuchulist , nil
 	})
 
-
-
-	fmt.Println(userId)
+	self.Json(shuchulist)
 
  }
