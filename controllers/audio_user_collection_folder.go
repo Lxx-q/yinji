@@ -41,7 +41,7 @@ func ( self *AudioCollectionFolderController ) AllByUserId(){
 /**
 	新建对应的收藏文件夹
 */
-func ( self *AudioCollectionFolderController ) AddCollectionFolder(){
+ func ( self *AudioCollectionFolderController ) AddCollectionFolder(){
 
 	var userId , getUserIdErr = self.GetInt64("userId")
 
@@ -123,5 +123,38 @@ func ( self *AudioCollectionFolderController ) UpdateCollectionFolder(){
 	}
 
 	self.Json( folder )
+}
+
+/**
+	根据对应的收藏夹的id ， 删除对应的那一行的收藏夹信息
+*/
+func ( self *AudioCollectionFolderController ) DeleteCollectionFolder(){
+
+	//先收集对应的信息
+	var id , getIdErr = self.GetInt64("id")
+
+	if getIdErr != nil {
+		self.FailJson( getIdErr )
+		return
+	}
+
+	var collectionFolder = bean.AudioCollectionFolder{}
+
+	collectionFolder.Id = id
+
+	var ormService = db.GetOrmServiceInstance()
+
+	var _ , transacErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		return o.Delete(&collectionFolder)
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+
+	//输出最后的结果
+	self.Json( collectionFolder )
+
 }
 

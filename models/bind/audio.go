@@ -23,3 +23,8 @@ func (self *AudioAndUser ) BindUser( user bean.User){
 	self.UserName =  user.Name;
 	self.UserImage = user.Image;
 }
+
+type CollectionAndAudio struct {
+	*bean.AudioUserCollection
+	Audio *bean.Audio `json:"audio"`
+}

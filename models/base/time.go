@@ -23,7 +23,8 @@ type TimeStruct struct {
 func ( self *TimeStruct) ParseTime( t time.Time ){
 	//利用对应的方法进行输出
 	self.MilliTime = t.Unix()
-	self.Year , _ , self.Day = t.Date()
+	self.Year = t.Year()
+	self.Day = t.Day()
 	self.Month = int(t.Month())
 	self.Hour = t.Hour()
 	self.Minute = t.Minute()

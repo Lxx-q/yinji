@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<title>jquery-confirm | 功能强大的jQuery对话框和确认框插件 </title>
+	
+      <link rel="stylesheet" href="http://libs.baidu.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/jq22-demo.css">
+	<link rel="stylesheet" href="demo/libs/default.min.css">
+	<link rel="stylesheet" href="demo/demo.min.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-confirm.css" />
+
+	<script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/jquery-1.11.0.min.js"><\/script>')</script>
+	<script src="http://libs.baidu.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="js/jquery.sticky.min.js"></script>
+	<script src="demo/libs/pretty.js"></script>
+	<script type="text/javascript" src="js/jquery-confirm.js"></script>
+
+
+	<style type="text/css">
+            .space10{
+                height: 10px;
+            }
+            body{
+                font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif;
+                position: relative;
+            }
+        </style>
+	<!--[if IE]>
+		<script src="http://libs.baidu.com/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+
+	<script>
+		$(document).ready(function(){
+			
+			$("#first").on('click',function(){
+				$.alert('hello , world')
+			})
+
+			$("#second").on("click",function(){
+				$.alert({
+					tltle:"ass",
+					content:"hello , world",
+					confirm:function(){
+					}
+				})
+			})
+		})
+
+
+	</script>
+</head>
+<body>
+	<button id="first"> frist </button>
+	<button id="second"> second </button>
+</body>
+</html>

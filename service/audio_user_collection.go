@@ -43,6 +43,7 @@ func ( self *CollectionService ) Insert( o orm.Ormer ,  collection *bean.AudioUs
  */
 func ( self *CollectionService ) Delete( o orm.Ormer ,  collection *bean.AudioUserCollection ) error {
 	var _ , deleteErr = o.Delete(collection)
+
 	return  deleteErr
 }
 

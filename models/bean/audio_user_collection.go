@@ -10,7 +10,7 @@ import (
 type AudioUserCollection struct {
 	AudioId int64 `orm:"column(audio_id)" json:"audioId"`//对应 audioId
 	UserId int64 `orm:"column(user_id)" json:"userId"`
-	FolderId int64 `orm:"column(collection_folder_id)" json:"folderId"`
+	FolderId *int64 `orm:"column(collection_folder_id)" json:"folderId"`
 	base.IdStruct //对应的id主键
 	base.CreateTimeStruct //对应的创建时间结构体
 }

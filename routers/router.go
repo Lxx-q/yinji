@@ -106,13 +106,18 @@ func init() {
 	//书写对应的评论的回复
 	beego.Router(app.GetUrl("/api/reply/comment/insert"), audioCommentReply,"*:InsertCommentReply")
 	beego.Router(app.GetUrl("/api/reply/comment/find/comment") , audioCommentReply , "*:ByCommentId")
-
 	//收藏的接口
 	beego.Router(app.GetUrl("/api/collection/insert") ,collection ,"*:InsertCollection")
+	//取消收藏的接口
 	beego.Router(app.GetUrl("/api/collection/delete"),collection,"*:DeleteCollection")
 	//根据对应的信息， 来获取对应的信息
-	beego.Router(app.GetUrl("/api/collection/find/relationship"),collection , "*:FindByUserAndAudio")
+	beego.Router(app.GetUrl("/api/collection/find/relationship"), collection , "*:FindByUserAndAudio")
 
+	//根据对应的 收藏夹的 id 来搜索出对应的 收藏信息与其绑定的 audio 信息
+	beego.Router( app.GetUrl("/api/collection/all/and"),collection,"*:SearchCollectionAndAudio")
+
+	//转移收藏信息
+	beego.Router( app.GetUrl("/api/collection/update"),collection , "*:UpdateCollection")
 	//仪表板输出格式相关的接口
 	beego.Router(app.GetUrl("/api/dashborad/audio") , dashborad , "*:FindByAudioId")
 
@@ -124,11 +129,10 @@ func init() {
 
 	//更改收藏夹的对应的信息
 	beego.Router( app.GetUrl( "/api/collection/folder/update") , collectionFolder ,"*:UpdateCollectionFolder")
-	
+	//删除收藏夹
+	beego.Router( app.GetUrl("/api/collection/folder/delete") , collectionFolder , "*:DeleteCollectionFolder");
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
-
-
 
 	/*
 		对应的 web 的接口， 该接口的主要目的 ， 只是服务与 web 前端服务 交互的前端

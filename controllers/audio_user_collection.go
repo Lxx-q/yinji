@@ -6,6 +6,7 @@ import (
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
+	"yinji/models/bind"
 )
 
 type CollectionController struct {
@@ -28,6 +29,9 @@ func ( self *CollectionController ) InsertCollection() {
 		return
 	}
 
+	//folderId ， 为非必要属性
+	var folderId , getFolderIdErr = self.GetInt64("folderId")
+
 	//将收集而来的信息全部进行收入
 	var collection = &bean.AudioUserCollection{}
 	//生成对应的信息
@@ -36,11 +40,22 @@ func ( self *CollectionController ) InsertCollection() {
 	collection.UserId = userId
 	collection.AudioId = audioId
 
+	if getFolderIdErr == nil {
+		collection.FolderId = &folderId
+	}
+
+
 	var collectionService = service.GetCollectonServiceInstance()
 
 	var ormService = db.GetOrmServiceInstance()
 
 	var _ , insertErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		//先根据对应的 audio 以及 folderId 进行查询 ， 查看是否能查询知道数据 ， 倘若能 ， 则退出查询
+		var readError = o.Read( collection ,"userId","audioId","folderId")
+
+		if readError == nil {
+			return nil , errors.New("该实例已经存在")
+		}
 		return collectionService.Insert( o , collection)
 	})
 
@@ -74,14 +89,17 @@ func ( self *CollectionController ) DeleteCollection(){
 		var readCollectionErr = o.Read(collectionResult)
 
 		if readCollectionErr != nil {
+			self.FailJson( readCollectionErr )
 			//输出对应的信息
 			return nil, nil
 		}
 
 		var err = collectionService.Delete(o , collection)
 		if err != nil {
+			self.FailJson( err )
 			return nil, nil
 		}
+
 		return nil , err
 	})
 
@@ -124,7 +142,7 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 /**
 	获取某个文件夹下面的收藏信息
  */
- func ( self *CollectionController ) SearchBindCollection() {
+ func ( self *CollectionController ) SearchCollectionAndAudio() {
 
  	/*
  	//先获取对应的信息
@@ -146,7 +164,7 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 	var ormService = db.GetOrmServiceInstance()
 	var audioService = service.GetAudioServiceInstance()
 
-	var shuchulist = make([]interface{} , 0)
+	var shuchulist = make([]bind.CollectionAndAudio , 0)
 	//输出对应的信息
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 
@@ -168,13 +186,13 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 				return
 			}
 
-			//设置对应的信息体进入对应的信息
-			var chunchumap = make(map[string] interface{})
+			//利用新型的输出结构体
+			var collectionAndAudio = bind.CollectionAndAudio{}
 
-			chunchumap["collection"] = collection
-			chunchumap["audio"] = audio
+			collectionAndAudio.AudioUserCollection = collection
+			collectionAndAudio.Audio = audio
 
-			shuchulist = append(shuchulist,chunchumap)
+			shuchulist = append(shuchulist, collectionAndAudio)
 		})
 
 		return shuchulist , nil
@@ -183,3 +201,44 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 	self.Json(shuchulist)
 
  }
+
+/**
+	修改对应的 collection 信息
+*/
+func ( self *CollectionController ) UpdateCollection(){
+
+	var id , getIdErr = self.GetInt64("id")
+
+	if getIdErr != nil {
+		self.FailJson( getIdErr )
+		return
+	}
+
+	var collectionFolderId , getCollectionFolderIdErr = self.GetInt64("folderId")
+
+	if getCollectionFolderIdErr != nil {
+		self.FailJson( getCollectionFolderIdErr )
+		return
+	}
+
+	var ormService = db.GetOrmServiceInstance()
+
+	var collection = bean.AudioUserCollection{}
+
+	var _ , transacErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		collection.Id = id
+		var readErr = o.Read(&collection)
+		if readErr != nil {
+			return nil , readErr
+		}
+		collection.FolderId = &collectionFolderId
+		return o.Update( &collection )
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+
+	self.Json( collection )
+}
