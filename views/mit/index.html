@@ -59,6 +59,7 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]--> 
   <script src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="/yinji/js/utils.js"></script>
  </head> 
  <body> 
   <div id="app"> 
@@ -83,12 +84,12 @@
        <!-- Navbar Header-->
        <a href="index.html" class="navbar-brand"> 
         <div class="brand-text brand-big visible text-uppercase">
-         <strong class="text-primary">Dark</strong>
-         <strong>Admin</strong>
+         <strong class="text-primary">音迹</strong>
+         <strong>数据中心</strong>
         </div> 
         <div class="brand-text brand-sm">
-         <strong class="text-primary">D</strong>
-         <strong>A</strong>
+         <strong class="text-primary">Y</strong>
+         <strong>J</strong>
         </div></a> 
        <!-- Sidebar Toggle Btn--> 
        <button class="sidebar-toggle"><i class="fa fa-long-arrow-left"></i></button> 
@@ -289,7 +290,7 @@
     </nav> 
    </header> 
 
-
+    <!-- 设置对应的信息 -->
    <div class="d-flex align-items-stretch"> 
     <!-- Sidebar Navigation--> 
     <nav id="sidebar"> 
@@ -299,8 +300,8 @@
        <img src="img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle" />
       </div> 
       <div class="title"> 
-       <h1 class="h5">Mark Stephen</h1> 
-       <p>Web Designer</p> 
+       <h1 class="h5">{{ user.name }}</h1> 
+       <p></p> 
       </div> 
      </div> 
      <!-- Sidebar Navidation Menus-->
@@ -1656,6 +1657,13 @@
             </div>
           </div>
 
+
+       </div>
+
+        <!-- 
+            对应的当前的数据信息
+          -->
+       <div class="page-content" :class="currentPage == 'audio' ? 'show':'hidden' "> 
 
        </div>
 

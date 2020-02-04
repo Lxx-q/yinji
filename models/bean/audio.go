@@ -59,3 +59,4 @@ func (self *Audio) RefreshToDb(){
 	var ormService = db.GetOrmServiceInstance();
 	ormService.Transaction(self.RefreshToDbFunc());
 }
+

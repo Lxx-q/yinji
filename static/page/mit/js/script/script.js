@@ -1,6 +1,9 @@
 /**
 
 对应的方法目录
+
+对应的
+
 1.新建收藏夹 [readyAddFolder]
 2.修改收藏夹信息 [ readyUpdateFolder]
 3.删除收藏夹 [ readyDeleteFolder ]
@@ -13,7 +16,7 @@ new Vue({
         /**
             对应的程序逻辑说明
         */
-        page:["index","charts","forms","register","tables" , "collection"]
+        page:["index","charts","forms","register","tables" , "collection","audio"]
         ,currentPage:"index"
         ,navMain:[
             { name:"Index" , iClass:"icon-home",page:0},
@@ -24,19 +27,20 @@ new Vue({
                 { name :"Page" , page:1 },
                 { name: "Page" , page:2 },
                 { name: "Page" , page:3 }
-            ]},{
-                name:"收藏",iClass:"icon-windows" , hasChildren:true , connection:"exampledropdownDropdown_collection" ,childrens:[
-                    { name:" 哈哈" ,page:5 , clickListener:function( item ){
-                        alert("this is item :" + item.name );
-                        alert("this is this :" + this.name  );
-                    }},
-                    { name:"哈哈哈哈" ,page:5 }
-                ]}
+            ]},
+            { name:"发布作品",iClass:"icon-padnote",page:6}
         ],navExtras:[
             { name:"Demo" ,iClass:"icon-settings" , page:1 },
             { name:"Demo" ,iClass:"icon-writing-whiteboard",page:0},
             { name:"Demo" ,iClass:"icon-chart",page:0}
-        ],currentCollection:[
+        ]
+        //用户与其有关的信息
+        ,userId:null,
+        user:{
+            id:"",name:""
+        }
+        //收藏视频有关的数据信息
+        ,currentCollection:[
             //输出收藏的信息 ，输出对应的 collection 的信息
             { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
             { id:123,userId:123,audioId:"" , createTime:"xxx",createTimeStruct:"",audio:{ id:123,name:"ss",introduction:"sss" }},
@@ -70,8 +74,26 @@ new Vue({
             }
 
         },initIndex:function(){
+            console.log("helloworld");
             //初始化 相对应的 时
-            
+            this.initUser();
+            this.initCollectionFolder();   
+        },initUser:function(){
+            //获取对应程序背后的 userId 信息 INIT_USER_INFORMATION
+            var userId = GetQueryString("userId");
+            this.userId = userId;
+            var vue = this;
+            var url = getServerUrl("api/user/find/id");
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    id:userId
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    vue.user = result
+                }
+            })
         },initCollectionFolder:function(){
             //初始化收藏文件夹的参数
             var folderObj =  {name:"收藏",iClass:"icon-windows" , hasChildren:true , connection:"exampledropdownDropdown_collection_1" }
@@ -80,7 +102,7 @@ new Vue({
 
             //下面开始初始化信息
 
-            var userId = 2
+            var userId = this.userId;
             //开始进行请求
 
             var vue = this;
@@ -156,6 +178,7 @@ new Vue({
         },readyAddFolder:function(){
             //准备添加修改文件夹
             var vue = this;
+            var userId = this.userId;
             //准备进行对应的新建收藏夹的输出化工作
             window.CONFIRM.confirm({
                 theme:"black",
@@ -172,7 +195,7 @@ new Vue({
                     window.AJAX_ENGINE.ajax({
                         url:url,
                         data:{
-                            userId:2,
+                            userId:userId,
                             name:name_val,
                             introduction:introduction_val
                         },async:true,
@@ -360,6 +383,8 @@ new Vue({
 
             var url = "/yinji/" + "api/collection/insert";
 
+            var userId = this.userId;
+
             //准备进行转移文件夹
             window.CONFIRM.confirm({
                 title:"列表",
@@ -373,7 +398,7 @@ new Vue({
                     window.AJAX_ENGINE.ajax({
                         url:url,
                         data:{
-                            userId:2,
+                            userId:userId,
                             audioId:item.audioId,
                             folderId:check_int
                         },async:true,
@@ -406,6 +431,6 @@ new Vue({
             }
         }
     },created:function(){
-        this.initCollectionFolder();
+        this.initIndex();
     }
 });

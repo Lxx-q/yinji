@@ -31,7 +31,7 @@ func (self *AudioCommentService) FindAudoComments( function func(o orm.Ormer) or
 	return comments;
 }
 
-func (self *AudioCommentService ) FindAudioCommentsAndUser( function func(o orm.Ormer) orm.QuerySeter ) [] *bean.AudioCommentAndUser{
+func (self *AudioCommentService ) FindAudioCommentsAndUser( o orm.Ormer ,  function func(o orm.Ormer) orm.QuerySeter ) [] *bean.AudioCommentAndUser{
 
 	var userService = GetUserServiceInstance()
 
@@ -43,7 +43,7 @@ func (self *AudioCommentService ) FindAudioCommentsAndUser( function func(o orm.
 	for index:= 0 ; index < len(comments) ; index ++ {
 
 		var comment = comments[ index ];
-		var user = userService.FindUserById(comment.UserId)
+		var user , _  = userService.FindUserById( o , comment.UserId)
 		var commentAndUser = &bean.AudioCommentAndUser{}
 
 		commentAndUser.AudioComment = comment

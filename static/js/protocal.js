@@ -1,9 +1,9 @@
 window.AJAX_ENGINE = {
-	buildAjaxClass:function( data , success = function( result , status , xhr ){}, error = function( xhr , status , error){} ){
+	buildAjaxClass:function( data , success = function( result , status , xhr ){}, fail = function( type , content ){} ){
 		var successFunc = function( result , status , xhr ){
 			//2 便是操作的方法
 			if( result.type == 2 ){
-				error( xhr , status , result.content);
+				fail( result.type , result.content);
 			}else{
 				//调用成功的方法
 				success(result.content ,status , xhr);
@@ -13,7 +13,7 @@ window.AJAX_ENGINE = {
 		//输入对应的错误的函数
 		data.success = successFunc;
 
-		data.error = error;
+		data.fail = fail;
 
 
 		return data;

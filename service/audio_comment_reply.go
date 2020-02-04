@@ -36,7 +36,7 @@ func (self *AudioCommentReplyService) FindAudoCommentReplys(function func(qs orm
 	return replies;
 }
 
-func (self *AudioCommentReplyService ) FindAudoCommentReplyAndUser( function func(qs orm.QuerySeter) orm.QuerySeter )[]*bean.AudioCommentReplyAndUser{
+func (self *AudioCommentReplyService ) FindAudoCommentReplyAndUser( o orm.Ormer , function func(qs orm.QuerySeter) orm.QuerySeter )[]*bean.AudioCommentReplyAndUser{
 	var userService = GetUserServiceInstance()
 
 	var replies []*bean.AudioCommentReply = self.FindAudoCommentReplys( function )
@@ -48,8 +48,8 @@ func (self *AudioCommentReplyService ) FindAudoCommentReplyAndUser( function fun
 		var replyAndUser = &bean.AudioCommentReplyAndUser{}
 		var reply = replies[index]
 
-		var user = userService.FindUserById(reply.UserId)
-		var target = userService.FindUserById(reply.TargetId)
+		var user ,_ = userService.FindUserById( o , reply.UserId)
+		var target ,_= userService.FindUserById(o , reply.TargetId)
 
 		reply.Parse()
 

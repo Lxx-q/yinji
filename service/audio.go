@@ -60,7 +60,7 @@ func (self *AudioService) SearchAudio( content string , startLimit int , endLimi
 
 }
 
-func( self *AudioService) SearchAudioAndUser( audioList []*bean.Audio)  []*bind.AudioAndUser{
+func( self *AudioService) SearchAudioAndUser( o orm.Ormer , audioList []*bean.Audio)  []*bind.AudioAndUser{
 
 	var user_service = GetUserServiceInstance();
 
@@ -73,7 +73,7 @@ func( self *AudioService) SearchAudioAndUser( audioList []*bean.Audio)  []*bind.
 		//输出 相对应的 信息
 		var audio = audioList[ index ];
 
-		var user = user_service.FindUserById( audio.UserId );
+		var user , _ = user_service.FindUserById( o , audio.UserId );
 
 		var audioAndUser = new(bind.AudioAndUser);
 
@@ -126,6 +126,26 @@ func ( self *AudioService ) AllByCollectionFolder(o orm.Ormer , folderId int64  
 	fmt.Println(sql)
 
 
+}
+
+func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
+
+	var _ , insertErr = o.Insert( audio )
+
+	if insertErr != nil {
+		return  insertErr
+	}
+
+	//初始化 ， 阅读记录信息
+	var audioBrowseHistoryService = GetAUdioBrowseHistoryServiceInstance()
+
+	var _ ,newErr = audioBrowseHistoryService.NewByAudioId( o , audio.Id )
+
+	//初始化 ， 点赞 ， 转化 ， 收藏初始化信息
+	var dashboradService = GetDashboardServiceInstance()
+	dashboradService.NewByAudioId( o , audio.Id )
+
+	return newErr
 }
 
 //之后我们 便可以开始获取信息

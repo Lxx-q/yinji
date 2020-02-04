@@ -3,6 +3,7 @@ package service
 import (
 	"yinji/models/bean"
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/logs"
 )
 
 type DashboardService struct {
@@ -11,10 +12,14 @@ type DashboardService struct {
 
 const (
 	AUDIO_DASHBOARD_C0LLECTION = 1
-	AUDIO_DASHBOARD_FAVORITE = 2
-	AUDIO_DASHBOARD_FORWARD = 3
+	AUDIO_DASHBOARD_FAVORITE = 3
+	AUDIO_DASHBOARD_FORWARD = 5
 )
 
+
+/**
+	将对应的audio信息包装成为对应的
+ */
 func ( self *DashboardService) ToMap(dashboards []*bean.AudioUserDashboard)  map[int]*bean.AudioUserDashboard {
 	var dashboardLen = len( dashboards )
 
@@ -24,7 +29,6 @@ func ( self *DashboardService) ToMap(dashboards []*bean.AudioUserDashboard)  map
 		dashboradItem.Parse()
 		dashboardMap[dashboradItem.DashboardType] = dashboradItem
 	}
-
 	return dashboardMap
 }
 
@@ -46,7 +50,7 @@ func ( self *DashboardService ) AddDashboradCountEvent( o orm.Ormer , dashboradT
 		return nil , newErr
 	}
 
-	dashborad , updateErr :=self.AddDashboradCount( o , dashborad )
+	dashborad , updateErr :=self.AddDashboradCount( o , dashborad ,1 )
 
 	return dashborad , updateErr
 
@@ -55,7 +59,6 @@ func ( self *DashboardService ) AddDashboradCountEvent( o orm.Ormer , dashboradT
 /**
 	下面便是基础的数据操作方法
  */
-
 //获取对应的信息 ， 最后输出对应的信息
 func ( self *DashboardService ) FindDashboardByAudio( o orm.Ormer , audioId int64 ) ([]*bean.AudioUserDashboard , error ){
 	var dashboards []*bean.AudioUserDashboard
@@ -75,7 +78,8 @@ func ( self *DashboardService ) FindDashboradByAudioAndType ( o orm.Ormer , dash
 	return dashboread , readErr
 }
 
-//性插入数据
+
+//由於主鍵id 策略發生的錯誤
 func ( self *DashboardService ) NewDashboard( o orm.Ormer , dashboardType int  , audioId int64 ) (*bean.AudioUserDashboard , error) {
 	var dashboard = &bean.AudioUserDashboard{}
 	dashboard.New()
@@ -86,13 +90,34 @@ func ( self *DashboardService ) NewDashboard( o orm.Ormer , dashboardType int  ,
 	return dashboard , insertErr
 }
 
+func ( self *DashboardService ) NewByAudioId( o orm.Ormer , audioId int64 ) ( *map[int] *bean.AudioUserDashboard , error ){
+	//制定对应的数组 ， 按照数组来进行操作
+	var dashboardTypeArray = [3]int{ AUDIO_DASHBOARD_C0LLECTION , AUDIO_DASHBOARD_FAVORITE , AUDIO_DASHBOARD_FORWARD }
+	var dashboardMap = make(map[int] *bean.AudioUserDashboard)
+	logs.SetLogger("console")
+	logs.Debug("default")
+	for dashboardType := range dashboardTypeArray {
+		var dashboard , newErr = self.NewDashboard( o , dashboardType,audioId)
+
+		logs.Debug("dashborad %i",dashboardType)
+		//有问题是否会使整个函数失败呢？？ ， 答 ， 不会使整个操作失败
+		if newErr != nil {
+
+			logs.Debug(newErr.Error())
+			continue
+		}
+		dashboardMap[dashboardType] = dashboard
+	}
+
+	return &dashboardMap , nil
+}
 //添加对应的信息量
-func ( self *DashboardService ) AddDashboradCount( o orm.Ormer , dashborad *bean.AudioUserDashboard ) ( *bean.AudioUserDashboard , error ) {
+func ( self *DashboardService ) AddDashboradCount( o orm.Ormer , dashborad *bean.AudioUserDashboard , addCount int64) ( *bean.AudioUserDashboard , error ) {
 
 	//原本的 点击数量
 	var count = dashborad.Count
 
-	dashborad.Count = count + 1
+	dashborad.Count = count + addCount
 
 	var updateSql = "UPDATE audio_user_dashborad aud SET aud.count = ? WHERE aud.count = ? AND aud.id = ? ; "
 	var _ , err = o.Raw( updateSql ,dashborad.Count , count , dashborad.Id ).Exec()

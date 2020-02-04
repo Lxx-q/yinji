@@ -4,6 +4,7 @@ import (
 	"yinji/service"
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bean"
+	"yinji/service/db"
 )
 
 type AudioCommentController struct {
@@ -21,13 +22,18 @@ func (self *AudioCommentController) ByAudioId(){
 	}
 
 	var instance = service.GetAudioCommentServiceInstance()
+	var ormService = db.GetOrmServiceInstance()
+	var comments interface{}
+	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		comments = instance.FindAudioCommentsAndUser( o , func(o orm.Ormer) orm.QuerySeter {
+			var qs = o.QueryTable(bean.GetAudioCommentTableName()).Filter("AudioId",audioId)
+			//之后进行对应的搜索
+			return qs
+		})
 
-	//之后开始进行对应的参数
-	var comments = instance.FindAudioCommentsAndUser(func(o orm.Ormer) orm.QuerySeter {
-		var qs = o.QueryTable(bean.GetAudioCommentTableName()).Filter("AudioId",audioId)
-		//之后进行对应的搜索
-		return qs
+		return nil, nil
 	})
+	//之后开始进行对应的参数
 
 	self.Json( comments )
 }

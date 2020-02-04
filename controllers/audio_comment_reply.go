@@ -4,6 +4,7 @@ import (
 	"yinji/models/bean"
 	"yinji/service"
 	"github.com/astaxie/beego/orm"
+	"yinji/service/db"
 )
 
 type AudioCommentReplyController struct {
@@ -68,12 +69,18 @@ func ( self *AudioCommentReplyController ) ByCommentId(){
 	}
 
 	var instance = service.GetAudioCommentReplyServiceInstance()
-	
-	var result = instance.FindAudoCommentReplyAndUser(func( qs  orm.QuerySeter ) orm.QuerySeter {
-		return qs.Filter("audioCommentId", commentId)
+	var ormService = db.GetOrmServiceInstance()
+
+	var result interface{}
+
+	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+
+		result = instance.FindAudoCommentReplyAndUser( o , func( qs  orm.QuerySeter ) orm.QuerySeter {
+			return qs.Filter("audioCommentId", commentId)
+		})
+		return nil, nil
+
 	})
 
 	self.Json( result )
-
-
 }

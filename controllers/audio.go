@@ -45,13 +45,19 @@ func (self *AudioController) SearchByString() {
 
 	//获取对应的 信息 ， 之后 来对对应的 信息 来进行 查询
 	var audio_service = service.GetAudioServiceInstance();
+	var ormService = db.GetOrmServiceInstance()
 
 	//获取对应的方法
 	var audioList = audio_service.SearchAudio(content , startLimit , endLimit );
 
-	//先暂时 用这个方法 来进行输出 信息
+	var audioAndUserList interface{} 
 
-	var audioAndUserList = audio_service.SearchAudioAndUser(audioList);
+	//先暂时 用这个方法 来进行输出 信息
+	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		audio_service.SearchAudioAndUser( o , audioList)
+		return nil, nil
+	})
+	
 	self.Json(audioAndUserList)
 }
 
@@ -221,10 +227,17 @@ func (self *AudioController) AudioUpload() {
 
 	}
 
-	instance.Transaction(func(o orm.Ormer) (interface{}, error) {
-		return o.Insert(audio)
+	var audioService = service.GetAudioServiceInstance()
+
+	var _ , transacErr = instance.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var newErr = audioService.New( o , audio )
+		return audio , newErr
 	})
 
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
 
 	self.Json(audio);
 }

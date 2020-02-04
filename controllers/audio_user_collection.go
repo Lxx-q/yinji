@@ -242,3 +242,4 @@ func ( self *CollectionController ) UpdateCollection(){
 
 	self.Json( collection )
 }
+

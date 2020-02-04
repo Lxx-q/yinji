@@ -1,7 +1,12 @@
+/**
+    1.点赞方法 [ addLove ]
+*/
 new Vue({
     el: "#app",
     data: {
-        string: "hello , world",
+        //是否已经点赞
+        isLove:false,
+        loveCount:"-",
         //评论区信息
         comments: [],
         maxComments:10,
@@ -28,6 +33,45 @@ new Vue({
         currentAudioCommentId:null
     },
     methods: {
+        //点赞方法
+        addLove:function(){
+            var url = getServerUrl("api/love/insert");
+            var userId = this.userId;
+            var audioId = this.audioId;
+            var vue = this;
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    userId:userId,
+                    audioId:audioId
+                },dataType:"json",
+                async:true,
+                success:function( result , status , xhr ){
+                    window.CONFIRM.alert("射射兄弟(●￣(ｴ)￣●)");
+                    vue.isLove = true
+                },fail:function( type , result ){
+                    //等等 ， 你好像已经关注了哦
+                }
+            })
+        },cancalLove:function(){
+            var url = getServerUrl("api/love/delete");
+            var userId = this.userId;
+            var audioId = this.audioId;
+            var vue = this;
+
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    userId:userId,
+                    audioId:audioId
+                },dataType:"json",
+                async:true,
+                success:function( result , status , xhr ){
+                    window.CONFIRM.alert("辣鸡，快给老子滚o(╥﹏╥)o");
+                    vue.isLove = false;
+                }
+            })
+        },
     	//写明伦之后的方法
     	writeComment:function(){
             var $commentTextarea = this.$commentTextarea;
@@ -204,6 +248,24 @@ new Vue({
 
                 }
             })
+        },initLove:function(){
+            var url = getServerUrl("api/love/find")
+            var userId = this.userId;
+            var audioId = this.audioId;
+            var vue = this;
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    userId:userId,
+                    audioId:audioId
+                },dataType:"json",
+                async:true,
+                success:function( result , status , xhr ){
+                    vue.isLove = true
+                },fail:function( type , result ){
+                    vue.isLove = false;
+                }
+            })
         }
     },created:function(){
     	var vue = this;
@@ -220,6 +282,7 @@ new Vue({
     		vue.$commentTextarea = $("#content");
     	})
         vue.loadAudioComments();
+        this.initLove();
     	
     }
 })

@@ -11,6 +11,7 @@ new Vue({
     el: "#app",
     data() {
         return {
+            userId:2,
             audio: null,
             circleLeft: null,
             barWidth: null,
@@ -317,9 +318,12 @@ new Vue({
             
         },
         favorite() {
-            this.tracks[this.currentTrackIndex].favorited = !this.tracks[
-                this.currentTrackIndex
-                ].favorited;
+
+            var userId = this.userId;
+            var track = this.tracks[this.currentTrackIndex];
+
+            //辨别当前的操作是进行点赞还是取消点赞
+            track.favorited = !track.favorited;
         },
         helloworld: function () {
             alert("hello , world");

@@ -40,10 +40,15 @@ func RegistOrm(){
 		new(bean.ResourceImage),
 		new(bean.ResourceAudio),
 
-		//
+		//收藏有关的bean类
 		new(bean.AudioUserCollection),
 		new(bean.AudioUserDashboard),
 		new(bean.AudioCollectionFolder),
+
+		//点赞 Bean
+		new(bean.AudioUserLove),
+		//audio 点击历史
+		new(bean.AudioBrowseHistroy),
 		);
 
 	orm.Debug = true;

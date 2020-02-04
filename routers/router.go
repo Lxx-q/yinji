@@ -25,6 +25,8 @@ func init() {
 
 	var collectionFolder = &controllers.AudioCollectionFolderController{}
 
+	var love = &controllers.AudioUserLoveController{}
+
 	var page = &controllers.PageController{}
 
 	beego.Router("/", &controllers.MainController{})
@@ -81,6 +83,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/login/by/account"), login, "*:LoginByAccount")
 	//获取当前session中的user
 	beego.Router(app.GetUrl("/api/login/current/user"), login, "*:CurrentUser")
+	//根据对应的id来获取user信息
+	beego.Router(app.GetUrl("/api/user/find/id"),user , "*:FindUserById")
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload"), audio, "*:AudioUpload")
 
@@ -131,6 +135,13 @@ func init() {
 	beego.Router( app.GetUrl( "/api/collection/folder/update") , collectionFolder ,"*:UpdateCollectionFolder")
 	//删除收藏夹
 	beego.Router( app.GetUrl("/api/collection/folder/delete") , collectionFolder , "*:DeleteCollectionFolder");
+	//点赞
+	beego.Router( app.GetUrl("/api/love/insert"),love,"*:InsertLove")
+	//取消点赞
+	beego.Router( app.GetUrl( "/api/love/delete"),love,"*:DeleteLove")
+	//查询点赞关系
+	beego.Router( app.GetUrl("/api/love/find"),love,"*:FindLove")
+
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 
