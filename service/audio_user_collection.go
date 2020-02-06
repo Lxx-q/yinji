@@ -3,13 +3,14 @@ package service
 import (
 	"yinji/models/bean"
 	"github.com/astaxie/beego/orm"
+	"yinji/config"
 )
 
 type CollectionService struct {
 
 }
 
-func ( self *CollectionService ) InsertCollection( o orm.Ormer , collection *bean.AudioUserCollection ) ( *bean.AudioUserCollection , *bean.AudioUserDashboard , error){
+func ( self *CollectionService ) InsertCollection( o orm.Ormer , collection *bean.AudioUserCollection ) ( *bean.AudioUserCollection , *bean.AudioDashboard, error){
 	//先进行对应的插入数据
 	var _ , insertErr = self.Insert( o , collection )
 
@@ -17,11 +18,11 @@ func ( self *CollectionService ) InsertCollection( o orm.Ormer , collection *bea
 		return  nil , nil , insertErr
 	}
 
-	//之后我们便开始记录数字
-	var dashboardService = GetDashboardServiceInstance()
-	var dashborad ,  getDashboardErr = dashboardService.AddDashboradCountEvent( o , AUDIO_DASHBOARD_C0LLECTION , collection.AudioId )
+	var audioDashboardService = GetDashboardServiceInstance()
+	//只加载一个的关系
+	audioDashboardService.AddCollectionCount( o , collection.AudioId , 1 )
 
-	return collection , dashborad , getDashboardErr
+	return collection , nil , nil
 
 }
 
@@ -77,7 +78,7 @@ func ( self *CollectionService ) FindByUser( o orm.Ormer , userId int64 ) []*bea
 	var collections []*bean.AudioUserCollection
 
 	var qt = o.QueryTable(bean.GetAudioUserCollectionTableName())
-	qt = qt.Filter("userId").OrderBy("-create_time").Limit(LIMIT_COUNT)
+	qt = qt.Filter("userId").OrderBy("-create_time").Limit(config.LIMIT_COUNT)
 	var _ , err = qt.All(&collections)
 
 	if err != nil {

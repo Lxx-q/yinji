@@ -21,11 +21,17 @@ func init() {
 
 	var collection = &controllers.CollectionController{}
 
-	var dashborad = &controllers.DashboardContrlller{}
+	//var dashborad = &controllers.DashboardContrlller{}
 
 	var collectionFolder = &controllers.AudioCollectionFolderController{}
 
 	var love = &controllers.AudioUserLoveController{}
+
+	var userTempDashboard = &controllers.UserTempDashoardController{}
+
+	//var userDateDashboard = &controllers.UserDateDashboardController{}
+
+	var userDashboard = &controllers.UserDashboardController{}
 
 	var page = &controllers.PageController{}
 
@@ -123,7 +129,7 @@ func init() {
 	//转移收藏信息
 	beego.Router( app.GetUrl("/api/collection/update"),collection , "*:UpdateCollection")
 	//仪表板输出格式相关的接口
-	beego.Router(app.GetUrl("/api/dashborad/audio") , dashborad , "*:FindByAudioId")
+	//beego.Router(app.GetUrl("/api/dashborad/audio") , dashborad , "*:FindByAudioId")
 
 	//对应的文件夹
 	beego.Router( app.GetUrl("/api/collection/folder/all"), collectionFolder , "*:AllByUserId")
@@ -142,6 +148,10 @@ func init() {
 	//查询点赞关系
 	beego.Router( app.GetUrl("/api/love/find"),love,"*:FindLove")
 
+	//获取一个周期内的信息
+	beego.Router( app.GetUrl("/api/dashboard/user/temp/find") , userTempDashboard ,"*:FindById")
+
+	beego.Router( app.GetUrl("/api/dashboard/user/find") , userDashboard, "*:FindById")
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 

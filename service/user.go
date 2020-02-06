@@ -13,7 +13,6 @@ type UserService struct {
 //下面我们 根据 对应的 信息 来进行 设置
 
 func( self *UserService) FindUserById ( o orm.Ormer , id int64) ( *bean.User , error ) {
-
 	//对应的 信息
 	var user = new(bean.User);
 	user.Id = id;

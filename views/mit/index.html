@@ -5,6 +5,7 @@
 
    1. 栏目去 关键字 ：KEY_NAV
    2. 收藏界面 ：KEY_COLLECTION_FOLDER
+   3. 数据首页： KEY_INDEX
  -->
 <html>
  <head> 
@@ -355,6 +356,10 @@
     </nav> 
     <!-- Sidebar Navigation end--> 
 
+    <!-- 
+        对应的数据中心: KEY_INDEX
+     -->
+
     <div class="page-content" :class="currentPage == 'index' ? 'show':'hidden' " > 
      <div class="page-header"> 
       <div class="container-fluid"> 
@@ -371,10 +376,10 @@
             <div class="icon">
              <i class="icon-user-1"></i>
             </div>
-            <strong>New Clients</strong> 
+            <strong>今日访问量</strong> 
            </div> 
            <div class="number dashtext-1">
-            27
+            {{ userDashboard.browseCount }}
            </div> 
           </div> 
           <div class="progress progress-template"> 
@@ -389,10 +394,10 @@
             <div class="icon">
              <i class="icon-contract"></i>
             </div>
-            <strong>New Projects</strong> 
+            <strong>今天新增点赞数</strong> 
            </div> 
            <div class="number dashtext-2">
-            375
+            {{ userDashboard.loveCount }}
            </div> 
           </div> 
           <div class="progress progress-template"> 
@@ -407,10 +412,10 @@
             <div class="icon">
              <i class="icon-paper-and-pencil"></i>
             </div>
-            <strong>New Invoices</strong> 
+            <strong>今日新增评论数</strong> 
            </div> 
            <div class="number dashtext-3">
-            140
+            {{ userDashboard.commentCount }}
            </div> 
           </div> 
           <div class="progress progress-template"> 
@@ -1656,6 +1661,7 @@
 
             </div>
           </div>
+          
 
 
        </div>
@@ -1664,6 +1670,8 @@
             对应的当前的数据信息
           -->
        <div class="page-content" :class="currentPage == 'audio' ? 'show':'hidden' "> 
+
+          
 
        </div>
 

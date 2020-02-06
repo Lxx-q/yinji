@@ -136,16 +136,23 @@ func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
 		return  insertErr
 	}
 
-	//初始化 ， 阅读记录信息
-	var audioBrowseHistoryService = GetAUdioBrowseHistoryServiceInstance()
+	Async(func() {
+		var ormService = db.GetOrmServiceInstance()
+		ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+			//初始化 ， 阅读记录信息
+			var audioBrowseHistoryService = GetAUdioBrowseHistoryServiceInstance()
 
-	var _ ,newErr = audioBrowseHistoryService.NewByAudioId( o , audio.Id )
+			var _ ,newErr = audioBrowseHistoryService.NewByAudioId( o , audio.Id )
 
-	//初始化 ， 点赞 ， 转化 ， 收藏初始化信息
-	var dashboradService = GetDashboardServiceInstance()
-	dashboradService.NewByAudioId( o , audio.Id )
+			//初始化 ， 点赞 ， 转化 ， 收藏初始化信息
+			var dashboradService = GetDashboardServiceInstance()
+			dashboradService.NewByAudioId( o , audio.Id )
 
-	return newErr
+			return nil , newErr
+		});
+	})
+
+	return insertErr
 }
 
 //之后我们 便可以开始获取信息

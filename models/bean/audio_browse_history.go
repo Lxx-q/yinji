@@ -8,7 +8,7 @@ import (
 // 目标 音频 浏览其实记录
 type AudioBrowseHistroy struct {
 	base.IdStruct
-	BrowseAllCount int64
+	BrowseAllCount int64 `orm:"column(browse_all_count)" json:"browseAllCount"`
 	base.CreateTimeAndModifyTimeStruct
 }
 

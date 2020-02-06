@@ -19,8 +19,8 @@ new Vue({
         page:["index","charts","forms","register","tables" , "collection","audio"]
         ,currentPage:"index"
         ,navMain:[
-            { name:"Index" , iClass:"icon-home",page:0},
-            { name:"Tables" ,iClass:"icon-home" ,actived:true , page:4},
+            { name:"数据中心" , iClass:"icon-home",page:0},
+            { name:"用户信息" ,iClass:"icon-home" ,actived:true , page:4},
             { name:"Charts" ,iClass:"fa fa-bar-chart" ,page:1},
             { name:"Forms"  ,iClass:"icon-padnote" , page:2},
             { name:"Example dropdown" ,iClass:"icon-windows" , hasChildren:true , connection:"exampledropdownDropdown" , childrens:[
@@ -38,6 +38,9 @@ new Vue({
         ,userId:null,
         user:{
             id:"",name:""
+        },userDashboard:{
+            //根据目标的信息来生成对应的xinxi
+            browseCount:"--" , forwardCount:"", loveCount:"--"
         }
         //收藏视频有关的数据信息
         ,currentCollection:[
@@ -73,11 +76,11 @@ new Vue({
                 item.clickListener( item );
             }
 
-        },initIndex:function(){
-            console.log("helloworld");
+        },init:function(){
             //初始化 相对应的 时
             this.initUser();
-            this.initCollectionFolder();   
+            this.initCollectionFolder();
+            this.initIndexPage();   
         },initUser:function(){
             //获取对应程序背后的 userId 信息 INIT_USER_INFORMATION
             var userId = GetQueryString("userId");
@@ -136,6 +139,32 @@ new Vue({
             this.folderObj = folderObj;
 
             this.navMain.push(this.folderObj);
+        },initIndexPage:function(){
+            //初始化index page的信息
+            var vue = this;
+            var userId = this.userId;
+
+            /**
+                
+                if( userId == null ){
+                    return ;
+                }
+
+            */
+
+            var url = getServerUrl("api/dashboard/user/find");
+            //获取对应的
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    id:userId
+                },dataType:"json",
+                async:true,
+                success:function( result , status , xhr ){
+                    vue.userDashboard = result;
+                }
+            });
+
         },collectionFolderToItem:function(item){
             var _item = item;
             _item.page = 5;
@@ -431,6 +460,6 @@ new Vue({
             }
         }
     },created:function(){
-        this.initIndex();
+        this.init();
     }
 });

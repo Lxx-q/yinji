@@ -39,6 +39,10 @@ func ( self *AudioUserLoveService ) InsertLove( o orm.Ormer ,  userId int64 , au
 
 	var _ , insertErr = o.Insert( love )
 
+	var audioDashboardService = GetDashboardServiceInstance()
+
+	audioDashboardService.AddLoveCount( o , love.AudioId , 1 )
+
 	return love , insertErr
 }
 

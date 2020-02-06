@@ -192,11 +192,7 @@ func (self *AudioController) AudioUpload() {
 		self.FailJson( err )
 		return
 	}
-
-	//var dir, _ = os.Getwd();
-	//准备进行 相对应的 信息的 输入
-
-
+	
 	var fileName = httpFileService.BuildAudioFileName(audio , fileHeader)
 
 	var audioUrl , uploadAudioErr = httpFileService.UploadAudio( fileName , file )

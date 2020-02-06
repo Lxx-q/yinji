@@ -42,13 +42,18 @@ func RegistOrm(){
 
 		//收藏有关的bean类
 		new(bean.AudioUserCollection),
-		new(bean.AudioUserDashboard),
+		new(bean.AudioDashboard),
 		new(bean.AudioCollectionFolder),
 
 		//点赞 Bean
 		new(bean.AudioUserLove),
 		//audio 点击历史
 		new(bean.AudioBrowseHistroy),
+
+		//用户角色这里的三个
+		new(bean.UserDashboard),
+		new(bean.UserDateDashboard),
+		new(bean.UserTempDashboard),
 		);
 
 	orm.Debug = true;
