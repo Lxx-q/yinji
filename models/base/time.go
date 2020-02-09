@@ -22,7 +22,7 @@ type TimeStruct struct {
 // 根据对应的时间 来得到 相对应的时间
 func ( self *TimeStruct) ParseTime( t time.Time ){
 	//利用对应的方法进行输出
-	self.MilliTime = t.Unix()
+	self.MilliTime = t.Unix() * 1000
 	self.Year = t.Year()
 	self.Day = t.Day()
 	self.Month = int(t.Month())

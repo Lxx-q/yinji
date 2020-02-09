@@ -23,10 +23,10 @@ type Audio struct {
 
 
 func ( self *Audio) TableName() string {
-	return GetAduioTableName()
+	return GetAudioTableName()
 }
 
-func GetAduioTableName() string{
+func GetAudioTableName() string{
 	return "audio";
 }
 

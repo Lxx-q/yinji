@@ -7,15 +7,15 @@ import (
 
 type UserDateDashboard struct {
 	base.IdStruct
-	UserId int64 `orm:"column(userId)" json:"userId"`
-	writeDate time.Time `orm:"column(write_date)" json:"writeDate"`
+	UserId int64 `orm:"column(user_id)" json:"userId"`
+	WriteDate time.Time `orm:"column(write_date)" json:"writeDate"`
 	//BrowseAllCount int64 `orm:column"browse_all_count"`
 	base.DashboardBase
 }
 
 func ( self *UserDateDashboard ) NewEntity( t time.Time ){
 	self.IdStruct.NewEntity( t )
-	self.writeDate = t
+	self.WriteDate = t
 	self.DashboardBase.New()
 }
 

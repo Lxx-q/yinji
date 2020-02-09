@@ -1,9 +1,58 @@
+
+var charts_home_legendState = true;
+if ($(window).outerWidth() < 576) {
+    charts_home_legendState = false;
+}
+
+window.CHART = {
+    line: function(jq, data , min , max ) {
+
+        if (( max - 10 ) < min) {
+            max = min + 10 ;
+        }
+
+        console.log(max);
+        console.log(min);
+        return new Chart(jq, {
+            type: 'line',
+            options: {
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            max: max,
+                            min: min
+                        },
+                        display: true,
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: charts_home_legendState
+                }
+            },
+            data: data
+        });
+    }
+}
+
+window.CHART_FUNC = function( vue ){
+
+
 $(document).ready(function () {
+
+    return ;
 
     'use strict';
 
     Chart.defaults.global.defaultFontColor = '#75787c';
-
 
     // ------------------------------------------------------- //
     // Line Chart
@@ -97,91 +146,86 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Bar Chart
     // ------------------------------------------------------ //
+
+    /**
+
+    */
+
+
     var BARCHARTEXMPLE    = $('#barChartExample1');
     var barChartExample = new Chart(BARCHARTEXMPLE, {
-        type: 'bar',
+        type: 'line',
         options: {
             scales: {
                 xAxes: [{
-                    display: false,
+                    display: true,
                     gridLines: {
-                        color: '#eee'
+                        display: false
                     }
                 }],
                 yAxes: [{
-                    display: false,
+                    ticks: {
+                        max: 60,
+                        min: 10
+                    },
+                    display: true,
                     gridLines: {
-                        color: '#eee'
+                        display: false
                     }
                 }]
             },
+            legend: {
+                display: legendState
+            }
         },
         data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
             datasets: [
                 {
-                    label: "Data Set 1",
-                    backgroundColor: [
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)"
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)",
-                        "rgba(134, 77, 217, 0.57)"
-                    ],
-                    borderColor: [
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)",
-                        "rgba(134, 77, 217, 1)"
-                    ],
-                    borderWidth: 1,
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    label: "Page Visitors",
+                    fill: true,
+                    lineTension: 0.2,
+                    backgroundColor: "transparent",
+                    borderColor: '#864DD9',
+                    pointBorderColor: '#864DD9',
+                    pointHoverBackgroundColor: '#864DD9',
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    borderWidth: 2,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 0,
+                    data: [20, 27, 20, 35, 30, 40, 33, 25, 39],
+                    spanGaps: false
                 },
                 {
-                    label: "Data Set 2",
-                    backgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)"
-                    ],
-                    hoverBackgroundColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)"
-                    ],
-                    borderColor: [
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)",
-                        "rgba(75, 75, 75, 0.7)"
-                    ],
-                    borderWidth: 1,
-                    data: [35, 40, 60, 47, 88, 27, 30],
+                    label: "Page Views",
+                    fill: true,
+                    lineTension: 0.2,
+                    backgroundColor: "transparent",
+                    borderColor: "#EF8C99",
+                    pointBorderColor: '#EF8C99',
+                    pointHoverBackgroundColor: "#EF8C99",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    borderWidth: 2,
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 5,
+                    pointHoverRadius: 5,
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: [25, 17, 28, 25, 33, 27, 30, 33, 27],
+                    spanGaps: false
                 }
             ]
         }
@@ -648,3 +692,4 @@ $(document).ready(function () {
     };
 
 });
+}

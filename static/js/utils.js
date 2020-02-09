@@ -27,3 +27,57 @@ function getServerUrl( url ){
 function parseImage( path ){
 	return path != null  && path != "" ? "/yinji" + "/" +  path : DEFAULT_IMAGE_PATH;  
 }
+
+/**
+	获取对应事件的毫秒级别参数
+*/
+
+const HOUR_MILLI_SEC = 1000 * 60 * 60 ;
+const DAY_MILLI_SEC = HOUR_MILLI_SEC * 24;
+
+function Today(){
+	var date = new Date();
+	//获取当前的时间
+	var year = date.getFullYear();
+	var month = date.getMonth();
+	var day = date.getDate();
+	return new Date( year , month , day );
+}
+
+/**
+	
+	year:year,
+	month:month,
+	day:day,
+	date:date,
+
+
+*/
+function parseTimeStruct( now ){
+
+	var year = now.getFullYear(); //得到年份
+	var month = now.getMonth() + 1 ; //得到月份
+	var date = now.getDate(); //得到日期
+	var day = now.getDay(); //得到周几
+	var hour = now.getHours(); //得到小时
+	var minu = now.getMinutes(); //得到分钟
+	var sec = now.getSeconds(); //得到秒
+	var times = now.getTime();
+
+	var timeStruct = {
+   		year: year,
+    	month: month,
+   	 	day: date,
+    	weekDay: day,
+    	hour: hour,
+    	minute: minu,
+    	milliTime: times
+	}
+
+	return timeStruct;
+}
+
+function parseTimes( times ){
+	var date = new Date( times );
+	return parseTimeStruct( date );
+}

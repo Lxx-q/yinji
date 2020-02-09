@@ -352,7 +352,7 @@ func( self *AudioController) SearchAudioByUserId(){
 	var ormService = db.GetOrmServiceInstance()
 
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		var tableName = bean.GetAduioTableName()
+		var tableName = bean.GetAudioTableName()
 		var qs = o.QueryTable( tableName )
 		qs.Filter("user_id" , userId).Limit( offset , startLimit ).OrderBy("-create_time").All( &audioSlice )
 		return nil, nil
@@ -386,4 +386,37 @@ func( self *AudioController ) FindAudioById(){
 	}
 
 	self.Json( audio )
+}
+
+/**
+	接受的信息：
+	userId : 目标用户的id
+	输出的信息：
+	直接输出数量
+ */
+func ( self *AudioController ) AudioLen( ){
+
+	var userId , getUserIdErr = self.GetInt64("userId")
+
+	if getUserIdErr != nil {
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	var ormService = db.GetOrmServiceInstance()
+
+	var result , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var qt = o.QueryTable( bean.GetAudioTableName() )
+
+		var count , countErr = qt.Filter("userId",userId).Count()
+		return count , countErr
+	})
+
+
+	if jdbcErr != nil {
+		self.FailJson( jdbcErr )
+	}
+
+	self.Json( result )
+
 }
