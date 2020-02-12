@@ -8,61 +8,151 @@
 2.修改收藏夹信息 [ readyUpdateFolder]
 3.删除收藏夹 [ readyDeleteFolder ]
 4.准备复制收藏关系 readyCopyCollection
+5.重新修改密码 [ rewritePwd ]
 */
 new Vue({
     el: "#app",
     data: {
         string: "helloworld",
+        url:"",//目前的url
         //当前页面情况 
         /**
             对应的程序逻辑说明
         */
-        page: ["index", "charts", "forms", "register", "tables", "collection", "audio"],
+        page: ["index", "password", "forms", "register", "tables", "collection", "audio"],
         currentPage: "index",
         navMain: [{
             name: "数据中心",
-            iClass: "icon-home",
+            iClass: "icon-chart",
             page: 0
         },
         {
             name: "用户信息",
-            iClass: "icon-home",
-            actived: true,
-            page: 4
-        },
-        {
-            name: "Charts",
-            iClass: "fa fa-bar-chart",
-            page: 1
-        },
-        {
-            name: "Forms",
             iClass: "icon-padnote",
-            page: 2
+            page: 2,
+            clickListener:function( item , vue ){
+                /**
+                    下面所要进行的操作
+                    搜索用户的一些详细信息
+                */
+                var userId = vue.userId;
+
+                var url = getServerUrl("api/user/details/find");
+                window.AJAX_ENGINE.ajax({
+                    url:url,
+                    data:{
+                        id:userId
+                    },dataType:"json",
+                    async:true,
+                    success:function( result , status , xhr ){
+                        vue.userDetails = result;
+                    }
+                })
+            }
         },
         {
-            name: "Example dropdown",
-            iClass: "icon-windows",
-            hasChildren: true,
-            connection: "exampledropdownDropdown",
-            childrens: [{
-                name: "Page",
-                page: 1
-            },
-            {
-                name: "Page",
-                page: 2
-            },
-            {
-                name: "Page",
-                page: 3
-            }]
+            name: "修改密码",
+            iClass: "icon-settings",
+            page: 1
         },
         {
             name: "发布作品",
             iClass: "icon-padnote",
-            page: 6
+            page: 6,
+            clickListener:function( item , vue ){
+
+                //初始化发布作品的
+                var userId = vue.userId;
+
+                //获取播放量最高的五个信息
+                var limit = 3 ;
+                //获取url
+                var url = getServerUrl("api/audio/search/dashboard");
+
+                window.AJAX_ENGINE.ajax({
+                    url:url,
+                    data:{
+                        userId:userId,
+                        limit:limit
+                    },async:true,
+                    dataType:"json",
+                    success:function( result , status , xhr ){
+                        vue.mostPlayAudio = result;
+
+                        var labels = [];
+                        var datas = [];
+                        //循环的播放对应的界面
+                        for( var index = 0 ; index < result.length ; index++){
+                            var audio = result[index];
+                            //添加对应的属性
+                            labels.push(audio.name);
+                            datas.push(audio.browseCount);
+                        }
+
+                        var data = {
+                            labels: labels,
+                            datasets: [
+                            {
+                            data: datas,
+                            borderWidth: 0,
+                            backgroundColor: [
+                                '#723ac3',
+                                "#864DD9",
+                                "#9762e6",
+                                "#a678eb"
+                            ],
+                            hoverBackgroundColor: [
+                                '#723ac3',
+                                "#864DD9",
+                                "#9762e6",
+                                "#a678eb"
+                            ]
+                        }]
+                        };
+
+                        //输入属性
+                        var jq = $("#salesBarChart1")
+                        var pie = window.CHART.pie( jq , data , function( event , legendItem ){
+                            console.log( event );
+                            console.log( legendItem );
+                        } );
+                    }
+                });
+                
+                //初始化名字
+                vue.searchAudio( vue.currentAudioIndex , vue.currentAudioCount);
+
+                var count_url = getServerUrl("api/audio/count");
+                window.AJAX_ENGINE.ajax({
+                    url:count_url,
+                    data:{
+                        userId:userId
+                    },async:true,
+                    dataType:"json",
+                    success:function( result , status , xhr ){
+                        var len = result;
+                        vue.currentAudioPageLen = len / vue.currentAudioCount;
+                    }
+                });
+            }
         }],
+        label:{
+            user:{
+                name:"名字",
+                introduction:"介绍信息",
+                image:"用户头像",
+                sex:"性别",
+                age:"年龄",
+                birthday:"出生年月",
+                address:"家庭地址",
+                cancelButton:"取消",
+                saveButton:"保存"
+            },login:{
+                password:"登录密码",
+                newPassword:"请输入新密码",
+                pwdAgain:"请重新输入密码"
+            }
+        },
         navExtras: [{
             name: "Demo",
             iClass: "icon-settings",
@@ -84,6 +174,8 @@ new Vue({
         user: {
             id: "",
             name: ""
+        },userDetails:{
+            //详细信息
         },
         dateArray: {
             //日期列表排期
@@ -98,8 +190,7 @@ new Vue({
             //用户近十日的数据
         }
         //收藏视频有关的数据信息
-        ,
-        currentCollection: [
+        ,currentCollection: [
         //输出收藏的信息 ，输出对应的 collection 的信息
         {
             id: 123,
@@ -173,7 +264,14 @@ new Vue({
         ],
         folderObj: {
 
-}
+        },mostPlayAudio:{
+            //最多播放量的节目
+        },currentAudio:{
+            //当前音频信息
+
+        },currentAudioIndex:0, // 当前audio 的 index 标签,
+        currentAudioCount:7, //当前一个页面 的数量,
+        currentAudioPageLen:0
     },
     methods: {
         selectPage: function(event, item) {
@@ -187,10 +285,16 @@ new Vue({
 
         },
         gotoPage: function(item) {
-            this.currentPage = this.page[item.page];
+
+            var toPage = this.page[item.page];
+            /*if( this.currentPage == toPage ){
+                return;
+            }
+            */
+            this.currentPage = toPage;
 
             if (item.clickListener != undefined) {
-                item.clickListener(item);
+                item.clickListener(item , this );
             }
 
         },
@@ -454,7 +558,7 @@ new Vue({
             _item.clickListener = this.searchCollectionAudio
             return _item;
         },
-        searchCollectionAudio: function(item) {
+        searchCollectionAudio: function(item , _vue ) {
             //根据目标的 id ( 收藏夹 [collection_folder]  , 来搜索 ，该id下面的所有的信息)
             var id = item.id;
 
@@ -753,10 +857,82 @@ new Vue({
             if (this.navMain.length > 0) {
                 this.gotoPage(this.navMain[0])
             }
+        },rewritePwd:function(){
+            var newPassword = $("#rewrite_newPassword");
+            var pwdAgain = $("#rewrited_pwdAgain");
+
+            //获取对应的信息
+            var newPassword_val = newPassword.val();
+            var pwdAgain_val = pwdAgain.val();
+
+            if ( newPassword_val != pwdAgain_val ){
+                window.CONFIRM.alert("两次密码不一致");
+                return ;
+            }
+
+            if( newPassword_val.length <= 6 ){
+                window.CONFIRM.alert("密码格式不正确，长度小于6")
+                return;
+            }
+
+            var userId = this.userId;
+            var url = getServerUrl("api/login/update/pwd")
+            var vue = this;
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    id:userId,
+                    password:newPassword_val
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    window.CONFIRM.alert("密码修改成功")
+                    vue.login = result;
+                    newPassword.val("");
+                    pwdAgain.val("");
+                }
+            })
+            //修改密码
+            console.log("准备开始重写新密码");
+        },searchAudio:function( page , count ){
+            //根据对应的 起始页面 数据 来获取对应的信息
+            //先获取对应的 
+            var userId = this.userId;
+            var vue = this;
+            var url = getServerUrl("api/audio/user");
+
+            if( page < 0 ){
+                window.CONFIRM.alert("现在已经是第一页喽^_^");
+                return ;
+            }
+
+            if( page > this.currentAudioPageLen ){
+                window.CONFIRM.alert("超过页面限度o(>﹏<)o");
+                return;
+            }
+
+            this.currentAudioIndex = page;
+            
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    userId:userId,
+                    page:page,
+                    count:count
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    //设置对应的信息
+                    vue.currentAudio = result;
+                }
+            });
+
+
         }
     },
     created: function() {
         var vue = this;
-            vue.init();
+        vue.init();
+        this.url = window.location.href;
     }
 });

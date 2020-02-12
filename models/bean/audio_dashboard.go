@@ -26,10 +26,10 @@ func ( self *AudioDashboard) New(){
 }
 
 func ( self *AudioDashboard) TableName() string {
-	return GetAudioUserDashboardTableName()
+	return GetAudioDashboardTableName()
 }
 
-func GetAudioUserDashboardTableName() string{
+func GetAudioDashboardTableName() string{
 	return "audio_dashboard"
 }
 

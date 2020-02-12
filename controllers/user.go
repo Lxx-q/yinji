@@ -69,3 +69,35 @@ func ( self *UserController ) FindUserById(){
 	self.Json( result )
 
 }
+
+/**
+	更新user 和 userDetails 的信息
+*/
+
+func ( self *UserController ) UpdateUserAndDetails(){
+
+	//先收集对应的信息
+	/*
+	var id , getIdErr = self.GetInt("id")
+
+	if getIdErr != nil{
+		self.FailJson( getIdErr )
+		return
+	}
+
+	var name  = self.GetString("name")
+
+	var introduction = self.GetString("introduction")
+
+	var sex , getSexErr = self.GetInt("sex")
+
+	if getSexErr != nil {
+		self.FailJson(getSexErr)
+		return
+	}
+
+	var address = self.GetString("address")
+	*/
+
+	self.String("helloworld")
+}

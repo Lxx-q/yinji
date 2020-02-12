@@ -5,6 +5,7 @@ import (
 	"yinji/models/bean"
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
+	"yinji/models/bind"
 )
 
 type AudioController struct {
@@ -174,7 +175,7 @@ func (self *AudioController) AudioUpload() {
 	var instance = db.GetOrmServiceInstance()
 
 	//下面输入对应的信息
-	audio.New()
+	//audio.New()
 	audio.Name = name
 	audio.Image = ""
 	audio.UserId = userId
@@ -333,30 +334,32 @@ func( self *AudioController) SearchAudioByUserId(){
 	//获取目标的 id
 	var userId , _ = self.GetInt64("userId")
 
-	var startLimit , startLimitError = self.GetInt("startLimit")
-	var endLimit , endLimitError = self.GetInt("endLimit")
+	var page, getPageErr = self.GetInt("page")
+	var count, getCountErr = self.GetInt("count")
 
-	if startLimitError != nil {
-		startLimit = 0
+	if getPageErr != nil {
+		page = 0
 	}
 
-	if endLimitError != nil {
-		endLimit = startLimit + 10
+	if getCountErr != nil {
+		count = 10
 	}
 
-	var offset = endLimit - startLimit
+	var offset = page * count
 
-	var audioSlice []bean.Audio
+	var audioSlice []*bean.Audio
 
 	//获取对应的
 	var ormService = db.GetOrmServiceInstance()
-
+	var audioService = service.GetAudioServiceInstance()
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 		var tableName = bean.GetAudioTableName()
 		var qs = o.QueryTable( tableName )
-		qs.Filter("user_id" , userId).Limit( offset , startLimit ).OrderBy("-create_time").All( &audioSlice )
+		qs.Filter("user_id" , userId).Limit( count , offset ).OrderBy("-create_time").All( &audioSlice )
 		return nil, nil
 	})
+
+	audioService.ParseArr( &audioSlice )
 
 	self.Json( audioSlice )
 }
@@ -418,5 +421,57 @@ func ( self *AudioController ) AudioLen( ){
 	}
 
 	self.Json( result )
+
+}
+
+/**
+	根据对应的输入属性，来搜索根据某种排行的数据
+	接收的信息：
+		audioId:userId
+		type:排序的类型
+		limit:限制数量
+	目前暂时只支持对应的 browse( 浏览 )
+
+*/
+func ( self *AudioController ) AudioByDashboard(  ) {
+
+	var userId , getUserIdErr = self.GetInt64("userId")
+
+	if getUserIdErr != nil {
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	var limit , getLimitErr = self.GetInt("limit")
+
+	if getLimitErr != nil {
+		self.FailJson( getLimitErr )
+		return
+	}
+	
+	var ormService = db.GetOrmServiceInstance()
+	//var audioService = service.GetAudioServiceInstance()
+
+	var sql = "SELECT a.* , ad.browse_count , ad.love_count , ad.comment_count ,ad.collection_count FROM audio a LEFT JOIN audio_dashboard ad ON a.id = ad.id WHERE a.user_id = ? ORDER BY ad.browse_count DESC LIMIT ? ;"
+	var audioArr []*bind.AudioAndDashboard
+	/**
+		输出结果
+	 */
+	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var _ , queryErr =  o.Raw( sql , userId , limit ).QueryRows(&audioArr)
+		return audioArr , queryErr
+	})
+
+	if jdbcErr != nil {
+		self.FailJson( jdbcErr )
+		return
+	}
+
+	for _ , dashboard := range audioArr {
+		dashboard.Parse()
+	}
+
+	//输出结果
+	self.Json( audioArr )
 
 }

@@ -1,9 +1,8 @@
 package bean
 
 import (
-	"github.com/astaxie/beego/orm"
-	"yinji/service/db"
-	"strconv"
+	"time"
+	"yinji/models/base"
 )
 
 type Audio struct {
@@ -16,9 +15,11 @@ type Audio struct {
 	TimeLength int `orm:"column(time_length)" json:"timeLength"`
 	//商业介绍
 	Introduction string `orm:"column(introduction)" json:"introduction"`
-	FolderId int64 `orm:"column(folder_id)" json:"folderId"`
+	AudioAlbumId int64 `orm:"column(audio_album_id)" json:"audioAlbumId"`
 
-	EntityBase
+	//EntityBase
+	base.IdAndCodeStruct
+	base.CreateTimeAndModifyTimeStruct
 }
 
 
@@ -30,7 +31,18 @@ func GetAudioTableName() string{
 	return "audio";
 }
 
+func ( self *Audio ) NewEntity( t time.Time) {
+	self.CreateTimeAndModifyTimeStruct.NewEntity( t )
+	self.IdAndCodeStruct.NewEntity( t )
 
+}
+
+func ( self *Audio ) New(){
+	var t = time.Now()
+	self.NewEntity( t )
+}
+
+/*
 func( self *Audio) NewToDbFunc() func(o orm.Ormer) (interface{}, error){
 
 	return func(o orm.Ormer) (interface{}, error) {
@@ -55,8 +67,12 @@ func ( self *Audio) RefreshToDbFunc() func(o orm.Ormer) (interface{}, error){
 
 }
 
+
+
 func (self *Audio) RefreshToDb(){
 	var ormService = db.GetOrmServiceInstance();
 	ormService.Transaction(self.RefreshToDbFunc());
 }
+
+*/
 

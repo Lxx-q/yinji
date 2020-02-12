@@ -117,6 +117,18 @@ func ( self *AudioDashboardService) NewByAudioId( o orm.Ormer , audioId int64 ) 
 	return &dashboardMap , nil
 }
 
+/**
+	根据对应的 audioId 来搜索对应的长度
+*/
+func ( self *AudioDashboardService ) SearchDashboard(o orm.Ormer , audioId int64 , limit int) ( *[]*bean.AudioDashboard , error ){
+	var array *[]*bean.AudioDashboard
+	var qt = o.QueryTable( bean.GetAudioDashboardTableName() )
+	// 按照 播放次数（ browseCount ) 来进行倒置输出
+	qt = qt.OrderBy("-browseCount").Limit( limit )
+	var _ , allErr = qt.All( array )
+	return array , allErr
+}
+
 //对应的数据
 var DASHBOARD_SERVICE_INSTANCE *AudioDashboardService = &AudioDashboardService{}
 

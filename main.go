@@ -54,6 +54,7 @@ func RegistOrm(){
 		new(bean.UserDashboard),
 		new(bean.UserDateDashboard),
 		new(bean.UserTempDashboard),
+		new(bean.UserDetails),
 		);
 
 	orm.Debug = true;

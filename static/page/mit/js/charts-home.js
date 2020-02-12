@@ -1,8 +1,10 @@
 
 var charts_home_legendState = true;
+
 if ($(window).outerWidth() < 576) {
     charts_home_legendState = false;
 }
+
 
 window.CHART = {
     line: function(jq, data , min , max ) {
@@ -11,8 +13,6 @@ window.CHART = {
             max = min + 10 ;
         }
 
-        console.log(max);
-        console.log(min);
         return new Chart(jq, {
             type: 'line',
             options: {
@@ -40,6 +40,40 @@ window.CHART = {
             },
             data: data
         });
+    },bar:function( jq , data , clickFunc = function( event , legendItem ){} ){
+        return new Chart(jq, {
+        type: 'bar',
+        options:
+        {
+            scales:
+            {
+                xAxes: [{
+                    display: false,
+                    barPercentage: 0.2
+                }],
+                yAxes: [{
+                    display: false
+                }],
+            },
+            legend: {
+                display: false
+                ,onClick:clickFunc
+            }
+        },
+        data:data
+    });
+    },pie:function( jq , data , clickFunc = function( event , legendItem ){}){
+        return new Chart(jq, {
+        type: 'pie',
+        options: {
+            legend: {
+                display: false,
+                onClick:clickFunc,
+                show:true
+            }
+        },
+        data:data
+    })
     }
 }
 

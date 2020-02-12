@@ -16,7 +16,7 @@ type UserDateDashboardService struct {
 func ( self *UserDateDashboardService ) ToMap( array *[]*bean.UserDateDashboard ) ( *map[int64] *bean.UserDateDashboard ) {
 	var _map = make( map[int64] *bean.UserDateDashboard )
 	for _ , dateDashboard := range *array {
-		_map[dateDashboard.WriteDate.Unix() * 1000] = dateDashboard
+		_map[dateDashboard.WriteDate.Unix() * 1000 ] = dateDashboard
 	}
 	return &_map
 }

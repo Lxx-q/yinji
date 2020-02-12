@@ -72,6 +72,7 @@ func( self *AudioService) SearchAudioAndUser( o orm.Ormer , audioList []*bean.Au
 	for index := 0 ; index < length ; index++{
 		//输出 相对应的 信息
 		var audio = audioList[ index ];
+		audio.Parse()
 
 		var user , _ = user_service.FindUserById( o , audio.UserId );
 
@@ -122,14 +123,12 @@ func ( self *AudioService ) AllByCollectionFolder(o orm.Ormer , folderId int64  
 		sql = "SELECT * FROM audio a WHERE a.id IN ( )"
 	}
 
-
-	fmt.Println(sql)
-
+	fmt.Println(sql )
 
 }
 
 func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
-
+	audio.New()
 	var _ , insertErr = o.Insert( audio )
 
 	if insertErr != nil {
@@ -153,6 +152,12 @@ func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
 	})
 
 	return insertErr
+}
+
+func ( self *AudioService ) ParseArr(  audioArr *[]*bean.Audio ) {
+	for _ , audio := range *audioArr {
+		audio.Parse()
+	}
 }
 
 //之后我们 便可以开始获取信息

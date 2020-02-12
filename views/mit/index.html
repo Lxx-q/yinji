@@ -51,6 +51,10 @@
     .black-color{
       background-color: #444;
     }
+
+    .strong {
+      color:#e95f71;
+    }
   </style>
 
   
@@ -83,7 +87,7 @@
      <div class="container-fluid d-flex align-items-center justify-content-between"> 
       <div class="navbar-header"> 
        <!-- Navbar Header-->
-       <a href="index.html" class="navbar-brand"> 
+       <a :href="url" class="navbar-brand"> 
         <div class="brand-text brand-big visible text-uppercase">
          <strong class="text-primary">音迹</strong>
          <strong>数据中心</strong>
@@ -298,7 +302,7 @@
      <!-- Sidebar Header--> 
      <div class="sidebar-header d-flex align-items-center"> 
       <div class="avatar">
-       <img src="img/avatar-6.jpg" alt="..." class="img-fluid rounded-circle" />
+       <img :src="'/yinji/api/resource/image/user?id=' + userId" alt="..." class="img-fluid rounded-circle" />
       </div> 
       <div class="title"> 
        <h1 class="h5">{{ user.name }}</h1> 
@@ -495,21 +499,6 @@
 
 
        <div class="row"> 
-       <!--
-        <div class="col-lg-4"> 
-         <div class="bar-chart block no-margin-bottom"> 
-          <canvas id="barChartExample1"></canvas> 
-         </div> 
-         <div class="bar-chart block"> 
-          <canvas id="barChartExample2"></canvas> 
-         </div> 
-        </div> 
-        <div class="col-lg-8"> 
-         <div class="line-cahrt block"> 
-          <canvas id="lineCahrt"></canvas> 
-         </div>
-
-         --> 
          <div class="col-lg-12"> 
          <div class="line-cahrt block"> 
           <canvas id="lineCahrt"></canvas> 
@@ -519,484 +508,7 @@
        </div> 
       </div> 
      </section> 
-     <section class="no-padding-bottom"> 
-      <div class="container-fluid"> 
-       <div class="row"> 
-        <div class="col-lg-6"> 
-         <div class="stats-2-block block d-flex"> 
-          <div class="stats-2 d-flex"> 
-           <div class="stats-2-arrow low">
-            <i class="fa fa-caret-down"></i>
-           </div> 
-           <div class="stats-2-content">
-            <strong class="d-block">5.657</strong>
-            <span class="d-block">Standard Scans</span> 
-            <div class="progress progress-template progress-small"> 
-             <div role="progressbar" style="width: 60%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template progress-bar-small dashbg-2"></div> 
-            </div> 
-           </div> 
-          </div> 
-          <div class="stats-2 d-flex"> 
-           <div class="stats-2-arrow height">
-            <i class="fa fa-caret-up"></i>
-           </div> 
-           <div class="stats-2-content">
-            <strong class="d-block">3.1459</strong>
-            <span class="d-block">Team Scans</span> 
-            <div class="progress progress-template progress-small"> 
-             <div role="progressbar" style="width: 35%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template progress-bar-small dashbg-3"></div> 
-            </div> 
-           </div> 
-          </div> 
-         </div> 
-         <div class="stats-3-block block d-flex"> 
-          <div class="stats-3">
-           <strong class="d-block">745</strong>
-           <span class="d-block">Total requests</span> 
-           <div class="progress progress-template progress-small"> 
-            <div role="progressbar" style="width: 35%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template progress-bar-small dashbg-1"></div> 
-           </div> 
-          </div> 
-          <div class="stats-3 d-flex justify-content-between text-center"> 
-           <div class="item">
-            <strong class="d-block strong-sm">4.124</strong>
-            <span class="d-block span-sm">Threats</span> 
-            <div class="line"></div>
-            <small>+246</small> 
-           </div> 
-           <div class="item">
-            <strong class="d-block strong-sm">2.147</strong>
-            <span class="d-block span-sm">Neutral</span> 
-            <div class="line"></div>
-            <small>+416</small> 
-           </div> 
-          </div> 
-         </div> 
-        </div> 
 
-        <!--
-        <div class="col-lg-6"> 
-         <div class="drills-chart block"> 
-          <canvas id="lineChart1"></canvas> 
-         </div> 
-        </div>
-        --> 
-       </div> 
-      </div> 
-     </section> 
-     <section class="no-padding-bottom"> 
-      <div class="container-fluid"> 
-       <div class="row"> 
-        <div class="col-lg-4"> 
-         <div class="user-block block text-center"> 
-          <div class="avatar">
-           <img src="img/avatar-1.jpg" alt="..." class="img-fluid" /> 
-           <div class="order dashbg-2">
-            1st
-           </div> 
-          </div>
-          <a href="#" class="user-title"> <h3 class="h5">Richard Nevoreski</h3><span>@richardnevo</span></a> 
-          <div class="contributions">
-           950 Contributions
-          </div> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>150</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>340</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>460</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="user-block block text-center"> 
-          <div class="avatar">
-           <img src="img/avatar-4.jpg" alt="..." class="img-fluid" /> 
-           <div class="order dashbg-1">
-            2nd
-           </div> 
-          </div>
-          <a href="#" class="user-title"> <h3 class="h5">Samuel Watson</h3><span>@samwatson</span></a> 
-          <div class="contributions">
-           772 Contributions
-          </div> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>80</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>420</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>272</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="user-block block text-center"> 
-          <div class="avatar">
-           <img src="img/avatar-6.jpg" alt="..." class="img-fluid" /> 
-           <div class="order dashbg-4">
-            3rd
-           </div> 
-          </div>
-          <a href="#" class="user-title"> <h3 class="h5">Sebastian Wood</h3><span>@sebastian</span></a> 
-          <div class="contributions">
-           620 Contributions
-          </div> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>150</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>280</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>190</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-       <div class="public-user-block block"> 
-        <div class="row d-flex align-items-center"> 
-         <div class="col-lg-4 d-flex align-items-center"> 
-          <div class="order">
-           4th
-          </div> 
-          <div class="avatar"> 
-           <img src="img/avatar-1.jpg" alt="..." class="img-fluid" />
-          </div>
-          <a href="#" class="name"><strong class="d-block">Tomas Hecktor</strong><span class="d-block">@tomhecktor</span></a> 
-         </div> 
-         <div class="col-lg-4 text-center"> 
-          <div class="contributions">
-           410 Contributions
-          </div> 
-         </div> 
-         <div class="col-lg-4"> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>110</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>200</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>100</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-       <div class="public-user-block block"> 
-        <div class="row d-flex align-items-center"> 
-         <div class="col-lg-4 d-flex align-items-center"> 
-          <div class="order">
-           5th
-          </div> 
-          <div class="avatar"> 
-           <img src="img/avatar-2.jpg" alt="..." class="img-fluid" />
-          </div>
-          <a href="#" class="name"><strong class="d-block">Alexander Shelby</strong><span class="d-block">@alexshelby</span></a> 
-         </div> 
-         <div class="col-lg-4 text-center"> 
-          <div class="contributions">
-           320 Contributions
-          </div> 
-         </div> 
-         <div class="col-lg-4"> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>150</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>120</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>50</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-       <div class="public-user-block block"> 
-        <div class="row d-flex align-items-center"> 
-         <div class="col-lg-4 d-flex align-items-center"> 
-          <div class="order">
-           6th
-          </div> 
-          <div class="avatar"> 
-           <img src="img/avatar-6.jpg" alt="..." class="img-fluid" />
-          </div>
-          <a href="#" class="name"><strong class="d-block">Arther Kooper</strong><span class="d-block">@artherkooper</span></a> 
-         </div> 
-         <div class="col-lg-4 text-center"> 
-          <div class="contributions">
-           170 Contributions
-          </div> 
-         </div> 
-         <div class="col-lg-4"> 
-          <div class="details d-flex"> 
-           <div class="item">
-            <i class="icon-info"></i>
-            <strong>60</strong>
-           </div> 
-           <div class="item">
-            <i class="fa fa-gg"></i>
-            <strong>70</strong>
-           </div> 
-           <div class="item">
-            <i class="icon-flow-branch"></i>
-            <strong>40</strong>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-     </section> 
-     <section class="margin-bottom-sm"> 
-      <div class="container-fluid"> 
-       <div class="row d-flex align-items-stretch"> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-1 block"> 
-          <div class="title"> 
-           <strong class="d-block">Sales Difference</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="row d-flex align-items-end justify-content-between"> 
-           <div class="col-5"> 
-            <div class="text">
-             <strong class="d-block dashtext-3">$740</strong>
-             <span class="d-block">May 2017</span>
-             <small class="d-block">320 Sales</small>
-            </div> 
-           </div> 
-           <div class="col-7"> 
-            <div class="bar-chart chart"> 
-             <canvas id="salesBarChart1"></canvas> 
-            </div> 
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-1 block"> 
-          <div class="title"> 
-           <strong class="d-block">Visit Statistics</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="row d-flex align-items-end justify-content-between"> 
-           <div class="col-4"> 
-            <div class="text">
-             <strong class="d-block dashtext-1">$457</strong>
-             <span class="d-block">May 2017</span>
-             <small class="d-block">210 Sales</small>
-            </div> 
-           </div> 
-           <div class="col-8"> 
-            <div class="bar-chart chart"> 
-             <canvas id="visitPieChart"></canvas> 
-            </div> 
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-1 block"> 
-          <div class="title"> 
-           <strong class="d-block">Sales Activities</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="row d-flex align-items-end justify-content-between"> 
-           <div class="col-5"> 
-            <div class="text">
-             <strong class="d-block dashtext-2">80%</strong>
-             <span class="d-block">May 2017</span>
-             <small class="d-block">+35 Sales</small>
-            </div> 
-           </div> 
-           <div class="col-7"> 
-            <div class="bar-chart chart"> 
-             <canvas id="salesBarChart2"></canvas> 
-            </div> 
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-     </section> 
-     <section class="no-padding-bottom"> 
-      <div class="container-fluid"> 
-       <div class="row"> 
-        <div class="col-lg-6"> 
-         <div class="checklist-block block"> 
-          <div class="title">
-           <strong>To Do List</strong>
-          </div> 
-          <div class="checklist"> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-1" name="input-1" class="checkbox-template" /> 
-            <label for="input-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-2" name="input-2" checked="" class="checkbox-template" /> 
-            <label for="input-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-3" name="input-3" class="checkbox-template" /> 
-            <label for="input-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-4" name="input-4" class="checkbox-template" /> 
-            <label for="input-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-5" name="input-5" class="checkbox-template" /> 
-            <label for="input-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-           <div class="item d-flex align-items-center"> 
-            <input type="checkbox" id="input-6" name="input-6" class="checkbox-template" /> 
-            <label for="input-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</label> 
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-6"> 
-         <div class="messages-block block"> 
-          <div class="title">
-           <strong>New Messages</strong>
-          </div> 
-          <div class="messages">
-           <a href="#" class="message d-flex align-items-center"> 
-            <div class="profile">
-             <img src="img/avatar-3.jpg" alt="..." class="img-fluid" /> 
-             <div class="status online"></div> 
-            </div> 
-            <div class="content"> 
-             <strong class="d-block">Nadia Halsey</strong>
-             <span class="d-block">lorem ipsum dolor sit amit</span>
-             <small class="date d-block">9:30am</small>
-            </div></a>
-           <a href="#" class="message d-flex align-items-center"> 
-            <div class="profile">
-             <img src="img/avatar-2.jpg" alt="..." class="img-fluid" /> 
-             <div class="status away"></div> 
-            </div> 
-            <div class="content"> 
-             <strong class="d-block">Peter Ramsy</strong>
-             <span class="d-block">lorem ipsum dolor sit amit</span>
-             <small class="date d-block">7:40am</small>
-            </div></a>
-           <a href="#" class="message d-flex align-items-center"> 
-            <div class="profile">
-             <img src="img/avatar-1.jpg" alt="..." class="img-fluid" /> 
-             <div class="status busy"></div> 
-            </div> 
-            <div class="content"> 
-             <strong class="d-block">Sam Kaheil</strong>
-             <span class="d-block">lorem ipsum dolor sit amit</span>
-             <small class="date d-block">6:55am</small>
-            </div></a>
-           <a href="#" class="message d-flex align-items-center"> 
-            <div class="profile">
-             <img src="img/avatar-5.jpg" alt="..." class="img-fluid" /> 
-             <div class="status offline"></div> 
-            </div> 
-            <div class="content"> 
-             <strong class="d-block">Sara Wood</strong>
-             <span class="d-block">lorem ipsum dolor sit amit</span>
-             <small class="date d-block">10:30pm</small>
-            </div></a>
-           <a href="#" class="message d-flex align-items-center"> 
-            <div class="profile">
-             <img src="img/avatar-1.jpg" alt="..." class="img-fluid" /> 
-             <div class="status online"></div> 
-            </div> 
-            <div class="content"> 
-             <strong class="d-block">Nader Magdy</strong>
-             <span class="d-block">lorem ipsum dolor sit amit</span>
-             <small class="date d-block">9:47pm</small>
-            </div></a>
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-     </section> 
-     <section> 
-      <div class="container-fluid"> 
-       <div class="row"> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-2 block"> 
-          <div class="title">
-           <strong class="d-block">Credit Sales</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="piechart chart"> 
-           <canvas id="pieChartHome1"></canvas> 
-           <div class="text">
-            <strong class="d-block">$2.145</strong>
-            <span class="d-block">Sales</span>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-2 block"> 
-          <div class="title">
-           <strong class="d-block">Channel Sales</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="piechart chart"> 
-           <canvas id="pieChartHome2"></canvas> 
-           <div class="text">
-            <strong class="d-block">$7.784</strong>
-            <span class="d-block">Sales</span>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-        <div class="col-lg-4"> 
-         <div class="stats-with-chart-2 block"> 
-          <div class="title">
-           <strong class="d-block">Direct Sales</strong>
-           <span class="d-block">Lorem ipsum dolor sit</span>
-          </div> 
-          <div class="piechart chart"> 
-           <canvas id="pieChartHome3"></canvas> 
-           <div class="text">
-            <strong class="d-block">$4.957</strong>
-            <span class="d-block">Sales</span>
-           </div> 
-          </div> 
-         </div> 
-        </div> 
-       </div> 
-      </div> 
-     </section> 
 
      <!-- 准备在这边开始截胡 -->
      <footer class="footer"> 
@@ -1013,436 +525,104 @@
         <!-- Page Header-->
         <div class="page-header no-margin-bottom">
           <div class="container-fluid">
-            <h2 class="h5 no-margin-bottom">Basic forms</h2>
+            <h2 class="h5 no-margin-bottom">用户信息</h2>
           </div>
         </div>
         <!-- Breadcrumb-->
         <div class="container-fluid">
           <ul class="breadcrumb">
+            <!--
             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item active">Basic forms        </li>
+            <li class="breadcrumb-item active">用户信息</li>
+            -->
           </ul>
         </div>
         <section class="no-padding-top">
           <div class="container-fluid">
+
+
             <div class="row">
-              <!-- Basic Form-->
-              <div class="col-lg-6">
-                <div class="block">
-                  <div class="title"><strong class="d-block">Basic Form</strong><span class="d-block">Lorem ipsum dolor sit amet consectetur.</span></div>
-                  <div class="block-body">
-                    <form>
-                      <div class="form-group">
-                        <label class="form-control-label">Email</label>
-                        <input type="email" placeholder="Email Address" class="form-control">
-                      </div>
-                      <div class="form-group">       
-                        <label class="form-control-label">Password</label>
-                        <input type="password" placeholder="Password" class="form-control">
-                      </div>
-                      <div class="form-group">       
-                        <input type="submit" value="Signin" class="btn btn-primary">
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              <!-- Horizontal Form-->
-              <div class="col-lg-6">
-                <div class="block">
-                  <div class="title"><strong class="d-block">Horizontal Form</strong><span class="d-block">Lorem ipsum dolor sit amet consectetur.</span></div>
-                  <div class="block-body">
-                    <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Email</label>
-                        <div class="col-sm-9">
-                          <input id="inputHorizontalSuccess" type="email" placeholder="Email Address" class="form-control form-control-success"><small class="form-text">Example help text that remains unchanged.</small>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Password</label>
-                        <div class="col-sm-9">
-                          <input id="inputHorizontalWarning" type="password" placeholder="Pasword" class="form-control form-control-warning"><small class="form-text">Example help text that remains unchanged.</small>
-                        </div>
-                      </div>
-                      <div class="form-group row">       
-                        <div class="col-sm-9 offset-sm-3">
-                          <input type="submit" value="Signin" class="btn btn-primary">
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              <!-- Inline Form-->
-              <div class="col-lg-8">                           
-                <div class="block">
-                  <div class="title"><strong>Inline Form</strong></div>
-                  <div class="block-body">
-                    <form class="form-inline">
-                      <div class="form-group">
-                        <label for="inlineFormInput" class="sr-only">Name</label>
-                        <input id="inlineFormInput" type="text" placeholder="Jane Doe" class="mr-sm-3 form-control">
-                      </div>
-                      <div class="form-group">
-                        <label for="inlineFormInputGroup" class="sr-only">Username</label>
-                        <input id="inlineFormInputGroup" type="text" placeholder="Username" class="mr-sm-3 form-control form-control">
-                      </div>
-                      <div class="form-group">
-                        <input type="submit" value="Submit" class="btn btn-primary">
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-              <!-- Modal Form-->
-              <div class="col-lg-4">
-                <div class="block">
-                  <div class="title"><strong>Modal Form</strong></div>
-                  <div class="block-body text-center">
-                    <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary">Form in simple modal </button>
-                    <!-- Modal-->
-                    <div id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-                      <div role="document" class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header"><strong id="exampleModalLabel" class="modal-title">Signin Modal</strong>
-                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <p>Lorem ipsum dolor sit amet consectetur.</p>
-                            <form>
-                              <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" placeholder="Email Address" class="form-control">
-                              </div>
-                              <div class="form-group">       
-                                <label>Password</label>
-                                <input type="password" placeholder="Password" class="form-control">
-                              </div>
-                              <div class="form-group">       
-                                <input type="submit" value="Signin" class="btn btn-primary">
-                              </div>
-                            </form>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Form Elements -->
+
+                
               <div class="col-lg-12">
                 <div class="block">
                   <div class="title"><strong>All form elements</strong></div>
                   <div class="block-body">
                     <form class="form-horizontal">
+
                       <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Normal</label>
+
+                        <label class="col-sm-3 form-control-label">{{ label.user.name }}</label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" :value="user.name">
+                        </div>
+                      </div>
+
+                      <div class="line"></div>
+
+                      <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">{{ label.user.introduction }}</label>
+                        <div class="col-sm-9">
+                          <textarea class="form-control" rows="4">{{ user.introduction }}</textarea><small class="help-block-none"></small>
                         </div>
                       </div>
                       <div class="line"></div>
+                      <!-- 相对应的头像信息 -->
+
                       <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Help text</label>
+                        <label class="col-sm-3 form-control-label">{{ label.user.image }}</label>
                         <div class="col-sm-9">
-                          <input type="text" class="form-control"><small class="help-block-none">A block of help text that breaks onto a new line and may extend beyond one line.</small>
+                          <input type="file" name="password" class="form-control" >
                         </div>
                       </div>
+                      
+                      <!-- 目标用户的性别 -->
                       <div class="line"></div>
                       <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Password</label>
+                        <label class="col-sm-3 form-control-label">{{ label.user.sex }}</label>
                         <div class="col-sm-9">
-                          <input type="password" name="password" class="form-control">
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Placeholder</label>
-                        <div class="col-sm-9">
-                          <input type="text" placeholder="placeholder" class="form-control">
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Disabled</label>
-                        <div class="col-sm-9">
-                          <input type="text" disabled="" placeholder="Disabled input here..." class="form-control">
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Checkboxes and radios <br><small class="text-primary">Normal Bootstrap elements</small></label>
-                        <div class="col-sm-9">
-                          <div>
-                            <input id="option" type="checkbox" value="">
-                            <label for="option">Option one is this and that—be sure to include why it's great</label>
-                          </div>
-                          <div>
-                            <input id="optionsRadios1" type="radio" checked="" value="option1" name="optionsRadios">
-                            <label for="optionsRadios1">Option one is this and that be sure to include why it's great</label>
-                          </div>
-                          <div>
-                            <input id="optionsRadios2" type="radio" value="option2" name="optionsRadios">
-                            <label for="optionsRadios2">Option two can be something else and selecting it will deselect option one</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Inline checkboxes</label>
-                        <div class="col-sm-9">
-                          <label class="checkbox-inline">
-                            <input id="inlineCheckbox1" type="checkbox" value="option1"> a
-                          </label>
-                          <label class="checkbox-inline">
-                            <input id="inlineCheckbox2" type="checkbox" value="option2"> b
-                          </label>
-                          <label class="checkbox-inline">
-                            <input id="inlineCheckbox3" type="checkbox" value="option3"> c
-                          </label>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Checkboxes &amp; radios <br><small class="text-primary">Custom elements</small></label>
-                        <div class="col-sm-9">
-                          <div class="i-checks">
-                            <input id="checkboxCustom1" type="checkbox" value="" class="checkbox-template">
-                            <label for="checkboxCustom1">Option one</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="checkboxCustom2" type="checkbox" value="" checked="" class="checkbox-template">
-                            <label for="checkboxCustom2">Option two checked</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="checkboxCustom" type="checkbox" value="" disabled="" checked="" class="checkbox-template">
-                            <label for="checkboxCustom">Option three checked and disabled</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="checkboxCustom3" type="checkbox" value="" disabled="" class="checkbox-template">
-                            <label for="checkboxCustom3">Option four disabled</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="radioCustom1" type="radio" value="option1" name="a" class="radio-template">
-                            <label for="radioCustom1">Option one</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="radioCustom2" type="radio" checked="" value="option2" name="a" class="radio-template">
-                            <label for="radioCustom2">Option two checked</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="radioCustom3" type="radio" disabled="" checked="" value="option2" class="radio-template">
-                            <label for="radioCustom3">Option three checked and disabled</label>
-                          </div>
-                          <div class="i-checks">
-                            <input id="radioCustom4" type="radio" disabled="" name="a" class="radio-template">
-                            <label for="radioCustom4">Option four disabled</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Select</label>
-                        <div class="col-sm-9">
-                          <select name="account" class="form-control mb-3 mb-3">
-                            <option>option 1</option>
-                            <option>option 2</option>
-                            <option>option 3</option>
-                            <option>option 4</option>
-                          </select>
-                        </div>
-                        <div class="col-sm-9 ml-auto">
-                          <select multiple="" class="form-control">
-                            <option>option 1</option>
-                            <option>option 2</option>
-                            <option>option 3</option>
-                            <option>option 4</option>
+                          <select name="usertype" class="selectpicker show-tick form-control" multiple data-live-search="false">
+                                        <option value="0" v-if="userDetails.sex == 0" selected>秘密</option>
+                                        <option value="0" v-else>秘密</option>
+                                        <option value="1" v-if="userDetails.sex == 1" selected>汉子</option>
+                                        <option value="1" v-else>汉子</option>
+                                        <option v-if="userDetails.sex == 2" value="2" >妹子</option>
+                                        <option value="2" v-else>妹子</option>
                           </select>
                         </div>
                       </div>
-                      <div class="line"></div>
-                      <div class="form-group row has-success">
-                        <label class="col-sm-3 form-control-label">Input with success</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control is-valid">
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row has-danger">
-                        <label class="col-sm-3 form-control-label">Input with error</label>
-                        <div class="col-sm-9">
-                          <input type="text" class="form-control is-invalid">
-                          <div class="invalid-feedback">Please provide your name.</div>
-                        </div>
-                      </div>
+
+                      <!-- 出生年月 -->
                       <div class="line"></div>
                       <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Control sizing</label>
+                        <label class="col-sm-3 form-control-label">{{ label.user.birthday }}</label>
                         <div class="col-sm-9">
-                          <div class="form-group">
-                            <input type="text" placeholder=".input-lg" class="form-control form-control-lg">
-                          </div>
-                          <div class="form-group">
-                            <input type="text" placeholder="Default input" class="form-control">
-                          </div>
-                          <div class="form-group">
-                            <input type="text" placeholder=".input-sm" class="form-control form-control-sm">
-                          </div>
+                          <input type="date" class="form-control" :value="userDetails.birthday">
                         </div>
                       </div>
+                      
+                      <!-- 家庭住址-->
                       <div class="line"></div>
                       <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Column sizing</label>
+                        <label class="col-sm-3 form-control-label">{{ label.user.address }}</label>
                         <div class="col-sm-9">
-                          <div class="row">
-                            <div class="col-md-3">
-                              <input type="text" placeholder=".col-md-3" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                              <input type="text" placeholder=".col-md-4" class="form-control">
-                            </div>
-                            <div class="col-md-5">
-                              <input type="text" placeholder=".col-md-5" class="form-control">
-                            </div>
-                          </div>
+                          <input type="text" class="form-control" length="50" :value=" userDetails.address ">
                         </div>
                       </div>
-                      <div class="line"> </div>
-                      <div class="row">
-                        <label class="col-sm-3 form-control-label">Material Inputs</label>
-                        <div class="col-sm-9">
-                          <div class="form-group-material">
-                            <input id="register-username" type="text" name="registerUsername" required class="input-material">
-                            <label for="register-username" class="label-material">Username</label>
-                          </div>
-                          <div class="form-group-material">
-                            <input id="register-email" type="email" name="registerEmail" required class="input-material">
-                            <label for="register-email" class="label-material">Email Address      </label>
-                          </div>
-                          <div class="form-group-material">
-                            <input id="register-password" type="password" name="registerPassword" required class="input-material">
-                            <label for="register-password" class="label-material">Password        </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Input groups</label>
-                        <div class="col-sm-9">
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend"><span class="input-group-text">@</span></div>
-                              <input type="text" placeholder="Username" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <input type="text" class="form-control">
-                              <div class="input-group-append"><span class="input-group-text">.00</span></div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                              <input type="text" class="form-control">
-                              <div class="input-group-append"><span class="input-group-text">.00</span></div>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                  <input type="checkbox">
-                                </div>
-                              </div>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                  <input type="checkbox" class="checkbox-template">
-                                </div>
-                              </div>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                  <input type="radio">
-                                </div>
-                              </div>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                  <input type="radio" class="radio-template">
-                                </div>
-                              </div>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">Button addons</label>
-                        <div class="col-sm-9">
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <button type="button" class="btn btn-primary">Go!</button>
-                              </div>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="input-group">
-                              <input type="text" class="form-control">
-                              <div class="input-group-append">
-                                <button type="button" class="btn btn-primary">Go!</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label">With dropdowns</label>
-                        <div class="col-sm-9">
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <button data-toggle="dropdown" type="button" class="btn btn-outline-secondary dropdown-toggle">Action <span class="caret"></span></button>
-                              <div class="dropdown-menu"><a href="#" class="dropdown-item">Action</a><a href="#" class="dropdown-item">Another action</a><a href="#" class="dropdown-item">Something else here</a>
-                                <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a>
-                              </div>
-                            </div>
-                            <input type="text" class="form-control">
-                          </div>
-                        </div>
-                      </div>
+
                       <div class="line"></div>
                       <div class="form-group row">
                         <div class="col-sm-9 ml-auto">
-                          <button type="submit" class="btn btn-secondary">Cancel</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
+                          <button type="submit" class="btn btn-secondary">{{ label.user.cancelButton }}</button>
+                          <button type="submit" class="btn btn-primary">{{ label.user.saveButton }}</button>
                         </div>
                       </div>
                     </form>
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
         </section>
@@ -1730,11 +910,212 @@
         <!-- 
             对应的当前的数据信息
           -->
-       <div class="page-content" :class="currentPage == 'audio' ? 'show':'hidden' "> 
-
+       <div class="page-content" :class="currentPage == 'password' ? 'show':'hidden' "> 
           
+           <!-- Page Header-->
+        <div class="page-header no-margin-bottom">
+          <div class="container-fluid">
+            <h2 class="h5 no-margin-bottom">用户信息</h2>
+          </div>
+        </div>
+        <!-- Breadcrumb-->
+        <div class="container-fluid">
+          <ul class="breadcrumb">
+            <!--
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item active">用户信息</li>
+            -->
+          </ul>
+        </div>
+        <section class="no-padding-top">
+          <div class="container-fluid">
 
-       </div>
+
+            <div class="row">
+                
+              <div class="col-lg-12">
+                <div class="block">
+                  <div class="title"><strong>修改密码</strong></div>
+                  <div class="block-body">
+                    <div class="form-horizontal">
+                      <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">{{ label.login.newPassword }}</label>
+                        <div class="col-sm-9">
+                          <input id="rewrite_newPassword" type="password" class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="line"></div>
+
+                      <div class="form-group row">
+
+                        <label class="col-sm-3 form-control-label">{{ label.login.pwdAgain }}</label>
+                        <div class="col-sm-9">
+                          <input id="rewrited_pwdAgain" type="password" class="form-control" >
+                        </div>
+                      </div>
+
+                      <div class="line"></div>
+                      <div class="form-group row">
+                        <div class="col-sm-9 ml-auto">
+                          <button class="btn btn-primary" @click="rewritePwd">{{ label.user.saveButton }}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        <footer class="footer">
+          <div class="footer__block block no-margin-bottom">
+            <div class="container-fluid text-center">
+              <!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+              <p class="no-margin-bottom">Copyright &copy; 2019.Company name All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+      
+      <!-- -->
+      <div class="page-content" :class="currentPage == 'audio' ? 'show':'hidden' "> 
+        <!--倘若并没有发布任何内容，我们是否需要填充一个空页面 -->
+        <div class="page-header no-margin-bottom">
+          <div class="container-fluid">
+            <h2 class="h5 no-margin-bottom">今日发布作品</h2>
+          </div>
+        </div>
+
+        <div class="container-fluid">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item active">播放量排行榜</li>
+          </ul>
+        </div>
+
+      <section class="no-padding-bottom"> 
+      <div class="container-fluid"> 
+       <div class="row"> 
+
+        <template v-for=" ( audio,index ) in mostPlayAudio">
+          <div class="col-lg-4" v-if="index<3"> 
+            <div class="user-block block text-center"> 
+            <div class="avatar">
+            <img :src="'/yinji/api/resource/image/audio?id='+audio.id" alt="..." class="img-fluid" /> 
+            <div class="order dashbg-2" v-if="index==1">
+              1st
+            </div>
+            <div class="order dashbg-1" v-else-if="index==2">
+            2nd
+           </div> 
+           <div class="order dashbg-4" v-else>
+            3rd
+           </div> 
+            <div></div> 
+            </div>
+          <a href="#" class="user-title"> <h3 class="h5">{{ audio.name }}</h3><span>{{ audio.introduction }}</span></a> 
+          <div class="contributions">
+           {{ audio.modifyTimeStruct.year }}-{{ audio.modifyTimeStruct.month }}-{{ audio.modifyTimeStruct.day }} {{ audio.modifyTimeStruct.hour }}:{{ audio.modifyTimeStruct.minute }}
+          </div>
+          <div class="details d-flex"> 
+           <div class="item">
+            <i class="icon-info"></i>
+            <strong>{{ audio.browseCount }}</strong>
+           </div> 
+           <div class="item">
+            <i class="fa fa-gg"></i>
+            <strong>{{ audio.loveCount }}</strong>
+           </div> 
+           <div class="item">
+            <i class="icon-flow-branch"></i>
+            <strong>{{ audio.forwardCount }}</strong>
+           </div> 
+          </div> 
+         </div> 
+        </div> 
+
+        </template>
+       </div> 
+
+       <!-- 输出. --> 
+        <div class="col-lg-12"> 
+         <div class="stats-with-chart-1 block"> 
+          <div class="title"> 
+           <strong class="d-block">数据前三分布</strong>
+           <span class="d-block">播放量比例</span>
+          </div> 
+          <div class="row d-flex align-items-end justify-content-between"> 
+           <div class="col-5"> 
+            <div class="text">
+            <template v-for=" ( audio,index ) in mostPlayAudio">
+             <strong class="d-block " v-if="index==0">{{ index +1 }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></strong>
+             <span class="d-block" v-else-if="index==1">{{ index + 1  }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></span>
+             <small class="d-block" v-else >{{ index +1 }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></small>
+            </template>
+            </div> 
+           </div> 
+           <div class="col-7"> 
+            <div class="bar-chart chart"> 
+             <canvas id="salesBarChart1"></canvas> 
+            </div> 
+           </div> 
+          </div> 
+         </div> 
+        </div>
+
+       <!-- 显示对应发布的节目的信息 -->
+       <div class="col-lg-12"> 
+         <div class="messages-block block"> 
+          <div class="title">
+           <strong>数据</strong>
+          </div> 
+          <div class="messages">
+            
+            <a href="#" class="message d-flex align-items-center" v-for="audio in currentAudio"> 
+            <div class="profile">
+             <img :src="'/yinji/api/resource/image/audio?id=' + audio.id" alt="..." class="img-fluid" /> 
+             <div class="status online"></div> 
+            </div> 
+            <div class="content"> 
+             <strong class="d-block">{{ audio.name }}</strong>
+             <span class="d-block">{{ audio.introduction }}</span>
+             <small class="date d-block">{{ audio.modifyTimeStruct.year }}-{{ audio.modifyTimeStruct.month }}-{{ audio.modifyTimeStruct.day }} {{ audio.modifyTimeStruct.hour }}:{{ audio.modifyTimeStruct.minute }}</small>
+            </div></a>
+
+            <div class="content" style="text-align: center;cursor: pointer;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3" @click="searchAudio(currentAudioIndex-1,currentAudioCount)"><</div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="row" v-if="currentAudioIndex==0">
+                        <!-- 暂时的数据 -->
+                        <div class="col-lg-3 col-md-3 "></div>
+                        <div class="col-lg-2 col-md-2" ><strong class="strong">1</strong></div>
+                        <div class="col-lg-2 col-md-2" v-if="currentAudioIndex +1 <= currentAudioPageLen ">2</div>
+                        <div class="col-lg-2 col-md-2" v-if="currentAudioIndex  + 2 <= currentAudioPageLen ">3</div>
+                        
+                      </div>
+                      <div class="row" v-else>
+                        <!-- 普通页面部署 -->
+                        <div class="col-lg-3 col-md-3 "></div>
+                        <div class="col-lg-2 col-md-2" v-if="currentAudioIndex -1 >=0" >{{  currentAudioIndex +1 - 1}}</div>
+                        <div class="col-lg-2 col-md-2" ><strong class="strong">{{ currentAudioIndex  + 1  }}</strong></div>
+                        <div class="col-lg-2 col-md-2" v-if="currentAudioIndex + 1 <= currentAudioPageLen "> {{ currentAudioIndex +1 + 1 }}</div>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3" @click="searchAudio(currentAudioIndex+1,currentAudioCount)">></div>
+                </div>
+            </div>
+          </div> 
+         </div> 
+        </div>
+
+      </div> 
+     </section> 
+
+
+      
+      </div>
 
     <!--  page -->
    </div>

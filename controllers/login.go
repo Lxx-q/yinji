@@ -6,6 +6,7 @@ import (
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
 	"errors"
+	"yinji/service"
 )
 
 type LoginController struct {
@@ -156,6 +157,54 @@ func ( self *LoginController ) LoginByAccount(){
 
 	//之后返回结果
 	self.Json( user )
+}
+
+/**
+ 修改密码
+*/
+func ( self *LoginController ) UpdatePwd(){
+
+	var id , getIdErr = self.GetInt64("id")
+
+	if getIdErr != nil {
+		self.FailJson( getIdErr )
+		return
+	}
+
+	var password = self.GetString("password")
+
+	var password_len = len(password)
+
+	if password_len <= 6 {
+		self.FailJson(errors.New("密码不符合格式"))
+		return
+	}
+
+	var ormService = db.GetOrmServiceInstance()
+	var loginService = service.GetLoginServiceInstance()
+
+	var login *bean.Login
+	var _ , transacErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var readErr error
+
+		login , readErr = loginService.ReadLogin( o , id )
+		if readErr != nil {
+			return nil , readErr
+		}
+
+		login.Password = password
+
+		var _ , updateErr = loginService.UpdateLogin( o , login )
+
+		return login , updateErr
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+
+	self.Json( login )
 }
 
 //显示当前的 Session 中的 状态

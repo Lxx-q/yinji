@@ -33,7 +33,11 @@ func init() {
 
 	var userDashboard = &controllers.UserDashboardController{}
 
+	var resource = &controllers.ResourceController{}
+
 	var page = &controllers.PageController{}
+
+	var userDetails = &controllers.UserDetailsController{}
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
@@ -89,6 +93,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/login/by/account"), login, "*:LoginByAccount")
 	//获取当前session中的user
 	beego.Router(app.GetUrl("/api/login/current/user"), login, "*:CurrentUser")
+	//修改密码
+	beego.Router(app.GetUrl("/api/login/update/pwd"),login , "*:UpdatePwd")
 	//根据对应的id来获取user信息
 	beego.Router(app.GetUrl("/api/user/find/id"),user , "*:FindUserById")
 	//进行对应的上传页面的 api
@@ -109,6 +115,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/audio/find/id"), audio, "*:FindAudioById")
 	//根据对应的userId 来查询目标发布了多少的作品
 	beego.Router(app.GetUrl("/api/audio/count"),audio,"*:AudioLen")
+	//根据对应的
+	beego.Router(app.GetUrl("/api/audio/search/dashboard") , audio , "*:AudioByDashboard")
 
 	//获取某个audio的 评论
 	beego.Router(app.GetUrl("/api/comment/find/audio"),audioComment,"*:ByAudioId")
@@ -157,17 +165,22 @@ func init() {
 
 	beego.Router( app.GetUrl("/api/dashboard/user/date/search"),userDateDashboard , "*:SearchByAudioId")
 	beego.Router( app.GetUrl("/api/dashboard/user/date/search/time"),userDateDashboard ,"*:SearchByAudioIdByTime")
+	//输出资源文件
+
+	//输出 音频的封面资源
+	beego.Router( app.GetUrl( "/api/resource/image/audio") , resource , "*:ImageAudio")
+	//输出用户的头像资源
+	beego.Router( app.GetUrl("/api/resource/image/user"),resource , "*:ImageUser")
+	//输出音频资源文件
+	beego.Router( app.GetUrl("/api/resource/audio") , resource , "*:Audio")
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 
+	beego.Router( app.GetUrl("/api/user/details/find"),userDetails ,"*:FindById")
 	/*
 		对应的 web 的接口， 该接口的主要目的 ， 只是服务与 web 前端服务 交互的前端
 	*/
-
-	//在用户的模拟下 ， 开始获取对应的信息
-	//beego.Router(app.GetUrl("/web/audio/audio/user") , audio,"")
 	beego.Router(app.GetUrl("/web/test"),test_controller,"*:WebTest")
-
 	//下面是测试api
 
 	//测试对应的上传图片的功能是否有效
@@ -179,4 +192,5 @@ func init() {
 	beego.Router(app.GetUrl("/test/audio/comments"),test_controller,"*:ApiAudioComment")
 
 	beego.Router(app.GetUrl("/test/resource/redirec"),test_controller,"*:TestResourceRedirect")
+
 }
