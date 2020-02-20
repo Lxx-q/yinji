@@ -1,4 +1,11 @@
 //对应的 js 脚本 语言
+
+/**
+   简单的说 ， 我们搜索两个信息
+
+   1.收藏的信息
+   2.
+*/
 new Vue({
     el: "#app",
     data: {
@@ -259,7 +266,7 @@ new Vue({
         //尾部的link信息的 信息
         links:[
             { title:"作品集",text:"个人作品集合",image:"images/314601.jpg",link:"page/pbl/main"},
-            { title:"数据中心",text:"可爱的基友在哪里？？",image:"images/316718.jpg",link:null},
+            { title:"数据中心",text:"可爱的基友在哪里？？",image:"images/316718.jpg",link:"page/mit/index"},
             { title:"上传作品",text:"哦,你有什么宝贝 , 者行孙！！",image:"images/317839.jpg" , link:"page/upload/audio"}
         ],
         //当前userId
@@ -477,6 +484,11 @@ new Vue({
             var url = getServerUrl("page/mit/login");
             // 转移到对应的 登录页面
             window.open( url );
+        },initPlay:function(){
+            //开始初始化信息
+            //初始化对应的播放时间
+            var url=  getServerUrl("api/audio/search/dashboard");
+            
         }
     },
     created: function() {

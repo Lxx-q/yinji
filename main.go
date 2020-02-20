@@ -47,14 +47,16 @@ func RegistOrm(){
 
 		//点赞 Bean
 		new(bean.AudioUserLove),
-		//audio 点击历史
-		new(bean.AudioBrowseHistroy),
 
 		//用户角色这里的三个
 		new(bean.UserDashboard),
 		new(bean.UserDateDashboard),
 		new(bean.UserTempDashboard),
 		new(bean.UserDetails),
+
+		//详细记录对应的信息
+		new(bean.AudioUserHistroy),
+		new(bean.AudioFast),
 		);
 
 	orm.Debug = true;
@@ -95,7 +97,6 @@ func main() {
 	beego.SetStaticPath(app.GetUrl("/js"),"static/js")
 
 	beego.SetStaticPath(app.GetUrl("/page/"),"static/page")
-
 	beego.Run();
 }
 

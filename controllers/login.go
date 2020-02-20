@@ -44,12 +44,19 @@ func ( self *LoginController ) RegisterByAccount(){
 	//为对应的user 设置信息
 	var user = bean.User{}
 
+	var userDetails = &bean.UserDetails{}
+
 	user.NewEntity( time )
 
 	//暂时默认 user的初始化名称为 login account 名称
 	user.Name = login.Acount
 
+	userDetails.Id = user.Id
+	userDetails.ModifyTime = user.CreateTime
+
 	var ormService = db.GetOrmServiceInstance()
+
+	var userDetailsService = service.GetUserDetailsServiceInstance()
 
 	//下面便开始数据库操作
 	var _ , transactionErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
@@ -70,6 +77,12 @@ func ( self *LoginController ) RegisterByAccount(){
 
 		if insertLoginError != nil {
 			return nil , insertLoginError
+		}
+
+		var _ , newDetailsErr = userDetailsService.New(o , userDetails)
+
+		if newDetailsErr != nil {
+			return nil , newDetailsErr
 		}
 
 		return nil, nil

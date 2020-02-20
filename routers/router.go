@@ -39,6 +39,10 @@ func init() {
 
 	var userDetails = &controllers.UserDetailsController{}
 
+	var audioUserHistory = &controllers.AudioUserHistoryController{}
+
+	var audioFast = &controllers.AudioFastController{}
+
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
 	beego.Router("/test/xml", test_controller, "*:XmlResult");
@@ -97,6 +101,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/login/update/pwd"),login , "*:UpdatePwd")
 	//根据对应的id来获取user信息
 	beego.Router(app.GetUrl("/api/user/find/id"),user , "*:FindUserById")
+	//根据对应的user信息来进行更新
+	beego.Router(app.GetUrl("/api/user/update"),user , "*:UpdateUser")
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload"), audio, "*:AudioUpload")
 
@@ -115,9 +121,10 @@ func init() {
 	beego.Router(app.GetUrl("/api/audio/find/id"), audio, "*:FindAudioById")
 	//根据对应的userId 来查询目标发布了多少的作品
 	beego.Router(app.GetUrl("/api/audio/count"),audio,"*:AudioLen")
-	//根据对应的
+	//根据对应的id 来输出对应的 信息
 	beego.Router(app.GetUrl("/api/audio/search/dashboard") , audio , "*:AudioByDashboard")
-
+	//这里输出当前点击量最多的信息
+	beego.Router(app.GetUrl("api/audio/search/browse/most"),audio,"*:SearchMostBrowseAudio")
 	//获取某个audio的 评论
 	beego.Router(app.GetUrl("/api/comment/find/audio"),audioComment,"*:ByAudioId")
 
@@ -175,8 +182,16 @@ func init() {
 	beego.Router( app.GetUrl("/api/resource/audio") , resource , "*:Audio")
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
-
+	//根据id来进行查询对应的信息
 	beego.Router( app.GetUrl("/api/user/details/find"),userDetails ,"*:FindById")
+	//更新对应的details信息
+	beego.Router(app.GetUrl("/api/user/details/update"),userDetails , "*:UpdateUserDetails")
+	//根据对应的userid ， 来搜索对应的信息
+	beego.Router(app.GetUrl("/api/audio/history/search"),audioUserHistory,"*:SearchByUserId")
+	// 登记
+	beego.Router(app.GetUrl("/api/audio/history/update"),audioUserHistory,"*:Update")
+	//新建对应的 audioFast
+	beego.Router(app.GetUrl("/api/audio/fast/new"),audioFast,"*:NewAudioFast")
 	/*
 		对应的 web 的接口， 该接口的主要目的 ， 只是服务与 web 前端服务 交互的前端
 	*/

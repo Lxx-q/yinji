@@ -6,6 +6,7 @@ import (
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bind"
+	"yinji/config"
 )
 
 type AudioController struct {
@@ -429,7 +430,8 @@ func ( self *AudioController ) AudioLen( ){
 	接收的信息：
 		audioId:userId
 		type:排序的类型
-		limit:限制数量
+		page:页数,
+		count:一张页面输出多少信息
 	目前暂时只支持对应的 browse( 浏览 )
 
 */
@@ -442,23 +444,85 @@ func ( self *AudioController ) AudioByDashboard(  ) {
 		return
 	}
 
-	var limit , getLimitErr = self.GetInt("limit")
+	//获取当前页数
+	var page , getPageErr = self.GetInt("page")
 
-	if getLimitErr != nil {
-		self.FailJson( getLimitErr )
-		return
+	if getPageErr != nil {
+		page =  0 ;
 	}
+
+	var count, getCountErr = self.GetInt("count")
+
+	if getCountErr != nil {
+		count = config.LIMIT_COUNT
+	}
+
+	var startLimit = page * count
+
+	var endLimit = startLimit + count
 	
 	var ormService = db.GetOrmServiceInstance()
-	//var audioService = service.GetAudioServiceInstance()
 
-	var sql = "SELECT a.* , ad.browse_count , ad.love_count , ad.comment_count ,ad.collection_count FROM audio a LEFT JOIN audio_dashboard ad ON a.id = ad.id WHERE a.user_id = ? ORDER BY ad.browse_count DESC LIMIT ? ;"
+	var sql = "SELECT a.* , ad.browse_count , ad.love_count , ad.comment_count ,ad.collection_count FROM audio a LEFT JOIN audio_dashboard ad ON a.id = ad.id WHERE a.user_id = ? ORDER BY ad.browse_count DESC LIMIT ? , ? ;"
 	var audioArr []*bind.AudioAndDashboard
 	/**
 		输出结果
 	 */
 	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		var _ , queryErr =  o.Raw( sql , userId , limit ).QueryRows(&audioArr)
+		var _ , queryErr =  o.Raw( sql , userId , startLimit , endLimit ).QueryRows(&audioArr)
+		return audioArr , queryErr
+	})
+
+	if jdbcErr != nil {
+		self.FailJson( jdbcErr )
+		return
+	}
+
+	for _ , dashboard := range audioArr {
+		dashboard.Parse()
+	}
+
+	//输出结果
+	self.Json( audioArr )
+
+}
+
+/**
+	获取单曲播放量最多的信息
+	获取的信息
+	page:页数
+	count:一个页面上有多少的数据
+	type:各种的类型 // 目前也仅仅只是对应的
+
+	PS. 这里的代码只是暂时的操作
+*/
+
+func ( self *AudioController ) SearchMostBrowseAudio(){
+	//获取当前页数
+	var page , getPageErr = self.GetInt("page")
+
+	if getPageErr != nil {
+		page =  0 ;
+	}
+
+	var count, getCountErr = self.GetInt("count")
+
+	if getCountErr != nil {
+		count = config.LIMIT_COUNT
+	}
+
+	var startLimit = page * count
+
+	var endLimit = startLimit + count
+
+	//暂时的输出对应的信息
+
+	var ormService = db.GetOrmServiceInstance()
+	var sql = "SELECT a.* , ad.browse_count , ad.love_count , ad.comment_count ,ad.collection_count FROM audio a LEFT JOIN audio_dashboard ad ON a.id = ad.id  ORDER BY ad.browse_count DESC LIMIT ? , ? ;"
+	var audioArr []*bind.AudioAndDashboard
+
+	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var _ , queryErr =  o.Raw( sql , startLimit , endLimit ).QueryRows(&audioArr)
 		return audioArr , queryErr
 	})
 

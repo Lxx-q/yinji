@@ -137,7 +137,11 @@ new Vue({
             }
         }],
         label:{
-            user:{
+            details:{
+                //用户详细信息
+                title:"用户详细信息"
+            },user:{
+                title:"用户信息",
                 name:"名字",
                 introduction:"介绍信息",
                 image:"用户头像",
@@ -146,7 +150,7 @@ new Vue({
                 birthday:"出生年月",
                 address:"家庭地址",
                 cancelButton:"取消",
-                saveButton:"保存"
+                saveButton:"保存",
             },login:{
                 password:"登录密码",
                 newPassword:"请输入新密码",
@@ -924,6 +928,65 @@ new Vue({
                 success:function( result , status , xhr ){
                     //设置对应的信息
                     vue.currentAudio = result;
+                }
+            });
+
+
+        },updateUser:function(){
+            //更新user信息
+            var userId = this.userId;
+
+            var name = $("#form_name");
+
+            var name_val = name.val();
+            var vue = this;
+            var url = getServerUrl("api/user/update")
+
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    id:userId,
+                    name:name_val
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    vue.user = result;
+                    window.CONFIRM.alert("修改成功喽^_^");
+                }
+            })
+        },updateUserDetails:function(){
+            var userId = this.userId;
+
+            var introduction = $("#details_introduction");
+            var introduction_val = introduction.val();
+
+            var sex = $("#details_sex option:selected");
+            var sex_val = sex.val();
+
+            //出生年月
+            var birthday = $("#details_birthday ");
+            var birthday_val = birthday.val();
+
+            //家庭住址
+            var address = $("#details_address");
+            var address_val = address.val();
+
+            var vue = this;
+            var url = getServerUrl("api/user/details/update");
+
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    id:userId,
+                    introduction:introduction_val,
+                    sex:sex_val,
+                    birthday:birthday_val,
+                    address:address_val
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    vue.userDetails = result;
+                    window.CONFIRM.alert("修改成功哦");
                 }
             });
 

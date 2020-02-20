@@ -10,6 +10,24 @@ type BeegoController struct {
 	beego.Controller
 }
 
+/**
+	获取page 与 count的数量
+ */
+
+ func ( controller *BeegoController ) GetPageAndCount( defaultCount int ) ( int , int ){
+ 	var page  , getPageErr = controller.GetInt("page")
+ 	if getPageErr != nil {
+ 		page = 0
+	}
+	var count , getCountErr = controller.GetInt("count")
+
+	if getCountErr != nil {
+		count = defaultCount
+	}
+
+	return page , count
+ }
+
 func (controller *BeegoController ) String( content string ){
 	controller.Ctx.WriteString( content );
 }

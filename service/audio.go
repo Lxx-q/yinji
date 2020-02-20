@@ -139,15 +139,12 @@ func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
 		var ormService = db.GetOrmServiceInstance()
 		ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
 			//初始化 ， 阅读记录信息
-			var audioBrowseHistoryService = GetAUdioBrowseHistoryServiceInstance()
-
-			var _ ,newErr = audioBrowseHistoryService.NewByAudioId( o , audio.Id )
 
 			//初始化 ， 点赞 ， 转化 ， 收藏初始化信息
 			var dashboradService = GetDashboardServiceInstance()
 			dashboradService.NewByAudioId( o , audio.Id )
 
-			return nil , newErr
+			return nil , nil
 		});
 	})
 

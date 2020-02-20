@@ -74,11 +74,10 @@ func ( self *UserController ) FindUserById(){
 	更新user 和 userDetails 的信息
 */
 
-func ( self *UserController ) UpdateUserAndDetails(){
+func ( self *UserController ) UpdateUser(){
 
 	//先收集对应的信息
-	/*
-	var id , getIdErr = self.GetInt("id")
+	var id , getIdErr = self.GetInt64("id")
 
 	if getIdErr != nil{
 		self.FailJson( getIdErr )
@@ -87,17 +86,30 @@ func ( self *UserController ) UpdateUserAndDetails(){
 
 	var name  = self.GetString("name")
 
-	var introduction = self.GetString("introduction")
+	//获取对应的 service intsance
+	var ormService = db.GetOrmServiceInstance()
+	var userService = service.GetUserServiceInstance()
 
-	var sex , getSexErr = self.GetInt("sex")
+	var user *bean.User
 
-	if getSexErr != nil {
-		self.FailJson(getSexErr)
+	var _ , jdbcErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var findErr error
+		user , findErr = userService.FindUserById( o , id)
+
+		if findErr != nil {
+			return nil , findErr
+		}
+
+		user.Name = name
+		user.Refresh()
+		var _ , updateErr = o.Update(user)
+		return user , updateErr
+	})
+
+	if jdbcErr != nil {
+		self.FailJson(jdbcErr)
 		return
 	}
 
-	var address = self.GetString("address")
-	*/
-
-	self.String("helloworld")
+	self.Json( user )
 }
