@@ -20,3 +20,10 @@ func Unix( times int64 ) *time.Time {
 	return &t
 }
 
+func Today() *time.Time{
+	var today = time.Now()
+	var year = today.Year()
+	var month = int(today.Month())
+	var day = today.Day()
+	return Date( year , month , day )
+}

@@ -4,6 +4,9 @@ import (
 	"yinji/models/bean"
 	"github.com/astaxie/beego/orm"
 	"time"
+	"yinji/models/base"
+	"yinji/service/db"
+	"yinji/utils"
 )
 
 type UserDateDashboardService struct {
@@ -37,11 +40,78 @@ func ( self *UserDateDashboardService ) SearchByAudioId( o orm.Ormer , audioId i
 	return userDateDashboard , allErr
 }
 
-func ( self *UserDateDashboardService ) NewByTemp( tempDashboard *bean.UserTempDashboard) {
-	var userDateDashboard = &bean.UserDateDashboard{}
-	userDateDashboard.New()
-	userDateDashboard.DashboardBase = tempDashboard.DashboardBase
+/**
+	新建方法的默认操作
+ */
+func ( self *UserDateDashboardService ) NewByTemp( o orm.Ormer , tempDashboard *bean.UserDateDashboard) ( *bean.UserDateDashboard , error ) {
+	tempDashboard.New()
+	tempDashboard.DashboardBase = tempDashboard.DashboardBase
+	var _ , insertErr = o.Insert( tempDashboard )
+	return tempDashboard , insertErr
 }
+
+/**
+	根据对应的userId 来直接输出
+ */
+func ( self *UserDateDashboardService ) NewByUserId( o orm.Ormer , userId int64 ) ( *bean.UserDateDashboard , error ){
+	var dashboard = &bean.UserDateDashboard{}
+	dashboard.UserId = userId
+	return self.NewByTemp( o , dashboard)
+}
+
+func( self *UserDateDashboardService ) FindOrNew( o orm.Ormer , userId int64 ) ( *bean.UserDateDashboard , error ){
+	var dashboard , findErr = self.FindById( o , userId )
+	if findErr != nil {
+		dashboard , findErr = self.NewByUserId( o , userId )
+	}
+	return dashboard , findErr
+}
+
+/**
+	根据对应的userId 来搜索对应的信息
+ */
+func ( self *UserDateDashboardService ) FindById( o orm.Ormer , userId int64 )( *bean.UserDateDashboard , error ){
+	var dashboard = &bean.UserDateDashboard{}
+	dashboard.UserId = userId
+	dashboard.WriteDate = *utils.Today()
+	var readErr = o.Read( dashboard , "userId","writeDate")
+	return dashboard , readErr
+}
+
+
+/**
+	数据库上对应的 修改数据的方法
+ */
+func ( self *UserDateDashboardService ) UpdateDashboardCount( o orm.Ormer , id int64 , dashboardBase *base.DashboardBase) ( *bean.UserDateDashboard , error ){
+
+	/**
+		现根据对应的信息 ， 来获取对应的信息
+	 */
+
+	var dashboard , findErr = self.FindOrNew(o , id)
+
+	if findErr != nil{
+		//倘若没有则开始添加
+		return nil, findErr
+	}
+
+	dashboard.Add(dashboardBase)
+
+	var _ , updateErr = o.Update(dashboard)
+	return dashboard , updateErr
+
+}
+
+/**
+	真正意义上使用jdbc的方法
+ */
+func ( self *UserDateDashboardService ) AddDashboardCount( id int64 , dashboardBase *base.DashboardBase ){
+	var ormService = db.GetOrmServiceInstance()
+	ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		return self.UpdateDashboardCount(o , id , dashboardBase)
+	});
+}
+
 
 var USER_DATE_DASHBORAD_SERVICE_INSTANCE = &UserDateDashboardService{}
 

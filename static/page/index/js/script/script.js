@@ -9,6 +9,8 @@
 new Vue({
     el: "#app",
     data: {
+        //对应的头部循环栏
+        headerSwiper:[1,2,3],
         jsPlayList: null,
         latestStartLimit:0,
         latestEndLimit:0,
@@ -285,48 +287,7 @@ new Vue({
             },
             [
             //对应播放器 内 存储的 歌单的 信息
-            {
-                title: "2026年",
-                artist: "まももP",
-                mp3: "http://jqueryplugins.qiniudn.com/jq22m1.mp3",
-                poster: "images/p1.jpg"
-            },
-            {
-                title: "BRAVE THE OCEAN <MODv>",
-                artist: "Eliana",
-                mp3: "src/audios/Eliana - BRAVE THE OCEAN ＜MODv＞.mp3",
-                poster: "images/p2.jpg"
-            },
-            {
-                title: "Qaijff - セツナロマンチック",
-                artist: "Qaijff",
-                mp3: "src/audios/Qaijff - セツナロマンチック.mp3",
-                poster: "images/p3.jpg"
-            },
-            {
-                title: "Annabel - 夕暮れのグランド",
-                artist: "Annabel",
-                mp3: "src/audios/Annabel - 夕暮れのグランド.mp3",
-                poster: "images/m0.jpg"
-            },
-            {
-                title: "gravityWall (Instrumental)",
-                artist: "Hiroyuki Sawano",
-                mp3: "src/audios/SawanoHiroyuki[nZk] - gravityWall (Instrumental).mp3 ",
-                poster: "images/m0.jpg"
-            },
-            {
-                title: "Electro Freak",
-                artist: "Studios",
-                mp3: "http://music.163.com/song/media/outer/url?id=448153.mp3",
-                poster: "images/m0.jpg"
-            },
-            {
-                title: "Mother",
-                artist: "Sound Horizon",
-                mp3: "src/audios/Sound Horizon - Mother.mp3",
-                poster: "images/m0.jpg"
-            }], {
+            ], {
                 playlistOptions: {
                     enableRemoveControls: true,
                     autoPlay: false
@@ -360,6 +321,8 @@ new Vue({
             
 
             this.initjPlayer();
+            this.initLastest();
+            this.initSpirit();
 
         },
         initjPlayer: function() {
@@ -382,8 +345,9 @@ new Vue({
                 $("#before,#after").addClass("set_imd");
             });
 
-        },
-        clickPlayMe: function(e) {
+        },addjPlayList:function(item){ //将目标的音频文件添加到目标的播放列表之中
+            this.jsPlayList.add(item);
+        },clickPlayMe: function(e) {
             e && e.preventDefault();
             var $this = $(e.target);
             if (!$this.is('a')) $this = $this.closest('a'); //closest() 方法获得匹配选择器的第一个祖先元素，从当前元素开始沿 DOM 树向上。
@@ -398,7 +362,7 @@ new Vue({
                 var k = $this.parent("li").index();
                 $(".poster-img").attr("src", this.latest[k].poster); //此方法返回一个函数改变src   $('a.cover1').html('<img src="' + latest[k].poster );
                 $(".musicbar").addClass("animate").index();
-                this.jsPlayList.add({
+                this.addjPlayList({
                     title: this.latest[k].title,
                     artist: this.latest[k].artist,
                     mp3: this.latest[k].mp3,
@@ -480,15 +444,70 @@ new Vue({
             }
             var url = getServerUrl(link) + "?" + "userId" + "=" + this.userId;
             window.open( url );
+        },clickHref:function( link ){
+            var userId = this.userId;
+
+            if( link == null ){
+                //倘若连接为空 ， 则返回自己
+                return ;
+            }
+
+            console.log(link)
+
+            if( userId != null){
+                link =  link + "&" + "userId" + "=" + userId;
+            }
+            var url = getServerUrl(link) ;
+            window.open( url );
         },locationLogin:function(){
             var url = getServerUrl("page/mit/login");
             // 转移到对应的 登录页面
             window.open( url );
-        },initPlay:function(){
+        },initLastest:function(){
             //开始初始化信息
             //初始化对应的播放时间
-            var url=  getServerUrl("api/audio/search/dashboard");
-            
+            var url=  getServerUrl("api/audio/search/browse/most");
+            var vue = this;
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    page:0,
+                    count:10,
+                },async:true,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    var new_data = window.AJAX_HANDLER.receiveArray(result);
+                    vue.latest = new_data;
+                }
+            })
+        },initSpirit:function(){
+            var url=  getServerUrl("api/audio/search/browse/date");
+
+            var vue = this;
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    page:0,
+                    count:10,
+                },async:false,
+                dataType:"json",
+                success:function( result , status , xhr ){
+                    var new_data = window.AJAX_HANDLER.receiveArray(result);
+                    vue.spirit = new_data;
+                    //暂时的initheader 放在这里
+                    vue.initHeaderSwiper();
+                }
+            });
+
+        },initHeaderSwiper:function(){ //初始化对应的头部轮播栏
+            var spirit = this.spirit;
+            this.headerSwiper = [];
+            var len = spirit.length;
+            len = len > 5 ? 5 : len;
+            for(var index = 0 ; index < len ; index++ ){
+                var item = spirit[index];
+                this.headerSwiper.push(item);
+            }
         }
     },
     created: function() {

@@ -24,12 +24,12 @@ window.AJAX_HANDLER = {
 		if(name == ""){
 			name = "未命名";
 		}
-
+		new_data = data;
 		new_data.title = name;
 		new_data.artist = name;
 		new_data.mp3 = window.URL_SERVICE.buildUrl(data.url);
 		new_data.poster = window.URL_SERVICE.buildUrl(data.image);
-
+		new_data.img = new_data.poster;
 		new_data.time = this.formatTimeLength( data.timeLength)
 		
 		//最后返回对应的数据

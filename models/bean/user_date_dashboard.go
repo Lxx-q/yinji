@@ -9,7 +9,6 @@ type UserDateDashboard struct {
 	base.IdStruct
 	UserId int64 `orm:"column(user_id)" json:"userId"`
 	WriteDate time.Time `orm:"column(write_date)" json:"writeDate"`
-	//BrowseAllCount int64 `orm:column"browse_all_count"`
 	base.DashboardBase
 }
 

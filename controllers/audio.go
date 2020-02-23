@@ -56,7 +56,7 @@ func (self *AudioController) SearchByString() {
 
 	//先暂时 用这个方法 来进行输出 信息
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		audio_service.SearchAudioAndUser( o , audioList)
+		audioAndUserList = audio_service.SearchAudioAndUser( o , audioList)
 		return nil, nil
 	})
 	
@@ -488,6 +488,53 @@ func ( self *AudioController ) AudioByDashboard(  ) {
 }
 
 /**
+	搜索最近最火爆的信息
+ */
+func ( self *AudioController ) SearchMostDateBrowseAudio(){
+	//获取当前页数
+	var page , getPageErr = self.GetInt("page")
+
+	if getPageErr != nil {
+		page =  0 ;
+	}
+
+	var count, getCountErr = self.GetInt("count")
+
+	if getCountErr != nil {
+		count = config.LIMIT_COUNT
+	}
+
+	var startLimit = page * count
+
+	var endLimit = startLimit + count
+
+	//暂时的输出对应的信息
+
+	var ormService = db.GetOrmServiceInstance()
+	var sql = "SELECT a.* , au_dd.browse_count , au_dd.love_count , au_dd.comment_count ,au_dd.collection_count FROM audio a LEFT JOIN audio_date_dashboard au_dd ON a.id = au_dd.id  ORDER BY au_dd.browse_count DESC LIMIT ? , ? ;"
+	var audioArr []*bind.AudioAndDashboard
+
+	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var _ , queryErr =  o.Raw( sql , startLimit , endLimit ).QueryRows(&audioArr)
+		return audioArr , queryErr
+	})
+
+	if jdbcErr != nil {
+		self.FailJson( jdbcErr )
+		return
+	}
+
+	for _ , dashboard := range audioArr {
+		dashboard.Parse()
+	}
+
+	//输出结果
+	self.Json( audioArr )
+
+}
+
+
+/**
 	获取单曲播放量最多的信息
 	获取的信息
 	page:页数
@@ -496,8 +543,8 @@ func ( self *AudioController ) AudioByDashboard(  ) {
 
 	PS. 这里的代码只是暂时的操作
 */
-
 func ( self *AudioController ) SearchMostBrowseAudio(){
+
 	//获取当前页数
 	var page , getPageErr = self.GetInt("page")
 
@@ -537,5 +584,4 @@ func ( self *AudioController ) SearchMostBrowseAudio(){
 
 	//输出结果
 	self.Json( audioArr )
-
 }

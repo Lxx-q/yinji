@@ -57,6 +57,7 @@ func RegistOrm(){
 		//详细记录对应的信息
 		new(bean.AudioUserHistroy),
 		new(bean.AudioFast),
+		new(bean.AudioTempDashboard),
 		);
 
 	orm.Debug = true;

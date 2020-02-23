@@ -18,7 +18,7 @@ func ( self *CollectionService ) InsertCollection( o orm.Ormer , collection *bea
 		return  nil , nil , insertErr
 	}
 
-	var audioDashboardService = GetDashboardServiceInstance()
+	var audioDashboardService = GetAudioDashboardServiceInstance()
 	//只加载一个的关系
 	audioDashboardService.AddCollectionCount( o , collection.AudioId , 1 )
 

@@ -81,3 +81,20 @@ function parseTimes( times ){
 	var date = new Date( times );
 	return parseTimeStruct( date );
 }
+
+
+function splice( arr , start , end ){
+
+	var new_arr = [];
+	var len = arr.length;
+	//倘若长度如果大于约定的长度 ， 那么我们就设定他的长度为固定的
+	len = len > end ? end : len;
+
+	for( var index = start ; index < len ; index ++ ){
+		var item = arr[index];
+		new_arr.push(item);
+	}
+
+	return new_arr;
+
+}

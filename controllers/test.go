@@ -7,6 +7,7 @@ import (
 	"yinji/service"
 	"github.com/astaxie/beego/httplib"
 	"yinji/service/url"
+	"yinji/models/base"
 )
 
 type TestController struct {
@@ -123,4 +124,30 @@ func (self *TestController) ApiAudioComment(){
 
 func (self *TestController) TestResourceRedirect(){
 	self.Redirect("/yinji/resources/image/none.jpg",302)
+}
+
+func ( self *TestController ) TestDashboard(){
+	audioId , getAudioIdErr := self.GetInt64("audioId")
+
+	if getAudioIdErr != nil {
+		audioId = 2
+	}
+
+	userId , getUserIdErr := self.GetInt64("userId")
+
+	if getUserIdErr != nil {
+		userId = 2
+	}
+
+	var dashboardService = service.GetDashboardServiceInstance()
+
+	dashboardBase := &base.DashboardBase{}
+	dashboardBase.BrowseCount = 1
+	dashboardBase.CommentCount = 1
+	dashboardBase.CommentCount = 1
+	dashboardBase.LoveCount = 1
+	dashboardService.AddCount(audioId , userId , dashboardBase)
+
+
+	self.Json( dashboardBase )
 }

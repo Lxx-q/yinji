@@ -141,7 +141,7 @@ func ( self *AudioService ) New( o orm.Ormer  , audio *bean.Audio ) error {
 			//初始化 ， 阅读记录信息
 
 			//初始化 ， 点赞 ， 转化 ， 收藏初始化信息
-			var dashboradService = GetDashboardServiceInstance()
+			var dashboradService = GetAudioDashboardServiceInstance()
 			dashboradService.NewByAudioId( o , audio.Id )
 
 			return nil , nil
