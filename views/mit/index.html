@@ -335,9 +335,10 @@
       </template>
 
      </ul>
-     <span class="heading">Extras</span> 
+     <span class="heading">其他</span> 
      <ul class="list-unstyled"> 
       
+      <!--
       <template v-for=" item in navExtras">
         <template v-if="item.hasChildren">
           <li><a :href="'#' + item.connection" aria-expanded="false" data-toggle="collapse"> <i :class="item.iClass"><div class="currentPage">{{ page[item.page] }} </div> </i> {{ item.name }} </a> 
@@ -354,6 +355,8 @@
         </template>
 
       </template>
+
+      -->
      </ul> 
 
 
@@ -367,7 +370,7 @@
     <div class="page-content" :class="currentPage == 'index' ? 'show':'hidden' " > 
      <div class="page-header"> 
       <div class="container-fluid"> 
-       <h2 class="h5 no-margin-bottom">Dashboard</h2> 
+       <h2 class="h5 no-margin-bottom">仪表盘</h2> 
       </div> 
      </div> 
      <section class="no-padding-top no-padding-bottom"> 
@@ -472,6 +475,8 @@
         </div>  
 
         
+        <!-- 暂时先去掉 -->
+        <!--
         <div class="col-md-3 col-sm-6"> 
          <div class="statistic-block block"> 
           <div class="progress-details d-flex align-items-end justify-content-between"> 
@@ -479,7 +484,7 @@
             <div class="icon">
              <i class="icon-writing-whiteboard"></i>
             </div>
-            <strong>All Projects</strong> 
+            <strong>全部音频</strong> 
            </div> 
            <div class="number dashtext-4">
             41
@@ -490,6 +495,7 @@
           </div> 
          </div> 
         </div> 
+        -->
 
        </div> 
       </div> 
@@ -514,7 +520,7 @@
      <footer class="footer"> 
       <div class="footer__block block no-margin-bottom"> 
        <div class="container-fluid text-center"> 
-        <p class="no-margin-bottom">Copyright &copy; 2019.Company name All rights reserved.</p> 
+        <p class="no-margin-bottom">
        </div> 
       </div> 
      </footer> 
@@ -546,13 +552,14 @@
                 <div class="block">
                   <div class="title"><strong>{{ label.details.title }}</strong></div>
                   <div class="block-body">
+                  <form id="user_form">
                     <div class="form-horizontal">
-
+                      
                       <div class="form-group row">
 
                         <label class="col-sm-3 form-control-label">{{ label.user.name }}</label>
                         <div class="col-sm-9">
-                          <input id="form_name" type="text" class="form-control" :value="user.name">
+                          <input id="form_name" type="text" class="form-control" :value="user.name" name="name">
                         </div>
                       </div>
 
@@ -562,17 +569,19 @@
                       <div class="form-group row">
                         <label class="col-sm-3 form-control-label">{{ label.user.image }}</label>
                         <div class="col-sm-9">
-                          <input type="file" name="password" class="form-control" >
+                          <input type="file" name="image" class="form-control" >
                         </div>
                       </div>
 
                       <div class="line"></div>
                       <div class="form-group row">
                         <div class="col-sm-9 ml-auto">
-                          <button type="submit" class="btn btn-primary" @click="updateUser">{{ label.user.saveButton }}</button>
+                          <input type="button" class="btn btn-primary" @click="updateUser" :value="label.user.saveButton"/>
                         </div>
                       </div>
+
                     </div>
+                  </form>
                   </div>
                 </div>
               </div>
@@ -859,27 +868,28 @@
           <div class="container-fluid">
 
             <!--  头部 ： 对应的收藏夹的对应的信息 -->
-
+            <template v-if="currentPage.id == null "></template>
+            <template v-else>
             <div class="row">
               <!-- 暂时的demo 设计 -->
-              <div class="col-lg-3 col-md-4">{{ currentFolder.name }}</div>
-              <div class="col-lg-3 col-md-4">{{ currentFolder.introduction }}</div>
+              <div class="col-lg-3 col-md-4">收藏夹名称：{{ currentFolder.name }}</div>
+              <div class="col-lg-3 col-md-4">简介：{{ currentFolder.introduction }}</div>
 
             </div>
             <div class="row">
               <div class="col-lg-4 col-md-4">
-                <button @click="readyAddFolder">对应的信息</button>
+                <button @click="readyAddFolder">新建收藏夹</button>
               </div>
 
               <div class="col-lg-4 col-md-4">
-                <button @click="readyUpdateFolder(currentFolder,0)">修改对应的信息</button>
+                <button @click="readyUpdateFolder(currentFolder,0)">更新收藏夹信息</button>
               </div>
 
               <div class="col-lg-4 col-md-4">
-                <button @click="readyDeleteFolder(currentFolder)">删除对应收藏夹</button>
+                <button @click="readyDeleteFolder(currentFolder)">删除该收藏夹</button>
               </div>
             </div>
-            
+            </template>
             <!-- 对应的空白栏目 , 我们使用这个栏目 ， 来空出对应的界面信息 -->
             <div class="row"></div>
             <div class="row">
@@ -1064,7 +1074,10 @@
           <div class="row d-flex align-items-end justify-content-between"> 
            <div class="col-5"> 
             <div class="text">
-            <template v-for=" ( audio,index ) in mostPlayAudio">
+            <template v-if="mostPlayAudio.length==0">
+              <h5> 暂无数据 </h5>
+            </template>
+            <template v-else v-for=" ( audio,index ) in mostPlayAudio">
              <strong class="d-block " v-if="index==0">{{ index +1 }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></strong>
              <span class="d-block" v-else-if="index==1">{{ index + 1  }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></span>
              <small class="d-block" v-else >{{ index +1 }}. {{audio.name}} 播放量为 <strong class="strong">{{ audio.browseCount }}</strong></small>
@@ -1088,6 +1101,10 @@
           </div> 
           <div class="messages">
             
+            <template v-if="currentAudio.length==0">
+              <h5>当前数据为空 , 你可以直接去<a href="#" @click="toUploadPage">发布信息</a>哦</h5>
+            </template>
+            <template v-else>
             <a href="#" class="message d-flex align-items-center" v-for="audio in currentAudio"> 
             <div class="profile">
              <img :src="'/yinji/api/resource/image/audio?id=' + audio.id" alt="..." class="img-fluid" /> 
@@ -1098,8 +1115,10 @@
              <span class="d-block">{{ audio.introduction }}</span>
              <small class="date d-block">{{ audio.modifyTimeStruct.year }}-{{ audio.modifyTimeStruct.month }}-{{ audio.modifyTimeStruct.day }} {{ audio.modifyTimeStruct.hour }}:{{ audio.modifyTimeStruct.minute }}</small>
             </div></a>
-
+            </template>
             <div class="content" style="text-align: center;cursor: pointer;">
+                <template></template>
+                <template v-else>
                 <div class="row">
                     <div class="col-lg-3 col-md-3" @click="searchAudio(currentAudioIndex-1,currentAudioCount)"><</div>
                     <div class="col-lg-6 col-md-6">
@@ -1121,6 +1140,7 @@
                     </div>
                     <div class="col-lg-3 col-md-3" @click="searchAudio(currentAudioIndex+1,currentAudioCount)">></div>
                 </div>
+                </template>
             </div>
           </div> 
          </div> 

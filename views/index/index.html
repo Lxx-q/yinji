@@ -39,7 +39,7 @@
           </a>
         </li>
       </ul>
-      <div class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
+      <div class="navbar-form navbar-left input-s-lg m-t m-l-n-xs " role="search">
         <div class="form-group">
           <div class="input-group" >
             <span class="input-group-btn">
@@ -82,7 +82,7 @@
                           <ul>
                           <!-- 循环对应的信息 -->
 
-                            <li style="cursor:pointer;" v-for=" item in headerSwiper " @click="clickHref('api/page?id=' +item.id)"><img :src="item.img" alt="images/beforeafter_3/315989.jpg" />  
+                            <li style="cursor:pointer;" v-for=" item in headerSwiper " @click="clickHref('static/index.html#/pages/comments/comments?audioId=' +item.id)"><img :src="item.img" alt="images/beforeafter_3/315989.jpg" />  
                               <div id="textbox_13">
                                 <div id="logo_13" class="fadeleft"></div>
                               </div>
@@ -161,16 +161,21 @@
                       <ul class=" list-group list-group-lg radius no-border no-bg m-t-n-xxs m-b-none auto" id="item ">
 
                       <!-- 对应的 信息 -->
-                      <li class="list-group-item" v-for=" item in latest" @click="clickPlayMe">
+                      <template v-if="latest.length==0">
+                        <div> <h5>并没有查询到信息，请重新查询或者查看网络连接状态</h5></div>
+                      </template>
+                      <template v-else>
+                        <li class="list-group-item" v-for=" item in latest" @click="clickPlayMe(event,item)">
                           <a href="#" class="jp-play-me m-r-sm pull-left" >
                           <i class="icon-control-play text"></i>
                           <i class="icon-control-pause text-active"></i>
-                        </a>
-                          <div  class=" clear text-ellipsis">
+                           </a>
+                          <div  class=" clear text-ellipsis"  style="cursor: pointer;" @click="clickHref('static/index.html#/pages/comments/comments?audioId=' +item.id)">
                             <span> {{ item.title }} </span>
                             <span class="text-muted"> -- {{ item.time }}</span>
                           </div>
                       </li>
+                      </template>
 
                       </ul>
                     </section>
@@ -182,16 +187,16 @@
                     <section class="scrollable hover">
                       <ul class="list-group list-group-lg no-bg auto m-b-none m-t-n-xxs">
 
-                        <li class="list-group-item clearfix" v-for= "item  in spirit" @click="clickPlayFun">
-                          <a href="#" class="jp-play-fun pull-right m-t-sm m-l text-md">
+                        <li class="list-group-item clearfix" v-for= "item  in spirit">
+                          <a href="#" class="jp-play-fun pull-right m-t-sm m-l text-md"  @click="clickPlayFun(event,item)">
                           <i class="icon-control-play text"></i>
                           <i class="icon-control-pause text-active"></i>
                         </a>
-                          <a href="#" class="pull-left thumb-sm m-r">
+                          <a href="#" class="pull-left thumb-sm m-r" style="cursor: pointer;" @click="clickHref('static/index.html#/pages/comments/comments?audioId=' +item.id)">
                           <img :src="item.img" alt="...">
-                        </a>
+                           </a>
                           <a class="clear" href="#">
-                          <span class="block text-ellipsis">{{ item.title }}</span>
+                          <span style="cursor: pointer;" @click="clickHref('static/index.html#/pages/comments/comments?audioId=' +item.id)" class="block text-ellipsis">{{ item.title }}</span>
                           <small class="text-muted">by {{ item.artist }}</small>
                         </a>
                         </li>

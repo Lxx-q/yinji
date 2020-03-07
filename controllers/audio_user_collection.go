@@ -7,6 +7,7 @@ import (
 	"yinji/service/db"
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bind"
+	"yinji/models/base"
 )
 
 type CollectionController struct {
@@ -51,8 +52,12 @@ func ( self *CollectionController ) InsertCollection() {
 
 	var _ , insertErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
 		//先根据对应的 audio 以及 folderId 进行查询 ， 查看是否能查询知道数据 ， 倘若能 ， 则退出查询
-		var readError = o.Read( collection ,"userId","audioId","folderId")
-
+		var readError error
+		if(getFolderIdErr == nil ) {
+			readError = o.Read(collection, "userId", "audioId", "folderId")
+		}else{
+			readError = o.Read(collection,"userId","audioId")
+		}
 		if readError == nil {
 			return nil , errors.New("该实例已经存在")
 		}
@@ -63,8 +68,79 @@ func ( self *CollectionController ) InsertCollection() {
 		self.FailJson( insertErr )
 		return
 	}
+
+	//添加记录
+	var dashboardService = service.GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.CollectionCount = 1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
 	//输出插入后的整合的信息
 	self.Json( collection )
+}
+
+/**
+删除对应的信息
+*/
+func ( self *CollectionController ) DeleteColl(){
+
+	//首先收集对应的信息
+	var userId , getUserIdErr = self.GetInt64("userId")
+
+	if getUserIdErr != nil {
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	var audioId , getAudioIdErr = self.GetInt64("audioId")
+
+	if getAudioIdErr != nil {
+		self.FailJson( getAudioIdErr )
+		return
+	}
+
+	var folderId , getFolderIdErr = self.GetInt64("folderId")
+
+	var ormService = db.GetOrmServiceInstance()
+
+	var collection = &bean.AudioUserCollection{}
+
+	collection.UserId = userId
+	collection.AudioId = audioId
+	collection.FolderId = &folderId
+
+	var _ , transacErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+
+		var readErr error
+		if getFolderIdErr == nil {
+			readErr=o.Read(collection, "audioId", "userId", "folderId")
+		}else {
+			readErr=o.Read(collection, "audioId", "userId")
+		}
+		//查询信息失败
+		if readErr != nil {
+			return nil , readErr
+		}
+
+		var _ , deleteErr = o.Delete(collection)
+		if deleteErr != nil {
+			self.FailJson( deleteErr )
+			return nil , deleteErr
+		}
+		return collection , nil
+	})
+
+	if transacErr != nil {
+		self.FailJson(transacErr)
+		return
+	}
+
+	//添加记录
+	var dashboardService = service.GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.CollectionCount = -1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
+	//输出插入后的整合的信息
+	self.Json(collection)
 }
 
 func ( self *CollectionController ) DeleteCollection(){
@@ -109,6 +185,16 @@ func ( self *CollectionController ) DeleteCollection(){
 	}
 
 	collectionResult.Parse()
+
+	var audioId = collection.AudioId
+	var userId = collection.UserId
+
+	//添加记录
+	var dashboardService = service.GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.CollectionCount = -1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
+	//输出插入后的整合的信息
 	self.Json( collectionResult )
 }
 
@@ -129,11 +215,16 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 
 	var collection *bean.AudioUserCollection = nil
 
-	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
-		collection = collectionService.FindByUserAndAudio( o , userId , audioId )
-		return nil, nil
+	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
+		var findErr error
+		collection , findErr = collectionService.FindByUserAndAudio( o , userId , audioId )
+		return collection , findErr
 	})
 
+	if jdbcErr != nil {
+		self.FailJson( jdbcErr)
+		return
+	}
 	//直接在这里输出对应的结果
 	self.Json( collection )
 }
@@ -144,7 +235,7 @@ func ( self *CollectionController ) FindByUserAndAudio() {
  */
  func ( self *CollectionController ) SearchCollectionAndAudio() {
 
- 	/*
+
  	//先获取对应的信息
  	var userId , getUserIdErr = self.GetInt64("userId")
 
@@ -153,12 +244,14 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 		return
 	}
 
-	*/
 	var folderId , getFolderIdErr = self.GetInt64("folderId")
 
+	var folderIdPoint *int64
+	//假设 folderId 没有该值 ， 我们则设置其为空
 	if getFolderIdErr != nil {
-		self.FailJson( getFolderIdErr )
-		return
+		folderIdPoint = nil
+	}else {
+		folderIdPoint = &folderId
 	}
 
 	var ormService = db.GetOrmServiceInstance()
@@ -172,8 +265,12 @@ func ( self *CollectionController ) FindByUserAndAudio() {
 
 		//计算并且得出最后的时间
 		var qt = o.QueryTable( bean.GetAudioUserCollectionTableName())
-
-		qt.Filter("folderId" , folderId ).OrderBy("-create_time").All(&collections)
+		if folderIdPoint != nil {
+			qt = qt.Filter("folderId",folderIdPoint)
+		}else{
+			qt = qt.Filter("folderId__isnull",true)
+		}
+		qt.Filter("userId",userId).OrderBy("-create_time").All(&collections)
 
 		service.ForCollection( collections , func(collection *bean.AudioUserCollection, index int) {
 			//先转化对应的信息

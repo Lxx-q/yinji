@@ -5,6 +5,7 @@ import (
 	"yinji/models/bean"
 	"yinji/models/base"
 	"yinji/service/db"
+	"yinji/utils"
 )
 
 type UserTempDashboardService struct {
@@ -20,7 +21,6 @@ func ( self *UserTempDashboardService ) AddDashboardCount( id int64 , dashboardB
 		return self.UpdateDashboardCount(o , id , dashboardBase)
 	});
 }
-
 /**
 	数据库上对应的 修改数据的方法
  */
@@ -34,7 +34,7 @@ func ( self *UserTempDashboardService ) UpdateDashboardCount( o orm.Ormer , id i
 
 	if findErr != nil{
 		//倘若没有则开始添加
-
+		return nil , findErr
 	}
 
 	dashboard.Add(dashboardBase)
@@ -43,27 +43,31 @@ func ( self *UserTempDashboardService ) UpdateDashboardCount( o orm.Ormer , id i
 	return dashboard , updateErr
 
 }
+/**
 
+ */
 func ( self *UserTempDashboardService ) FindOrNew( o orm.Ormer , id int64) ( *bean.UserTempDashboard , error) {
 	var dashboard , findErr = self.FindById(o , id );
 	if findErr != nil {
-		dashboard , findErr = self.New(o,dashboard)
+		dashboard , findErr = self.New(o,dashboard , id )
 	}
 	return dashboard , findErr
 }
-
 /**
 	根据id ， 来生成对应的信息
  */
 func ( self *UserTempDashboardService ) FindById ( o orm.Ormer , id int64 ) ( *bean.UserTempDashboard , error ){
 	var dashboard = &bean.UserTempDashboard{}
-	dashboard.Id = id
-	var readErr = o.Read( dashboard )
+	dashboard.UserId = id
+	var today = utils.Today()
+	dashboard.WriteDate = *today
+	var readErr = o.Read( dashboard , "userId" , "writeDate")
 	return dashboard , readErr
 }
 
-func ( self *UserTempDashboardService ) New( o orm.Ormer , dashboard *bean.UserTempDashboard ) ( *bean.UserTempDashboard , error ) {
-	dashboard.DashboardBase.New()
+func ( self *UserTempDashboardService ) New( o orm.Ormer , dashboard *bean.UserTempDashboard , id int64) ( *bean.UserTempDashboard , error ) {
+	dashboard.UserId = id
+	dashboard.New()
 	var _ , insertErr = o.Insert( dashboard )
 	return dashboard , insertErr
 }
@@ -71,7 +75,7 @@ func ( self *UserTempDashboardService ) New( o orm.Ormer , dashboard *bean.UserT
 func ( self *UserTempDashboardService ) NewById( o orm.Ormer , id int64 ) ( *bean.UserTempDashboard , error ) {
 	var dashboard = &bean.UserTempDashboard{}
 	dashboard.Id = id
-	return self.New( o ,dashboard )
+	return self.New( o ,dashboard , id)
 }
 
 var USER_TEMP_DASHBOARD_SERVICE_INSTANCE = &UserTempDashboardService{}

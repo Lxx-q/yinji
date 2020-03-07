@@ -8,12 +8,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"yinji/service"
 	"github.com/astaxie/beego/session"
+	"yinji/thread"
 )
 
 
 func Init(){
 	RegistOrm();
 	SessionInit()
+
+	thread.ParseUserTempToUserDate()
+	thread.ParseAudioTempToUserDate()
 }
 
 func RegistOrm(){
@@ -98,6 +102,7 @@ func main() {
 	beego.SetStaticPath(app.GetUrl("/js"),"static/js")
 
 	beego.SetStaticPath(app.GetUrl("/page/"),"static/page")
+	beego.SetStaticPath(app.GetUrl("/static"),"static/static")
 	beego.Run();
 }
 

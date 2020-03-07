@@ -71,10 +71,13 @@ func ( self *AudioUserLoveController ) InsertLove(){
 		return audioUserLoveService.InsertLove( o , userId , audioId )
 	})
 
+
 	if insertLoveErr != nil {
 		self.FailJson( insertLoveErr )
 		return
 	}
+
+
 
 	self.Json( love )
 

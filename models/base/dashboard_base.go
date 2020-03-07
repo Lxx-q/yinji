@@ -11,7 +11,7 @@ type DashboardBase struct {
 func ( self *DashboardBase ) Add( base *DashboardBase ){
 	self.LoveCount += base.LoveCount
 	self.ForwardCount += base.ForwardCount
-	self.CollectionCount += base.ForwardCount
+	self.CollectionCount += base.CollectionCount
 	self.BrowseCount += base.BrowseCount
 	self.CommentCount += base.CommentCount
 }
@@ -22,4 +22,10 @@ func ( self *DashboardBase ) New() {
 	self.CollectionCount = 0
 	self.BrowseCount = 0
 	self.CommentCount = 0
+}
+
+func NewDashboardBase() *DashboardBase{
+	var dashboard = &DashboardBase{}
+	dashboard.New()
+	return dashboard
 }

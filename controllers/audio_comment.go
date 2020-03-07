@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bean"
 	"yinji/service/db"
+	"yinji/models/base"
 )
 
 type AudioCommentController struct {
@@ -21,12 +22,30 @@ func (self *AudioCommentController) ByAudioId(){
 		return;
 	}
 
+	/*
+	//查询对应的page , 与 count
+
+	var page , getPageErr = self.GetInt("page")
+
+	if getPageErr != nil {
+		page = 0
+	}
+
+	var count , getCountErr = self.GetInt("count")
+
+	if getCountErr != nil {
+		count = 10
+	}
+
+	var offset = page * count
+	*/
 	var instance = service.GetAudioCommentServiceInstance()
 	var ormService = db.GetOrmServiceInstance()
 	var comments interface{}
 	ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {
 		comments = instance.FindAudioCommentsAndUser( o , func(o orm.Ormer) orm.QuerySeter {
 			var qs = o.QueryTable(bean.GetAudioCommentTableName()).Filter("AudioId",audioId)
+			qs = qs.OrderBy("-create_time")
 			//之后进行对应的搜索
 			return qs
 		})
@@ -71,7 +90,59 @@ func (self *AudioCommentController) InsertComment(){
 		return
 	}
 
+	var dashboardService = service.GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.CommentCount = 1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
+
 	self.Json( audioComment )
+}
+
+/**
+	根据对应的  audio Comment 的 id 来搜索信息
+ */
+func ( self *AudioCommentController ) DeleteCommentById(){
+	//收集对应的信息
+	var id , getIdErr = self.GetInt64("id")
+
+	if getIdErr != nil {
+		self.FailJson( getIdErr )
+		return
+	}
+
+	//之后进行请求
+	var ormService = db.GetOrmServiceInstance()
+
+	//填充对应的 audioComment 的 信息
+	var audioComment = bean.AudioComment{}
+	audioComment.Id = id
+
+	var audioCommentService = service.GetAudioCommentServiceInstance()
+
+	var _ , transacErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var readErr = o.Read(&audioComment)
+		if readErr != nil  {
+			return nil , readErr
+		}
+		var deleteCommentErr = audioCommentService.DeleteComment(o , &audioComment)
+		return nil , deleteCommentErr
+	})
+
+	if transacErr != nil {
+		self.FailJson(transacErr)
+		return
+	}
+
+	self.Json(audioComment)
+
+}
+
+/**
+	返回 hbulderx 下面的数据
+	说白了一次性
+ */
+func ( self *AudioCommentController) ByAudioInHB(){
+
 }
 
 func (self *AudioCommentController ) PageDetails(){

@@ -15,7 +15,9 @@ new Vue({
 		]
 	},methods:{
 
-		ajaxAudio:function(){
+		toAudioDetailsPage:function( item ){ //根据目标的 信息 ， 将结果导向目标页面的方法
+			alert(item.id);
+		},ajaxAudio:function(){
 
 			var vue = this;
 
@@ -87,6 +89,8 @@ new Vue({
 		},nextPage:function(){
 			this.startLimit = this.endLimit;
 			this.endLimit = this.startLimit + this.space;
+		},initEvent:function(){
+			//初始化事件
 		}
 	},created:function(){
 		var vue = this;

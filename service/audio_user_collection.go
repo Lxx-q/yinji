@@ -51,18 +51,15 @@ func ( self *CollectionService ) Delete( o orm.Ormer ,  collection *bean.AudioUs
 /**
 	查看目标用户是否与目标音频存在关系
  */
-func ( self *CollectionService ) FindByUserAndAudio( o orm.Ormer , userId int64 , auidoId int64) *bean.AudioUserCollection {
+func ( self *CollectionService ) FindByUserAndAudio( o orm.Ormer , userId int64 , auidoId int64) (*bean.AudioUserCollection ,error) {
 
 	var collection = bean.AudioUserCollection{}
-
+	collection.UserId = userId
+	collection.AudioId = auidoId
 
 	var err = o.Read(&collection , "user_id" , "audio_id")
 
-	if err != nil {
-		return nil
-	}
-
-	return &collection
+	return &collection , err
 
 }
 

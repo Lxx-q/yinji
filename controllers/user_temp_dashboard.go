@@ -12,10 +12,10 @@ type UserTempDashoardController struct {
 }
 
 func ( self *UserTempDashoardController ) FindById() {
-	var id , getIdErr = self.GetInt64( "id" )
+	var userId, getUserIdErr = self.GetInt64( "userId" )
 
-	if getIdErr != nil {
-		self.FailJson( getIdErr )
+	if getUserIdErr != nil {
+		self.FailJson(getUserIdErr)
 		return
 	}
 
@@ -24,7 +24,7 @@ func ( self *UserTempDashoardController ) FindById() {
 
 	var dashboard *bean.UserTempDashboard
 	var _ , transactionErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
-		_dashboard , findErr := userTempDashboardService.FindById( o , id )
+		_dashboard , findErr := userTempDashboardService.FindById( o , userId)
 
 		if findErr == nil {
 			dashboard = _dashboard
@@ -32,7 +32,7 @@ func ( self *UserTempDashoardController ) FindById() {
 			return dashboard , findErr
 		}
 
-		_dashboard , newErr := userTempDashboardService.New(o , _dashboard)
+		_dashboard , newErr := userTempDashboardService.New(o , _dashboard , userId)
 		dashboard = _dashboard
 		return _dashboard , newErr
 

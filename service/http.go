@@ -25,6 +25,8 @@ const URL_AUDIO_PATH = "resources/audio"
 
 const URL_IMAGE_AUDIO_PATH = "resources/image/audio"
 
+const URL_IMAGE_USER_PATH = "resources/image/user"
+
 func ( self *HttpFileService ) GetServerPath() string {
 	var serverPath , _ = os.Getwd()
 	//返回对应的 基础时间信息
@@ -34,6 +36,11 @@ func ( self *HttpFileService ) GetServerPath() string {
 func ( self *HttpFileService ) BuildServerPath( path string ) string {
 	var serverPath = self.GetServerPath()
 	return serverPath + "/" + path
+}
+
+//得到的是返回的路径 ， 可成功 ， 可不成功
+func ( self * HttpFileService ) GetImagUserePath( path string ) string {
+	return  URL_IMAGE_USER_PATH + "/" + path
 }
 
 //得到的是返回的路径 ， 可成功 ， 可不成功
@@ -56,10 +63,38 @@ func ( self *HttpFileService) GetAudioFileName( audio *bean.Audio ) string {
 	return audio.Url
 }
 
+ func ( self *HttpFileService ) BuildFileName( id int64 , header *multipart.FileHeader ) string {
+	var imageSuffix = path.Ext( header.Filename )
+	var imageName = strconv.FormatInt( id ,10) + imageSuffix
+	return imageName
+}
+
 func ( self *HttpFileService ) BuildAudioFileName( audio *bean.Audio , header *multipart.FileHeader ) string {
 	var imageSuffix = path.Ext( header.Filename )
 	var imageName = strconv.FormatInt( audio.Id ,10) + imageSuffix
 	return imageName
+}
+
+/**
+	利用绝对路径上传
+ */
+func ( self *HttpFileService ) Upload( path string , reader io.Reader) ( string , error ){
+
+	var serverPath = self.BuildServerPath(path)
+	var file , getFileErr = self.fileService.GetFile( serverPath )
+
+	if getFileErr != nil {
+		//倘若查找文件出现错误 ， 那么我们便开始返回相对应的结果
+		return "" , getFileErr
+	}
+
+	var fileAssembly = FileAssembly{ file }
+
+	self.fileService.Write( fileAssembly , reader )
+
+	defer fileAssembly.Release()
+
+	return path , nil
 }
 
 func ( self *HttpFileService ) UploadAudio( path string  , reader io.Reader)  ( string , error )   {
@@ -72,7 +107,7 @@ func ( self *HttpFileService ) UploadAudio( path string  , reader io.Reader)  ( 
 		return "" ,  err
 	}
 
-	var fileAssembly  =FileAssembly{ file  }
+	var fileAssembly  = FileAssembly{ file  }
 
 	var writeFileErr = self.fileService.Write( fileAssembly , reader )
 

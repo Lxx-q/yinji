@@ -186,9 +186,12 @@ new Vue({
         },
         userDashboard: {
             //根据目标的信息来生成对应的xinxi
-            browseCount: "--",
-            forwardCount: "",
-            loveCount: "--"
+            browseCount: "0",
+            forwardCount: "0",
+            loveCount: "0",
+            collectionCount:"0",
+            forwardCount:"0",
+            commentCount:"0"
         },
         userDateDashboard: {
             //用户近十日的数据
@@ -268,17 +271,22 @@ new Vue({
         ],
         folderObj: {
 
-        },mostPlayAudio:{
+        },mostPlayAudio:[
             //最多播放量的节目
-        },currentAudio:{
+        ],currentAudio:[
             //当前音频信息
 
-        },currentAudioIndex:0, // 当前audio 的 index 标签,
+        ],currentAudioIndex:0, // 当前audio 的 index 标签,
         currentAudioCount:7, //当前一个页面 的数量,
         currentAudioPageLen:0
     },
     methods: {
-        selectPage: function(event, item) {
+        toUploadPage:function(){ // 跳转到对应的上传音频页面
+            var baseUrl = getServerUrl("page/upload/audio");
+            var url = baseUrl + "?userId=" + this.userId;
+            window.open( url );
+
+        },selectPage: function(event, item) {
             //获取对应的 信息
             var target = $(event.target);
             var currentPage = target.find(".currentPage");
@@ -343,6 +351,13 @@ new Vue({
             var userId = this.userId;
             //开始进行请求
             var vue = this;
+
+            //初始化默认加入一个 item 
+            var defaultItem = {};
+            defaultItem.name = "默认文件夹";
+            defaultItem.id = null;
+            defaultItem = vue.collectionFolderToItem(defaultItem);
+            childrens.push(defaultItem);
             window.AJAX_ENGINE.ajax({
                 url: "/yinji/api/collection/folder/all",
                 data: {
@@ -387,12 +402,12 @@ new Vue({
 
             */
 
-            var url = getServerUrl("api/dashboard/user/find");
+            var url = getServerUrl("api/dashboard/total/temp");
             //获取对应的
             window.AJAX_ENGINE.ajax({
                 url: url,
                 data: {
-                    id: userId
+                    userId: userId
                 },
                 dataType: "json",
                 async: true,
@@ -565,6 +580,7 @@ new Vue({
         searchCollectionAudio: function(item , _vue ) {
             //根据目标的 id ( 收藏夹 [collection_folder]  , 来搜索 ，该id下面的所有的信息)
             var id = item.id;
+            var userId = this.userId;
 
             var url = "/yinji" + "/" + "api/collection/all/and";
 
@@ -576,6 +592,7 @@ new Vue({
             window.AJAX_ENGINE.ajax({
                 url: url,
                 data: {
+                    userId:userId,
                     folderId: id
                 },
                 async: true,
@@ -936,19 +953,22 @@ new Vue({
             //更新user信息
             var userId = this.userId;
 
-            var name = $("#form_name");
+            //对应的信息
+            var formData = new FormData(document.getElementById("user_form"));
+            formData.append("id",userId);
 
-            var name_val = name.val();
             var vue = this;
-            var url = getServerUrl("api/user/update")
+            var url = getServerUrl("api/user/update/image/name");
+            console.log( formData)
 
             window.AJAX_ENGINE.ajax({
                 url:url,
-                data:{
-                    id:userId,
-                    name:name_val
-                },async:true,
+                data:formData,
+                async:true,
                 dataType:"json",
+                processData: false,
+                contentType: false,
+                type:"post",
                 success:function( result , status , xhr ){
                     vue.user = result;
                     window.CONFIRM.alert("修改成功喽^_^");
@@ -990,6 +1010,8 @@ new Vue({
                 }
             });
 
+
+        },searchAudioLen:function(){
 
         }
     },

@@ -25,9 +25,9 @@ func ( self *AudioTempDashboard) New(){
 
 
 func ( self *AudioTempDashboard) TableName() string {
-	return GetAudioDateDashboardTableName()
+	return GetAudioTempTempDashboard()
 }
 
-func GetAudioDateDashboardTableName() string{
+func GetAudioTempTempDashboard() string{
 	return "audio_temp_dashboard"
 }

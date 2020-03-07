@@ -13,6 +13,10 @@ type AudioController struct {
 	BeegoController
 }
 
+func ( self *AudioController ) Audio1(){
+	self.Resource("upload/demo_123.html")
+}
+
 /**
 * 输出 对应的 页面的 信息
 */
@@ -30,7 +34,7 @@ func (controller *AudioController) IndexPage() {
 
 func (self *AudioController) SearchByString() {
 
-	//获取对应的 xixni
+	//获取对应的 信息
 	var content string = self.GetString("content");
 
 	var startLimit , startLimitError = self.GetInt("startLimit")
@@ -320,6 +324,13 @@ func ( self *AudioController ) AudioUpdate() {
 	self.Json( audio )
 }
 
+/**
+	新的上传资源页面
+ */
+func ( self *AudioController ) NewAudioUploadPage(){
+	self.Resource("uploadnew/template")
+}
+
 
 func (self *AudioController) AudioUploadPage() {
 	self.Resource("upload/demo_1.html");
@@ -391,6 +402,7 @@ func( self *AudioController ) FindAudioById(){
 
 	self.Json( audio )
 }
+
 
 /**
 	接受的信息：
@@ -511,7 +523,7 @@ func ( self *AudioController ) SearchMostDateBrowseAudio(){
 	//暂时的输出对应的信息
 
 	var ormService = db.GetOrmServiceInstance()
-	var sql = "SELECT a.* , au_dd.browse_count , au_dd.love_count , au_dd.comment_count ,au_dd.collection_count FROM audio a LEFT JOIN audio_date_dashboard au_dd ON a.id = au_dd.id  ORDER BY au_dd.browse_count DESC LIMIT ? , ? ;"
+	var sql = "SELECT a.* , au_dd.browse_count , au_dd.love_count , au_dd.comment_count ,au_dd.collection_count FROM audio a LEFT JOIN audio_temp_dashboard au_dd ON a.id = au_dd.id  ORDER BY au_dd.browse_count DESC LIMIT ? , ? ;"
 	var audioArr []*bind.AudioAndDashboard
 
 	var _ , jdbcErr = ormService.Jdbc(func(o orm.Ormer) (interface{}, error) {

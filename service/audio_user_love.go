@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bean"
+	"yinji/models/base"
 )
 
 type AudioUserLoveService struct {
@@ -39,9 +40,14 @@ func ( self *AudioUserLoveService ) InsertLove( o orm.Ormer ,  userId int64 , au
 
 	var _ , insertErr = o.Insert( love )
 
-	var audioDashboardService = GetAudioDashboardServiceInstance()
+	if insertErr != nil {
+		return nil , insertErr
+	}
 
-	audioDashboardService.AddLoveCount( o , love.AudioId , 1 )
+	var dashboardService = GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.LoveCount = 1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
 
 	return love , insertErr
 }
@@ -55,7 +61,17 @@ func ( self *AudioUserLoveService ) DeleteLove( o orm.Ormer , userId int64 , aud
 
 	var _ , deleteErr = o.Delete( love )
 
-	return love , deleteErr
+	if deleteErr != nil {
+		return love , deleteErr
+	}
+
+	var dashboardService = GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.LoveCount = -1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
+
+	return love ,  nil
+
 }
 
 var AUDIO_USER_LOVE_SERVICE_INSTANCE = &AudioUserLoveService{}

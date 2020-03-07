@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- Bootstrap CSS-->
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/yinji/js/bootstrap/css/bootstrap.css" rel="stylesheet">
     <!-- Font Awesome CSS-->
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom Font Icons CSS-->
@@ -26,9 +26,11 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 
     <script type="text/javascript" src="/yinji/js/protocal.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/yinji/js/bootstrap/js/bootstrap.js"></script>
   </head>
   <body>
-    <div class="login-page">
+    <div class="login-page" id="app">
       <div class="container d-flex align-items-center">
         <div class="form-holder has-shadow">
           <div class="row">
@@ -37,9 +39,9 @@
               <div class="info d-flex align-items-center">
                 <div class="content">
                   <div class="logo">
-                    <h1>Dashboard</h1>
+                    <h1>{{ label.header }}</h1>
                   </div>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                  <p>{{ label.introduction }}</p>
                 </div>
               </div>
             </div>
@@ -51,31 +53,32 @@
                   <form method="get" class="form-validate mb-4">
                     <div class="form-group">
                       <input id="login-username" type="text" name="loginUsername" required data-msg="Please enter your username" class="input-material">
-                      <label for="login-username" class="label-material">User Name</label>
+                      <label for="login-username" class="label-material">{{ label.userName }}</label>
                     </div>
                     <div class="form-group">
                       <input id="login-password" type="password" name="loginPassword" required data-msg="Please enter your password" class="input-material">
-                      <label for="login-password" class="label-material">Password</label>
+                      <label for="login-password" class="label-material">{{ label.pwd }}</label>
                     </div>
-                    <button id="login-submit" type="button" class="btn btn-primary">Login</button>
-                    <button type="reset" class="btn btn-primary">reset</button>
+                    <button id="login-submit" type="button" class="btn btn-primary">{{ label.login }}</button>
+                    <button type="reset" class="btn btn-primary">{{ label.reset }}</button>
                   </form>
-                  <a href="#" class="forgot-pass">Forgot Password?</a><br><small>Do not have an account? </small><a href="register" class="signup">Signup</a>
+                  <!-- 暂时还没有先 关闭 -->
+                  <!--
+                  <a href="#" class="forgot-pass">Forgot Password?</a>
+                  -->
+                  <br><small>{{ label.registerStr }} </small><a href="register" class="signup">{{ label.register }}</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="copyrights text-center">
-        <p>Design by <a href="https://bootstrapious.com/p/bootstrap-4-dark-admin" class="external">Bootstrapious</a></p>
-        <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
-      </div>
+
+
     </div>
     <!-- JavaScript files-->
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    
     <script src="vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
     <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
     <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
     <script src="js/front.js"></script>
@@ -139,6 +142,25 @@
           }
 
       })
+    </script>
+    <script src="/yinji/js/vue/vue.min.js"></script>
+    <script>
+      new Vue({
+          el:"#app",
+          data:{
+            label:{
+              header:"音迹",
+              introduction:"即使不知道未来飞向何处，但依然要努力飞翔",
+              userName:"登录账号",
+              pwd:"密码",
+              login:"登录",
+              reset:"重新输入",
+              forget:"忘记密码",
+              register:"注册",
+              registerStr:"还没有账号吗？？？请先注册"
+            }
+          }
+      });
     </script>
   </body>
 </html>

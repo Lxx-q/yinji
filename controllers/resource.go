@@ -13,9 +13,22 @@ type ResourceController struct {
 }
 
 /**
+	根据对应的path , 来直接获取对应的信息
+*/
+func ( self *ResourceController ) ResourcePath(){
+	var path = self.GetString("path")
+
+	if path == "" {
+		path = config.RESOURCE_IMAGE_404
+	}
+
+	var urlPath = "/" + config.SERVER_NAME + "/" + path
+	self.Redirect( urlPath , 302 )
+}
+
+/**
 	根据 audio id 可以直接找到对应的 audio 音频资源信息
 */
-
 func ( self *ResourceController ) Audio() {
 	var id , getIdErr = self.GetInt64("id")
 
@@ -90,13 +103,15 @@ func ( self *ResourceController ) ImageUser() {
 
 	//暂时默认的操作
 	//全部返回 404 图片
+	/*
 	var image = config.RESOURCE_IMAGE_404
 
 	var urlPath = "/" + config.SERVER_NAME + "/" + image
 
 	self.Redirect( urlPath , 302 )
+	*/
 
-	/*
+
 	var id , getIdErr = self.GetInt64("id")
 
 	if getIdErr != nil {
@@ -128,7 +143,7 @@ func ( self *ResourceController ) ImageUser() {
 
 	self.Redirect( urlPath , 302 )
 
-	*/
+
 
 }
 

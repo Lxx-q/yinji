@@ -42,6 +42,7 @@ func init() {
 	var audioUserHistory = &controllers.AudioUserHistoryController{}
 
 	var audioFast = &controllers.AudioFastController{}
+	var dashboard = &controllers.DashboardContrlller{}
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/test/json", test_controller, "*:JsonResult")
 	beego.Router("/test/xml", test_controller, "*:XmlResult");
@@ -68,6 +69,7 @@ func init() {
 	beego.Router(app.GetUrl("/page/upload/audio"), audio, "*:AudioUploadPage")
 	//修改音频信息的页面
 	beego.Router(app.GetUrl("/page/upload/update"), audio, "*:AudioUpdatePage")
+	beego.Router(app.GetUrl("/page/upload/audio1"),audio,"*:Audio1")
 	//详细页面
 	beego.Router(app.GetUrl("/page/details/main"),audioComment , "*:PageDetails")
 	/**
@@ -90,6 +92,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/user/find/id"),user , "*:FindUserById")
 	//根据对应的user信息来进行更新
 	beego.Router(app.GetUrl("/api/user/update"),user , "*:UpdateUser")
+	//更新用户名与用户头像
+	beego.Router(app.GetUrl("/api/user/update/image/name"),user,"*:UpdateUserNameAndImage")
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload"), audio, "*:AudioUpload")
 	//对应的修改页面的api
@@ -114,6 +118,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/comment/find/audio"),audioComment,"*:ByAudioId")
 	//插入评论
 	beego.Router(app.GetUrl("/api/comment/insert"),audioComment,"*:InsertComment")
+	//根据对应的 comment 的 id 来删除评论
+	beego.Router(app.GetUrl("/api/comment/delete/id"),audioComment,"*:DeleteCommentById")
 	//书写对应的评论的回复
 	beego.Router(app.GetUrl("/api/reply/comment/insert"), audioCommentReply,"*:InsertCommentReply")
 	beego.Router(app.GetUrl("/api/reply/comment/find/comment") , audioCommentReply , "*:ByCommentId")
@@ -121,6 +127,8 @@ func init() {
 	beego.Router(app.GetUrl("/api/collection/insert") ,collection ,"*:InsertCollection")
 	//取消收藏的接口
 	beego.Router(app.GetUrl("/api/collection/delete"),collection,"*:DeleteCollection")
+	//取消收藏 根据对应的 userId + audioId + folderId
+	beego.Router(app.GetUrl("/api/collection/delete/userandaudio"),collection,"*:DeleteColl")
 	//根据对应的信息， 来获取对应的信息
 	beego.Router(app.GetUrl("/api/collection/find/relationship"), collection , "*:FindByUserAndAudio")
 	//根据对应的 收藏夹的 id 来搜索出对应的 收藏信息与其绑定的 audio 信息
@@ -148,11 +156,17 @@ func init() {
 	beego.Router( app.GetUrl("/api/dashboard/user/find") , userDashboard, "*:FindById")
 	beego.Router( app.GetUrl("/api/dashboard/user/date/search"),userDateDashboard , "*:SearchByAudioId")
 	beego.Router( app.GetUrl("/api/dashboard/user/date/search/time"),userDateDashboard ,"*:SearchByAudioIdByTime")
+	//输出一个 目标用户在一个周期内 收到 的信息的总和
+	beego.Router( app.GetUrl("/api/dashboard/total/temp") , dashboard , "*:TempFindUserId")
+	//输出一个 目标用户在全部 收到 的信息的总和
+	beego.Router( app.GetUrl("/api/dashboard/total/all") , dashboard , "*:AudioDashboardFindUserId")
 	//输出资源文件
 	//输出 音频的封面资源
 	beego.Router( app.GetUrl( "/api/resource/image/audio") , resource , "*:ImageAudio")
 	//输出用户的头像资源
 	beego.Router( app.GetUrl("/api/resource/image/user"),resource , "*:ImageUser")
+	//根据对应的路径 ， 来输出对应的地址
+	beego.Router(app.GetUrl("/api/resource/image/path"),resource,"*:ResourcePath")
 	//输出音频资源文件
 	beego.Router( app.GetUrl("/api/resource/audio") , resource , "*:Audio")
 	//api测试输出
@@ -164,7 +178,7 @@ func init() {
 	//根据对应的userid ， 来搜索对应的信息
 	beego.Router(app.GetUrl("/api/audio/history/search"),audioUserHistory,"*:SearchByUserId")
 	// 登记
-	beego.Router(app.GetUrl("/api/audio/history/update"),audioUserHistory,"*:Update")
+	beego.Router(app.GetUrl("/api/audio/history/add"),audioUserHistory,"*:AddCount")
 	//新建对应的 audioFast
 	beego.Router(app.GetUrl("/api/audio/fast/new"),audioFast,"*:NewAudioFast")
 	/*
@@ -180,4 +194,5 @@ func init() {
 	beego.Router(app.GetUrl("/test/audio/comments"),test_controller,"*:ApiAudioComment")
 	beego.Router(app.GetUrl("/test/resource/redirec"),test_controller,"*:TestResourceRedirect")
 	beego.Router(app.GetUrl("/test/dashboard/add"),test_controller,"*:TestDashboard")
+
 }

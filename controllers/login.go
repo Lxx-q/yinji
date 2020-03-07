@@ -53,6 +53,7 @@ func ( self *LoginController ) RegisterByAccount(){
 
 	userDetails.Id = user.Id
 	userDetails.ModifyTime = user.CreateTime
+	userDetails.Birthday = time
 
 	var ormService = db.GetOrmServiceInstance()
 
@@ -85,7 +86,7 @@ func ( self *LoginController ) RegisterByAccount(){
 			return nil , newDetailsErr
 		}
 
-		return nil, nil
+		return _login, nil
 	});
 
 	//最后对结果进行判断

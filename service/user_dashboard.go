@@ -35,7 +35,7 @@ func ( self *UserDashboardService ) UpdateDashboardCount( o orm.Ormer , id int64
 
 	if findErr != nil{
 		//倘若没有则开始添加
-
+		return nil , findErr
 	}
 
 	dashboard.Add(dashboardBase)

@@ -347,7 +347,26 @@ new Vue({
 
         },addjPlayList:function(item){ //将目标的音频文件添加到目标的播放列表之中
             this.jsPlayList.add(item);
-        },clickPlayMe: function(e) {
+        },writePlayDashboard:function( item ){ // 请求服务器,并且记录下播放事件
+            var userId = this.userId;
+            if( userId == null ){
+                return;
+            }
+            var audioId = item.id; //获取对应的 audioId
+            var url = getServerUrl("api/audio/history/add")
+            window.AJAX_ENGINE.ajax({
+                url:url,
+                data:{
+                    lastTime:0, // 目前只能暂时默认这个lastTime 为0
+                    userId:userId,
+                    audioId:audioId,
+                    count:1
+                },async:true,
+                success:function( data , status , xhr ){
+                    console.log( data );
+                }
+            })
+        },clickPlayMe: function(e , item ) {
             e && e.preventDefault();
             var $this = $(e.target);
             if (!$this.is('a')) $this = $this.closest('a'); //closest() 方法获得匹配选择器的第一个祖先元素，从当前元素开始沿 DOM 树向上。
@@ -370,6 +389,8 @@ new Vue({
                 });
                 this.jsPlayList.play( - 1);
             }
+            this.writePlayDashboard( item );
+
         },
         clickPlayFun: function(e) {
             e && e.preventDefault();

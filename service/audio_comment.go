@@ -5,6 +5,7 @@ import (
 	"yinji/service/db"
 	"yinji/models/bean"
 	"github.com/astaxie/beego/orm"
+	"yinji/models/base"
 )
 
 type AudioCommentService struct {
@@ -18,8 +19,6 @@ func (self *AudioCommentService) Parse( comments []*bean.AudioComment){
 	}
 }
 
-/**
- */
 func (self *AudioCommentService) FindAudoComments( function func(o orm.Ormer) orm.QuerySeter ) []*bean.AudioComment{
 	var service = db.GetOrmServiceInstance()
 	var comments []*bean.AudioComment
@@ -64,6 +63,28 @@ func (self *AudioCommentService) InsertComment( audioComment *bean.AudioComment 
 	})
 
 	return insertErr
+}
+
+/**
+	删除对应的 comment 信息
+*/
+func ( self *AudioCommentService) DeleteComment( o orm.Ormer ,  audioComment *bean.AudioComment ) error {
+	var _  , deleteErr = o.Delete(audioComment)
+	// 之后我们将结果输出
+	if deleteErr != nil {
+		return deleteErr
+	}
+
+	var audioId = audioComment.AudioId
+	var userId = audioComment.UserId
+
+	//添加记录
+	var dashboardService = GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.CollectionCount = -1
+	dashboardService.AddCount(audioId,userId,dashboardBase)
+
+	return nil
 }
 
 var AUDIO_COMMENT_SERVICE_INSTANCE = &AudioCommentService{ db.GetOrmServiceInstance()}

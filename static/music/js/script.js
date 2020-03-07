@@ -28,6 +28,14 @@ new Vue({
                    我们再使用一个 相对应的 参数 ， 来表示 该歌曲 是否来自本地 ， 还是网络 ， 这个参数 ， 只能自己添加
                 */
                 {
+                    name: "Mekanın Sahibi",
+                    artist: "Norm Ender",
+                    cover: "t2.png",
+                    source: "mp3/2.amr",
+                    url: "#",
+                    favorited: false,
+                    from: FROM_SERVER
+                },{
                     name: "Everybody Knows",
                     artist: "Leonard Cohen",
                     cover: "t1.png",
@@ -36,15 +44,7 @@ new Vue({
                     favorited: true,
                     from: FROM_SERVER
                 },
-                {
-                    name: "Mekanın Sahibi",
-                    artist: "Norm Ender",
-                    cover: "t2.png",
-                    source: "mp3/2.mp3",
-                    url: "#",
-                    favorited: false,
-                    from: FROM_SERVER
-                }, {
+                 {
                     name: "Da yu",
                     artist: "Zhou 深",
                     cover: "t2.png",

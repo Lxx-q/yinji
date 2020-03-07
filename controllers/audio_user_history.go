@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bean"
 	"yinji/service"
+	"yinji/models/base"
 )
 
 type AudioUserHistoryController struct {
@@ -49,7 +50,7 @@ func ( self *AudioUserHistoryController ) SearchByUserId(){
 /**
 	根据目标的audio和 user 的操作来进行搜索
 */
-func ( self *AudioUserHistoryController ) Update(){
+func ( self *AudioUserHistoryController ) AddCount(){
 	//收集对应的信息
 	var userId , getUserIdErr = self.GetInt64("userId");
 
@@ -99,6 +100,12 @@ func ( self *AudioUserHistoryController ) Update(){
 		self.FailJson( transacErr )
 		return
 	}
+
+	//添加记录
+	var dashboardService = service.GetDashboardServiceInstance()
+	var dashboardBase = base.NewDashboardBase()
+	dashboardBase.BrowseCount = count
+	dashboardService.AddCount(audioId,userId,dashboardBase)
 
 	self.Json( history )
 

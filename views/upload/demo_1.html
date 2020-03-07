@@ -2,7 +2,7 @@
 <html>
  <head> 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-  <title>jQuery Filer 1.0.4 | CreativeDream</title> 
+  <title>提交对应的信息</title> 
   <!--Stylesheets--> 
   <link href="css/jquery.filer.css" type="text/css" rel="stylesheet" /> 
   <link href="css/themes/jquery.filer-dragdropbox-theme.css" type="text/css" rel="stylesheet" /> 
@@ -59,7 +59,6 @@
   <div id="app"> 
    <form id="upload_form" action="/yinji/api/audio/upload" method="post" enctype="multipart/form-data"> 
     <!-- 多文件 ， 那么他的名字必须带有 audio --> 
-    <h2>{{ title }}</h2> 
     <section class="content"> 
      <!-- 文件的标题，名称 --> 
      <template v-for=" item in inputArr"> 
@@ -87,6 +86,9 @@
         new Vue({
             el:"#app",
             data:{
+                label:{
+                  
+                }
                 string:"hello , world",
                 title:"请输入对应的信息",
                 inputArr:[
@@ -103,7 +105,6 @@
                         //进行设置对应的信息
                         return;
                     }
-                    console.log( userId )
                     // 将 id 设置进入对应的 fromData
                     //插入userid
                     fromData.append("userId",userId);
@@ -117,7 +118,6 @@
                         processData: false,
                         async:true,
                         success:function( result , status , xhr ){
-
                             //等单曲信息也出来之后 ， 再进行对应的修改
                             window.location.href = "http://localhost:8080/yinji/page/pbl/main" +"?"+"userId="+ userId
                         },error:function( xhr , status , context , result ){

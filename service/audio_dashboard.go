@@ -160,6 +160,7 @@ func ( self *AudioDashboardService ) UpdateDashboardCount( o orm.Ormer , id int6
 	 	return nil , findErr
 	 }
 
+	 dashboard.Refresh()
 	 dashboard.Add(dashboardBase)
 
 	 var _ , updateErr = o.Update(dashboard)
