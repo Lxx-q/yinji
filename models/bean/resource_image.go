@@ -1,20 +1,34 @@
 package bean
 
-import "yinji/models/base"
+import (
+	"yinji/models/base"
+	"time"
+)
+
+const (
+	RESOURCE_IMAGE_ORIGIN_TYPE int = 0
+	RESOURCE_IMAGE_THUMB_TYPE  int = 1
+)
 
 type ResourceImage struct {
-	//还差一个对应的id值
 	base.IdStruct
-
-	Name string `orm:"column(name)" json:"name"`
-	OriginFile int64 `orm:"column(origin_file)" json:"origin_file"`
-	CompressFile30 int64 `orm:"column(compress_file_30)" json:"compress_file_30"`
-	CompressFile60 int64 `orm:"column(compress_file_60)" json:"compress_file_60"`
-	CompressFile80 int64 `orm:"column(compress_file_80)" json:"compress_file_80"`
-	//对应的信息
 	base.CreateTimeAndModifyTimeStruct
+	OriginResourceId int64 `orm:"column(origin_resource_id)" json:"originResourceId"`
+	ThumbResourceId int64 `orm:"column(thumb_resource_id)" json:"thumbResourceId"`
 }
 
+func ( self *ResourceImage) NewEntity( t time.Time ){
+	self.IdStruct.NewEntity( t )
+	self.CreateTimeAndModifyTimeStruct.NewEntity( t )
+}
+
+func ( self *ResourceImage ) New(){
+	var t = time.Now()
+	self.NewEntity( t )
+}
+
+
+//对应的信息
 func ( self *ResourceImage) TableName() string {
 	return GetResourceImageTableName()
 }
@@ -22,3 +36,4 @@ func ( self *ResourceImage) TableName() string {
 func GetResourceImageTableName() string{
 	return "resource_image"
 }
+

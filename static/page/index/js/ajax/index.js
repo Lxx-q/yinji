@@ -27,8 +27,8 @@ window.AJAX_HANDLER = {
 		new_data = data;
 		new_data.title = name;
 		new_data.artist = name;
-		new_data.mp3 = window.URL_SERVICE.buildUrl(data.url);
-		new_data.poster = window.URL_SERVICE.buildUrl(data.image);
+		new_data.mp3 = '/yinji/api/resource/audio/t?type=1&id=' + data.resourceAudioId;
+		new_data.poster = '/yinji/api/resource/image?type=1&id=' + data.resourceImageId;
 		new_data.img = new_data.poster;
 		new_data.time = this.formatTimeLength( data.timeLength)
 		

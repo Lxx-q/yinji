@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Text Input Effects | Set 1</title>
+		<meta name="description" content="Simple ideas for enhancing text input interactions" />
+		<meta name="keywords" content="input, text, effect, focus, transition, interaction, inspiration, web design" />
+		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/set1.css" />
+		<script src="js/vue.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.filer.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.filer-dragdropbox-theme.css" />
+		<link rel="stylesheet" type="text/css" href="css/tomorrow.css" />
+		<link rel="stylesheet" type="text/css" href="css/custom.css" />
+		<script type="text/javascript" src="js/utils.js"></script>
+		<script type="text/javascript" src="js/protocal.js"></script>
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<!--[if IE]>
+  		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<style>
+			.file-label{
+				text-align: left;
+				font-weight: 700;
+				margin: 10px 20px;
+			}
+			
+			.rp {
+				width: 50%;
+				height: 50%;
+				text-align: center;
+				position: fixed;
+				top: 25%;
+				left:25%;
+				background: rgba(0, 0, 0, 0.8);
+				display: none;
+				z-index: 9999;
+				overflow: hidden;
+			}
+			
+			.aname {
+				font-size: 16px;
+			}
+			
+			.ainf {
+				font-size: 12px;
+			}
+			
+			.rtime {
+				font-size: 22px;
+				color: #FF0000;
+			}
+			
+			.ptime {
+				margin-top: 40%;
+				font-size: 22px;
+				color: #FFFFFF;
+			}
+			
+			.rprogress {
+				background: url(img/arecord.png) no-repeat center center;
+				background-size: 32px 32px;
+			}
+			
+			.rschedule {
+				background-color: rgba(0, 0, 0, 0);
+				border: 5px solid rgba(0, 183, 229, 0.9);
+				opacity: .9;
+				border-left: 5px solid rgba(0, 0, 0, 0);
+				border-right: 5px solid rgba(0, 0, 0, 0);
+				border-radius: 50px;
+				box-shadow: 0 0 15px #2187e7;
+				width: 36px;
+				height: 36px;
+				margin: 0 auto;
+				-webkit-animation: spin 1s infinite linear;
+				animation: spin 1s infinite linear;
+			}
+			
+			@-webkit-keyframes spin {
+				0% {
+					-webkit-transform: rotate(0deg);
+				}
+			
+				100% {
+					-webkit-transform: rotate(360deg);
+				}
+			}
+			
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+			
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+			
+			.progress {
+				width: 90%;
+				background-color: #666;
+				margin: 0 5%;
+				border: 1px solid #222;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+			}
+			
+			.schedule {
+				width: 8px;
+				height: 8px;
+				margin: 1px 0;
+				background-color: #FFCC33;
+				-webkit-border-radius: 4px;
+				border-radius: 4px;
+				-webkit-transition: all 1s linear;
+				transition: all 1s linear;
+			}
+			
+			.stop {
+				width: 72px;
+				height: 72px;
+				background: url(img/astop.png) center center;
+				background-size: 72px 72px;
+				margin: auto;
+				-webkit-border-radius: 72px;
+				border-radius: 72px;
+			}
+			
+			.stop:active {
+				-webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5) inset;
+				box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5) inset;
+			}
+			
+			.iplay {
+				display: block;
+				background: no-repeat right center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABYCAYAAAADWlKCAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABZ0RVh0Q3JlYXRpb24gVGltZQAwOS8xMi8xM5w+I3MAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAAD9UlEQVR4nO2b3XETMRRGDwzvoYOkg5hRAVkqiKmAdIA7wHSQVECoALsC1gXciV0BTge4gvCwgnHk9d/+WF8m97ztxrlXs8fS1Urym6enJxwd3uZugPMcFyKGCxHDhYjhQsRwIWK4EDFciBguRAwXIoYLEcOFiOFCxHAhYrgQMVyIGC5EDBcihgsRw4WI4ULEcCFiuBAx3uVuwDGY2XtgCBTAALjc8tEFMAdKYBJC+HOK9nXBm5dwUM7MCmAEXDcMMQVuQwhlV23qC2khZjYAboGrjkLOgFEIYd5RvM6RrSFmdgs80J0MYqyHGFsSuR4S60TJ9vrwCEziZ+YhhGXy/xdU9aWgqjfnW+IsgEKtvkgJiUPUPfUyZsD42DoQ68+Y+p62AG6UhjAZITt6xopq3L9vGf+Gqh6dJX+S6ilKNaRkU8YCGLSVARBjDGLMdS5jbgkkhMQiWyejSGtEG2KsghopKoU++5AV68ZDcrvXYWTH8Pghdz1R6CHpN3MFDPsc02PsYcy1qy0nJ6uQOANKZz+jfcOUmd3H6W1jYo5RcvsqtikbuXtI+kBmBxbwz8DczMZtksdcsz1tOinZhMRxPF2bGh8R4gz4amZLMxu2aEqa8zq2LQs5e0j6EB8bLv6dAz/NrGwyjMWcj3vadjJyCimS60nLeFfAbzO7bfANT3MXLdvSmJxCBsl12VHcL8AyvpkfSpo7bdvJyCkkfQfocv5/Bnw3s/mBs6Y097aFzd7JPcv6T5dv5GtcAr/2TZN7yt0IGSE908k0+RS8FiEvhhd1yKEFUw5YAVBApoe0XQrZwgL4GEIY7pLRU+5G5OwhC57PZgbAsqPYK6rdxUMXC9Npbro8fzJy9pB0qll0FPcOuDhCRl3ubEvwOYWUyXXb5YoZ1X7GqMHSfZq7bNmWxuQUki5XnDdc+n4EPoUQiiabSzFnejKl7TJOY7IJid/iaXJ7fESIFfCNas+9zQNMc05zHnjIPctKx/mrA9egflCJGLd5eDFXukGWdddQYU+95PlDWVE97GXPeS+oivf6saBZCKHoM+8+cvcQ2NyhOwMmfW4SxdgTNs9oZd0tBAEhsRDfJbcvgbIPKTtOnNzlPnECAkPWP8xsTv3ZrJ1v2UfmuKDqGRt5QgjZ9kDWyd5D1iioP1U4P3KzqZYYY5v0om38rpDpIeCHrUFMCPjPEeSE/COetf3SU/i7EEL2GVUdSjXkGfGBfWDzIFsb/q93dRizU2R7yDr+o09R/GfRzsmRrSGvFRcihgsRw4WI4ULEcCFiuBAxXIgYLkQMFyKGCxHDhYjhQsRwIWK4EDFciBguRAwXIoYLEcOFiOFCxHAhYrgQMf4CVuqCm+17t3sAAAAASUVORK5CYII=);
+				background-size: 50px 44px;
+				-ms-touch-action: auto;
+			}
+			
+			.hideDiv{
+				display: none;
+			}
+	</style>
+	</head>
+	<body>
+		<div class="container container-fluid " id="app">
+			<template v-if="userId!=null">
+
+				<div :class="!successVoice?'':'hideDiv'">
+					
+					<!-- 使用录音文件上传 -->
+					<div id="play" class="rp">
+						<div id="ptime" class="ptime">{{ time.string }}/{{ totalTime.string }}</div><br />
+						<div id="progress" class="progress">
+							<div id="schedule" class="schedule"></div>
+						</div>
+						<br />
+						<div class="stop" @click="stopRecordVoice"></div>
+					</div>
+
+					<div id="record" class="rp">
+						<div style="width:100%;height:20%;"></div>
+						<div class="rprogress">
+							<div class="rschedule"></div>
+						</div>
+						<br />
+						<div id="rtime" class="rtime">{{ time.string }}</div><br />
+						<div class="stop" @click="stopRecord"></div>
+					</div>
+
+					<!-- 只有完成录音之后才会出现这个 -->
+					<template v-if="voiceStatus==voiceStatusDone">
+						<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.voice.againVoice"
+						 @click="startRecord" />
+						
+						<!-- 播放录音 -->
+						<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.voice.doneVoice" @click="playRecordVoice" />
+						
+						<!-- 使用录音文件上传 -->
+						<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.voice.useVoice" @click="clickVoiceDone"/>
+						
+					</template>
+					<template v-else>
+						<!-- 录音的页面样式 -->
+						<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.voice.readyVoice"
+						 @click="startRecord" />
+					</template>
+
+				</div>
+				<div :class="successVoice?'':'hideDiv'">
+					<div class="file-label" style="font-size: 26px">
+						请输入信息
+					</div>
+					<section class="content">
+						<form id="upload_form">
+							<span class="input input--ichiro"> <input class="input__field input__field--ichiro" type="text" id="input-25"
+								 name="name" :value="audio.name" /> <label class="input__label input__label--ichiro" for="input-25"> <span
+									 class="input__label-content input__label-content--ichiro">{{ label.name.html }}</span> </label> </span>
+							<span class="input input--ichiro"> <input class="input__field input__field--ichiro" type="text" id="input-26"
+								 name="introduction" :value="audio.introduction" /> <label class="input__label input__label--ichiro" for="input-26">
+									<span class="input__label-content input__label-content--ichiro">{{ label.introduction.html }}</span> </label>
+							</span>
+							<!-- 暂时放弃上传图片 -->
+							<!--
+							<div class="row">
+								<div class="col-md-12 col-sm-12 file-label">
+									{{ label.image.html }}
+								</div>
+								<input type="file" name="image" id="uploadImage" />
+							</div>
+							-->
+							<div class="row">
+								<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.submit.html"
+								 @click="clickBtnSub" />
+								 <!-- 返回对应的录音界面 -->
+								 <input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.voice.backToVoice"
+								  @click="backToVoicePage" />
+							</div>
+						</form>
+					</section>
+				</div>
+				<!-- -->
+			</template>
+			<template v-else="">
+				<div class="file-label" style="font-size: 26px;">
+					信息错误， 您暂未登录
+				</div>
+			</template>
+		</div>
+		<!-- /container -->
+		<script src="js/classie.js"></script>
+		<script>
+			(function() {
+				// trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+				if (!String.prototype.trim) {
+					(function() {
+						// Make sure we trim BOM and NBSP
+						var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+						String.prototype.trim = function() {
+							return this.replace(rtrim, '');
+						};
+					})();
+				}
+
+				[].slice.call(document.querySelectorAll('input.input__field')).forEach(function(inputEl) {
+					// in case the input is already filled..
+					if (inputEl.value.trim() !== '') {
+						classie.add(inputEl.parentNode, 'input--filled');
+					}
+
+					// events:
+					inputEl.addEventListener('focus', onInputFocus);
+					inputEl.addEventListener('blur', onInputBlur);
+				});
+
+				function onInputFocus(ev) {
+					classie.add(ev.target.parentNode, 'input--filled');
+				}
+
+				function onInputBlur(ev) {
+					if (ev.target.value.trim() === '') {
+						classie.remove(ev.target.parentNode, 'input--filled');
+					}
+				}
+			})();
+		</script>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {
+					playDiv: null, //播放的 div
+					recordDiv: null, //录音的 div
+					record: null, // 对应的录音类
+					chineseLabel: {
+						name: {
+							type: "text",
+							html: "名称",
+							placholder: "请输入对应的名称"
+						},
+						introduction: {
+							type: "textarea",
+							html: "简介",
+							placholder: "请简单的说两句哦"
+						},
+						image: {
+							html: "请上传图片",
+							placholder: "请上传一张图片"
+						},
+						voice: {
+							html: "请点击上传音频",
+							placholder: "请上传一份音频资源文件"
+						},
+						submit: {
+							html: "提交"
+						},
+						voice: {
+							readyVoice: "准备录音",
+							doneVoice: "播放录音",
+							useVoice:"使用录音",
+							backToVoice:"重新录音",
+							againVoice:"重新录音"
+						}
+					},
+					uploadAudioUrl: getServerUrl('api/audio/upload'),
+					updateAuidoUrl: getServerUrl('api/audio/update'),
+					updateAmrUrl:getServerUrl('api/audio/upload/amr'),
+					findAudioUrl: getServerUrl("api/audio/find/id"),
+					formId: "upload_form",
+					audio: {
+						name: "",
+						introduction: ""
+					},
+					successVoice: false, //是否录音已经完成 ， 我们默认为 不完成
+					voiceStatus: 0, //录音的状态 ， 0为还未录音 ， 1 为 录音中 2 为 录音完成
+					voiceStatusNo: 0, // 未录音
+					voiceStatusIng: 1, // 录音中
+					voiceStatusDone: 2, //已经录音完成
+					time: 0,
+					totalTime: 0,
+					timeCounter: null, //计时器 ， 记录对应的时间
+					voiceFileName:null,
+					player:null, //播放器 
+					durationTime:0, //对应的时间的长度
+					temp:"ss"
+					
+				},
+				methods: {
+					setTimeStru: function(t) { //设置 time
+						this.time = this.setTimeStruct(t);
+					},
+					setTotalTimeStru: function(t) { //设置全部的秒级别
+						this.totalTime = this.setTimeStruct(t)
+					},
+					setTimeStruct: function(time) {
+						var sec = time % 60;
+						var time_y_minu = Math.floor(time / 60);
+						var min = time_y_minu % 60;
+						var hour = Math.floor(time_y_minu / 60);
+						var t = time;
+
+						var secStr = sec;
+						var minStr = min;
+						var hourStr = hour
+
+						//设置对应的时间的 string 字符串
+						if (sec < 10) {
+							secStr = "0" + secStr;
+						}
+
+						if (min < 10) {
+							minStr = "0" + minStr;
+						}
+
+						if (hour < 10) {
+							hourStr = "0" + hourStr;
+						}
+
+						var string = hourStr + ":" + minStr + ":" + secStr;
+
+						return {
+							sec: sec, //秒
+							min: min, //分钟
+							hour: hour, //小时
+							t: t, //总秒级
+							string: string, //显示的字符串
+							temp: ""
+						};
+					},
+					ajaxUploadAudio: function(formData) { //上传音频
+						//上传对应的信息
+						this.uploadPlusForm();
+					},
+					clickBtnUpload: function() { //上传的点击事件入口
+						this.uploadPlusForm();
+					},
+					ajaxUpdateAudio: function(formData) {
+						var url = this.updateAuidoUrl;
+						var audioId = this.audioId;
+						formData.append("id", audioId);
+						var vue = this;
+						window.AJAX_ENGINE.ajax({
+							url: url,
+							data: formData,
+							dataType: "json",
+							type: "post",
+							contentType: false,
+							processData: false,
+							async: true,
+							success: function(res, status, xhr) {
+								//成功输出结果成功
+								vue.leave();
+							}
+
+						})
+					},
+					clickBtnUpdate: function() {
+						var id = this.formId;
+						var formEle = document.getElementById(id);
+						var formData = new FormData(formEle);
+						var audio = document.getElementById("uploadVoice");
+						var vue = this;
+						//接着我们使用下面的方法， 来获取， 该上传的音频文件的长度为多少 ， 并且将其上传 。 长度无法精确到毫秒， 因此只能精确到秒为止
+						var auidoFiles = audio.files;
+						if (auidoFiles.length != 0) {
+							var audioUrl = window.URL.createObjectURL(audio.files[0]);
+							var audioObject = new Audio(audioUrl);
+
+							var vue = this;
+							audioObject.onloadedmetadata = function() {
+								// 倘若有对应的信息在输出对应 的 信息
+								var audio_metadata = this;
+								var duration = audio_metadata.duration;
+								//获取时间长度
+								duration = Math.floor(duration);
+
+								formData.append("length", duration);
+								vue.ajaxUpdateAudio(formData);
+							}
+						} else {
+							vue.ajaxUpdateAudio(formData);
+						}
+					},clickVoiceDone:function(){ //当点击按钮的时候 ， 则设定 对应的上传音频完成
+						this.successVoice = true;
+					},backToVoicePage:function(){ //返回对应的录音页面
+						this.successVoice = false;
+					},uploadPlusForm:function(){
+						
+						//获取对应的信息 ， 包括对应的名称 ， 介绍 ， 长度 
+						var nameJq = $("#input-25")
+						var introductionJq = $("#input-26")
+						
+						var userId = this.userId + "";
+						var name = nameJq.val();
+						var len = this.durationTime + ""
+						var introduction = introductionJq.val();
+						
+						var url = this.updateAmrUrl;
+						var vue = this;
+						var task = plus.uploader.createUpload(url ,{
+							method:"POST",
+							blocksize:204800,
+							priority:100
+						},function( t , status ){
+							console.log("success upload  " + status + t.url)
+							vue.leave();
+						})
+						
+						
+						/**
+						 *  放弃上传图片
+						 */
+						
+						//添加名称
+						task.addData("name" , name);
+						//添加介绍
+						task.addData("introduction" , introduction);
+						task.addData("length",len);
+						task.addData("userId",userId);
+						task.addFile(this.voiceFileName,{key:"audio[]"});
+						
+						task.start();
+						
+					},clickBtnSub: function() {
+						//如果是 isUpload  , 那么便是上传 ， 否者 便是修改
+						if (this.isUpload) {
+							this.clickBtnUpload();
+						} else {
+							this.clickBtnUpdate();
+						}
+					},
+					findAudio: function() {
+						//获取对应的
+						var audioId = this.audioId;
+						var url = this.findAudioUrl;
+						var vue = this;
+						$(document).ready(function() {
+
+							window.AJAX_ENGINE.ajax({
+								url: url,
+								data: {
+									id: audioId
+								},
+								async: true,
+								success: function(res, status, xhr) {
+									vue.audio = res;
+								},
+								fail: function() {
+									vue.isUpload = true;
+								}
+							});
+						});
+
+
+					},
+					leave: function() {
+						window.location.href = "http://192.168.0.107:8080/yinji/page/pbl/main" + "?" + "userId" + "=" + this.userId;
+					},
+					plusReady: function() { //下面准备开始加载对应的页面上面的操作
+						plus.io.resolveLocalFileSystemURL('_doc/', function(entry) {
+							entry.getDirectory('audio', {
+								create: true
+							}, function(dir) {
+								gentry = dir;
+							}, function(e) {
+								outSet('Get directory "audio" failed: ' + e.message);
+							});
+						}, function(e) {
+							outSet('Resolve "_doc/" failed: ' + e.message);
+						});
+					},
+					initPlus: function() { //初始化信息
+						var plusReady = this.plusReady;
+					   document.addEventListener('plusready', plusReady, false);
+					},
+					startRecord: function() { //开始录音的函数
+						var uniApp = this;
+						this.voiceStatus = this.voiceStatusNo;
+						this.record = plus.audio.getRecorder();
+						
+						if (this.record == null) {
+							console.log("错误");
+							return;
+						}
+						
+						var uniApp = this;
+						
+						this.record.record({
+							filename: '_doc/audio/'
+						}, function( p ) { //录音成功的函数
+							console.log("helloworld");
+							uniApp.voiceFileName = p; // 设置对应的 录音文件
+						}, function(err) { //录音失败的函数
+							console.log("录音失败" + err.message );
+							uniApp.voiceStatus = uniApp.voiceStatusNo;
+						});
+						
+						this.showDiv(this.recordDiv);
+						
+						var time = 0;
+						this.timeCounter = setInterval(function() {
+							time++;
+							uniApp.setTimeStru( time );
+							uniApp.durationTime = time;
+						}, 1000);
+					},
+					stopRecord: function() { //停止录音
+						this.record.stop();//停止录音事件
+						this.voiceStatus = this.voiceStatusDone;
+						this.hideDiv( this.recordDiv );
+						clearInterval( this.timeCounter );
+						this.setTimeStru(0);
+					},playRecordVoice: function() { // 播放刚才的录音文件
+						var voiceFileName = this.voiceFileName;
+						var time = 0;
+						var vue = this;
+						vue.showDiv(vue.playDiv);
+						vue.timeCounter = setInterval(function() {
+							time++;
+							vue.setTimeStru( time )
+							var duration = Math.floor(player.getDuration());
+							vue.setTotalTimeStru( duration );
+							
+						}, 1000);
+						var player = plus.audio.createPlayer( voiceFileName );
+						player.play(function(){
+							//播放成功的情况
+							vue.stopRecordVoice();
+						},function(){
+							//播放失败的事件
+							vue.stopRecordVoice();
+						})
+						
+						this.player = player;
+					},stopRecordVoice:function(){
+						this.hideDiv( this.playDiv );
+						clearInterval( this.timeCounter );
+						this.setTimeStru(0);
+					},initJq: function() {
+						//初始化jquery 的事件
+						this.playDiv = $("#play");
+						this.recordDiv = $("#record");
+					},
+					showDiv: function(jqEle) {
+						jqEle.css("display", "block");
+					},
+					hideDiv: function(jqEle) {
+						jqEle.css("display", "none");
+					}
+				},
+				created: function() {
+					this.label = this.chineseLabel;
+					
+					this.userId = 2;
+					//下面开始调整对应的页面形式 ， 主要的意思就是是否录音前与录音后
+					this.successVoice = false;
+
+					this.initPlus();
+					//如果isUpload 等于 true  那么就是上传资源 ， 否则就是修改资源
+
+					if (this.audioId != null) {
+						this.isUpload = false;
+						// 如果不是 isupload  , 那么我们就可以访问对应的upload 信息
+						this.findAudio();
+					} else {
+						this.isUpload = true;
+					}
+
+					this.setTimeStru(0);
+					this.setTotalTimeStru(0);
+
+					var vue = this;
+					$(document).ready(function() {
+						//初始化信息
+						vue.initJq();
+					})
+
+				}
+			})
+		</script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.filer.min.js" type="text/javascript"></script>
+		<script src="js/prettify.js" type="text/javascript"></script>
+		<script src="js/scripts.js" type="text/javascript"></script>
+		<script src="js/custom.js" type="text/javascript"></script>
+	</body>
+</html>

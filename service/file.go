@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"bytes"
 	"path"
+	"strings"
 )
 
 /**
@@ -67,6 +68,13 @@ func ( self *FileService) Write( assembly DownloadAssembly, reader io.Reader ) e
 //获取文件后缀名
 func ( self *FileService) Ext( fileName string  ) string {
 	return path.Ext( fileName )
+}
+
+//获取文件的后缀名其他的信息
+func( self *FileService ) OnlyFileName( fileName string ) string {
+	var suffix = self.Ext( fileName )
+	var filenameOnly = strings.TrimSuffix(fileName, suffix)
+	return filenameOnly //
 }
 
 //这个东西 ， 掌握了如何进行 下载的目标

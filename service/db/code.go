@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"time"
 	"yinji/utils"
+	"fmt"
 )
 
 /*
@@ -24,6 +25,8 @@ func ( self *CodeService) BuildCode( targetType reflect.Type , t time.Time ) int
 	var number int64 = t.Unix() ;
 
 	var random = utils.Rann( 3 )
+	fmt.Println(number)
+	fmt.Println(random)
 	//将后面
 	return  right * number + int64( random );
 }

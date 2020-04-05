@@ -4,8 +4,8 @@ import (
 	"github.com/astaxie/beego/orm"
 	"math"
 	"math/rand"
-	"time"
 	"yinji/config"
+	"time"
 )
 
 func Limit( seter orm.QuerySeter ) orm.QuerySeter {
@@ -17,8 +17,9 @@ func Limit( seter orm.QuerySeter ) orm.QuerySeter {
 */
 func Rann( number  int) int64 {
 	//先获取最大数
-	rand.Seed(time.Now().Unix())
+	rd :=rand.New(rand.NewSource(time.Now().UnixNano()))
 	var maxCount = math.Pow10( number )
 	//输出任意数
-	return rand.Int63n( int64( maxCount ))
+	return rd.Int63n( int64( maxCount ))
 }
+

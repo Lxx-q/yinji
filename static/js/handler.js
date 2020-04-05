@@ -7,9 +7,6 @@ window.AUDIO_HANDLER = {
 
 		var image = newItem.image;
 
-		if( image == "" ){
-			image = "resources/image/none.jpg";
-		}
 
 		var modifyTime = this.parseTime( newItem.modifyTime );
 		var createTime = this.parseTime( newItem.createTime );
@@ -17,7 +14,7 @@ window.AUDIO_HANDLER = {
 		newItem.modifyTime = modifyTime;
 		newItem.createTime = createTime;
 
-		newItem.image = "/yinji" + "/" + image;
+		newItem.image = "/yinji/api/resource/image" + "?type=1&id=" + newItem.resourceImageId;
 
 		return newItem;
 	},parseTime:function( date ){

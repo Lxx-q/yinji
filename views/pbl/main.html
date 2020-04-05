@@ -44,7 +44,9 @@
 		</svg>
 		<main id="app">
 			<header class="codrops-header">
-				<h1 class="codrops-header__title">音频管理</h1>
+				<h1 class="codrops-header__title" style="cursor: pointer;" @click="backIndex">
+					回到主页
+				</h1>
 			</header>
 			<div class="content content--side">
 				<div class="control control--grids">
@@ -66,7 +68,8 @@
 					<template v-for=" ( item , index ) in items">
 						<div class="grid__item">
 						<div class="grid__link pater" :class=" index %2 == 0 ? 'pater--small':''">
-							<img class=" pater__img grid__img  ":src="item.image"  />
+							
+							<img class=" pater__img grid__img  ":src="item.image"></img>
 							<div class="pater__content">
 								<a :href="'/yinji/static/index.html#/pages/comments/comments?' + 'userId='+ userId + '&' + 'audioId' + '='+item.id " target="_blank">
 								<h2 class="pater__title" > {{ item.name }}</h2>

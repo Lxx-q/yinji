@@ -15,12 +15,6 @@ type HttpFileService struct {
 
 const RESOURCE_BAST_PATH = "static"
 
-/*
-const URL_AUDIO_PATH = "audio"
-
-const URL_IMAGE_PATH = "image"
-*/
-
 const URL_AUDIO_PATH = "resources/audio"
 
 const URL_IMAGE_AUDIO_PATH = "resources/image/audio"
@@ -38,6 +32,13 @@ func ( self *HttpFileService ) BuildServerPath( path string ) string {
 	return serverPath + "/" + path
 }
 
+/**
+	获取对应的amr 文件
+*/
+func ( self *HttpFileService ) GetAmrPath( file string ) string {
+	return self.GetAudioPath( file )
+}
+
 //得到的是返回的路径 ， 可成功 ， 可不成功
 func ( self * HttpFileService ) GetImagUserePath( path string ) string {
 	return  URL_IMAGE_USER_PATH + "/" + path
@@ -49,6 +50,13 @@ func ( self * HttpFileService ) GetImagePath( path string ) string {
 	return serverPath + "/" + URL_IMAGE_AUDIO_PATH + "/" + path
 }
 
+/**
+	获取对应的 auido 的 相对应的 资源地址
+ */
+func ( self *HttpFileService ) GetAudioRelaPath( path  string ) string {
+	return URL_AUDIO_PATH +"/" + path
+}
+
 func ( self * HttpFileService ) GetAudioPath( path string ) string{
 	var serverPath = self.GetServerPath()
 
@@ -58,8 +66,6 @@ func ( self * HttpFileService ) GetAudioPath( path string ) string{
 }
 
 func ( self *HttpFileService) GetAudioFileName( audio *bean.Audio ) string {
-	/*var fileName = strconv.FormatInt( audio.Id , 10 ) + ".mp3"
-	return fileName*/
 	return audio.Url
 }
 

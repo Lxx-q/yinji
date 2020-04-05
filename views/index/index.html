@@ -43,7 +43,7 @@
         <div class="form-group">
           <div class="input-group" >
             <span class="input-group-btn">
-              <button id="serachInputButton" class="btn btn-sm bg-white btn-icon rounded" @click="clickSearchButton"><i class="fa fa-search"></i></button>
+              <button id="serachInputButton" class="btn btn-sm bg-white btn-icon rounded" @click="clickSearchButton" @tap="clickSearchButton"><i class="fa fa-search"></i></button>
             </span>
             <!-- 对应目标搜索的 输入栏 -->
             <input id="searchInput" type="text" class="form-control input-sm no-border rounded" placeholder="Search songs, albums...">
@@ -100,60 +100,7 @@
                               </div>
 
                             </li>
-
-                            <!--
-
-                            <li><img src="images/beforeafter_3/316253jas.jpg" alt="images/beforeafter_3/316253jas.jpg" />
-                              <div id="textbox_13">
-                                <div id="logo_13" class="fadeleft"></div>
-                              </div>
-                              <div id="textbox_13" class="before">
-                                <div id="title_13" class="fadeup">Start in my life</div>
-                              </div>
-                              <div id="textbox_13" class="after">
-                                <div id="title_13" class="fadeup">Feel Fine!&nbsp;&nbsp;</div>
-                              </div>
-                              <div id="textbox_13b" class="after">
-                                <div id="title_13b" class="fadeup"><i>Make my day</i></div>
-                              </div>
-                              <div id="textbox_13c" class="after">
-                                <div id="title_13c" class="fadeup"><i>kami,my opp</i></div>
-                              </div>
-                            </li>
-                            <li><img src="images/beforeafter_3/315989.jpg" alt="images/beforeafter_3/315989.jpg" />
-                              <div id="textbox_code" class="after">
-                                <div id="code" class="fadeup"></div>
-                              </div>
-                              <div id="textbox_green" class="before">
-                                <div id="green" class="fadeleft"></div>
-                              </div>
-                              <div id="textbox_green2" class="after">
-                                <div id="green2" class="fade"></div>
-                              </div>
-                              <div id="textbox_fish">
-                                <div id="fish" class="fadedown"></div>
-                              </div>
-                              <div id="textbox_points" class="after">
-                                <div id="points" class="faderight"></div>
-                              </div>
-                              <div id="textbox_points" class="after">
-                                <div id="points" class="faderight"></div>
-                              </div>
-                              <div id="textbox_points" class="before">
-                                <div id="points" class="faderight"></div>
-                              </div>
-                              <div id="textbox_14c" class="after">
-                                <div id="title_14c" class="fadeup">We are</div>
-                              </div>
-                              <div id="textbox_14a" class="after">
-                                <div id="title_14" class="fadeup">freshline</div>
-                              </div>
-                              <div id="textbox_14b" class="before">
-                                <div id="title_14" class="fadeup">fresh</div>
-                              </div>
-                            </li>
-
-                            -->
+                            
 
                           </ul>
                         </div>
@@ -212,8 +159,10 @@
                       <div class="m-t-n-xxs">
                       
                       <template v-for="( item , index ) in links">
+
                       <!-- 下面便是设置对应的 信息的东西 -->
-                      <div class="item pos-rlt">
+                      <template v-if="isPc">
+                      <div class="item pos-rlt" v-if="item.status!=2" >
                           <a href="#" class="item-overlay active opacity wrapper-md font-xs" @click="clickLinks(item.link)">
                           <span class="block h3 font-bold text-info">{{ item.title }}</span>
                           <span class="text-muted">{{ item.text }}</span>
@@ -226,6 +175,24 @@
                           <img class="img-full" :src="item.image" alt="...">
                         </a>
                         </div>
+                        </template>
+                        <template v-else>
+                          <!-- 1 为 Pc  ， false 表示 -->
+                          <div class="item pos-rlt" v-if="item.status!=1" >
+                          <a href="#" class="item-overlay active opacity wrapper-md font-xs" @click="clickLinks(item.link)">
+                          <span class="block h3 font-bold text-info">{{ item.title }}</span>
+                          <span class="text-muted">{{ item.text }}</span>
+                          <span class="bottom wrapper-md block"> 
+                          <i class="icon-arrow-right i-lg pull-right" v-if="index % 2 == 0 "></i>
+                          <i class="icon-arrow-right i-lg pull-left" v-else></i>
+                          </span>
+                        </a>
+                          <a href="#">
+                          <img class="img-full" :src="item.image" alt="...">
+                        </a>
+                        </div>
+                        </template>
+
                       </template>
 
                         

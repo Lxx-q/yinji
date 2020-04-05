@@ -1,8 +1,8 @@
 package bean
 
 import (
-	"yinji/models/base"
-	"time"
+"yinji/models/base"
+"time"
 )
 
 //点赞类

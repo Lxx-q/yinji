@@ -41,6 +41,7 @@ func RegistOrm(){
 
 		//对应的信息
 		new(bean.Resource),
+		new(bean.HostResource),
 		new(bean.ResourceImage),
 		new(bean.ResourceAudio),
 

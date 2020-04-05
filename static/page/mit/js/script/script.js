@@ -131,7 +131,9 @@ new Vue({
                     dataType:"json",
                     success:function( result , status , xhr ){
                         var len = result;
+
                         vue.currentAudioPageLen = len / vue.currentAudioCount;
+                        console.log(vue.currentAudioPageLen);
                     }
                 });
             }
@@ -1018,6 +1020,12 @@ new Vue({
     created: function() {
         var vue = this;
         vue.init();
-        this.url = window.location.href;
+
+        var url = getServerUrl("page/index/main");
+        var userId = this.userId;
+        if( userId != null ){
+            url = url + "?userId=" +userId; 
+        }
+        this.url = url;
     }
 });

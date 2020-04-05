@@ -8,6 +8,8 @@ import (
 	"github.com/astaxie/beego/httplib"
 	"yinji/service/url"
 	"yinji/models/base"
+	"strconv"
+	"os"
 )
 
 type TestController struct {
@@ -55,6 +57,7 @@ func( controller *TestController) FindHtml(){
 }
 
 func ( self *TestController ) UploadImage(){
+
 	var file , fileHeader , getFileErr = self.GetFile("image")
 
 	if getFileErr !=  nil {
@@ -62,15 +65,16 @@ func ( self *TestController ) UploadImage(){
 		return
 	}
 
-	var httpFileService = service.GetHttpFileServiceInstance()
-	var filePath , uploadImageErr = httpFileService.UploadImage( fileHeader.Filename , file )
+	var hostResourceService = service.GetResourceImageServiceInstance()
+	var o = orm.NewOrm()
+	var filename = fileHeader.Filename
+	var resourceImage, uploadErr = hostResourceService.UploadImage( o ,filename  ,file)
 
-	if uploadImageErr != nil {
-		self.FailJson( uploadImageErr )
-		return
+	if uploadErr != nil {
+		self.String( uploadErr.Error() )
 	}
 
-	self.Json( filePath )
+	self.String(  strconv.FormatInt(resourceImage.Id , 10) )
 
 }
 
@@ -126,6 +130,10 @@ func (self *TestController) TestResourceRedirect(){
 	self.Redirect("/yinji/resources/image/none.jpg",302)
 }
 
+func ( self *TestController ) TestUploadPage(){
+	self.Resource("uploadFile.html")
+}
+
 func ( self *TestController ) TestDashboard(){
 	audioId , getAudioIdErr := self.GetInt64("audioId")
 
@@ -150,4 +158,79 @@ func ( self *TestController ) TestDashboard(){
 
 
 	self.Json( dashboardBase )
+}
+
+/**
+	将对应的 audio 的格式进行转化
+*/
+
+func ( self *TestController ) AudioFormatChange(){
+	var ormService = db.GetOrmServiceInstance()
+	var audioList []*bean.Audio
+	var resourceImageService = service.GetResourceImageServiceInstance()
+	var resourceAudioService = service.GetResourceAudioServiceInstance()
+	var httpFileService = service.GetHttpFileServiceInstance()
+	ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var qs = o.QueryTable("audio")
+		var _ , allErr = qs.All(&audioList)
+
+		if allErr != nil {
+			return nil , allErr
+		}
+		var audioLen = len(audioList)
+		for index:=0; index < audioLen ; index ++   {
+
+			var audio = audioList[index]
+			if audio.Image != "" {
+				var absImageFile = httpFileService.BuildServerPath(audio.Image)
+				var imageFile, imageErr = os.Open(absImageFile)
+				if imageErr != nil {
+
+				}
+				var resourceImage, _= resourceImageService.UploadImage(o, audio.Image, imageFile)
+				audio.ResourceImageId = resourceImage.Id
+			}
+
+			var absAudioFile = httpFileService.BuildServerPath(audio.Url)
+			var audioFile , audioErr = os.Open(absAudioFile)
+			if audioErr != nil {
+				continue
+			}
+			var resourceAudio , _ = resourceAudioService.UploadAudio( o , audio.Url , audioFile )
+			audio.ResourceAudioId = resourceAudio.Id
+			o.Update(audio)
+		}
+
+		return nil , allErr
+	})
+
+	self.Json(audioList)
+
+}
+
+/**
+
+*/
+
+func ( self *TestController) ChangeResourceAudioFormatChange(){
+
+	var ormService = db.GetOrmServiceInstance()
+
+	var resource_image_list []*bean.ResourceImage
+	ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var qt = o.QueryTable("resource_image")
+		qt.All(&resource_image_list)
+		var audioLen = len(resource_image_list)
+		for index:=0; index < audioLen ; index++ {
+			var resourceImage= resource_image_list[index]
+			if resourceImage.ThumbResourceId == 0 {
+				resourceImage.ThumbResourceId = resourceImage.OriginResourceId
+				o.Update(resourceImage)
+			}
+
+		}
+		return nil, nil
+	})
+
+	self.String("helloworld")
 }

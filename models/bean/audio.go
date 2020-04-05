@@ -16,6 +16,8 @@ type Audio struct {
 	//商业介绍
 	Introduction string `orm:"column(introduction)" json:"introduction"`
 	AudioAlbumId int64 `orm:"column(audio_album_id)" json:"audioAlbumId"`
+	ResourceImageId int64 `orm:"column(resource_image_id)" json:"resourceImageId"`
+	ResourceAudioId int64 `orm:"column(resource_audio_id)" json:"resourceAudioId"`
 
 	//EntityBase
 	base.IdAndCodeStruct

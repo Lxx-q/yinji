@@ -31,7 +31,7 @@ new Vue({
                     name: "Mekanın Sahibi",
                     artist: "Norm Ender",
                     cover: "t2.png",
-                    source: "mp3/2.amr",
+                    source: "mp3/2.mp3",
                     url: "#",
                     favorited: false,
                     from: FROM_SERVER

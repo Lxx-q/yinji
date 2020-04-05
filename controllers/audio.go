@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"yinji/models/bind"
 	"yinji/config"
+	"yinji/ffmpeg"
 )
 
 type AudioController struct {
@@ -82,7 +83,7 @@ func (self *AudioController) Delete() {
 		return
 	}
 
-	var httpFileService = service.GetHttpFileServiceInstance()
+	//var httpFileService = service.GetHttpFileServiceInstance()
 	var ormService = db.GetOrmServiceInstance()
 
 	//查询对应的 code 的 信息
@@ -108,21 +109,6 @@ func (self *AudioController) Delete() {
 			return audio , err
 		}
 
-		var absPath = httpFileService.GetAudioFileName( &audio )
-
-		var deleteAudioErr = httpFileService.Delete( absPath )
-
-		//删除文件夹错误
-		if deleteAudioErr != nil{
-			return audio , deleteAudioErr
-		}
-
-		//如果audio.Image 为空，我们则不进行删除
-		if audio.Image != "" {
-			//会返回对应的信息 ， 删除是否出现问题 ， 还不如被注意
-			var _ = httpFileService.Delete( audio.Image)
-
-		}
 		return nil , nil
 
 	})
@@ -147,7 +133,7 @@ const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION ="introduction"
 
 const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_USERID = "userId"
 
-const AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID = "id"
+const 	AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID = "id"
 
 
 
@@ -180,7 +166,7 @@ func (self *AudioController) AudioUpload() {
 	var instance = db.GetOrmServiceInstance()
 
 	//下面输入对应的信息
-	//audio.New()
+	audio.New()
 	audio.Name = name
 	audio.Image = ""
 	audio.UserId = userId
@@ -244,6 +230,326 @@ func (self *AudioController) AudioUpload() {
 	self.Json(audio);
 }
 
+/**
+ 	我们穿件新的上传接口
+ */
+func ( self *AudioController ) NewAudioUpload(){
+	var httpFileService = service.GetHttpFileServiceInstance()
+
+	var audio = new(bean.Audio)
+
+	var name = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_NAME)
+
+	var length , _ = self.GetInt( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_LENGTH )
+
+	var introduction = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION)
+
+	//获取对应的 userId 的 信息
+	var userId , getUserIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_USERID )
+
+	if getUserIdErr != nil {
+		//当出现 getUserId 的错误 ,
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	//获取对应相对应的 信息
+
+	var ormService = db.GetOrmServiceInstance()
+
+	//下面输入对应的信息
+	audio.New()
+	audio.Name = name
+	audio.Image = ""
+	audio.UserId = userId
+	audio.Url = ""
+	audio.TimeLength = length
+	audio.Introduction = introduction
+
+	//直接获取对应的 信息
+
+	var audioFile, audioHeader, getAudioErr = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO )
+
+	defer httpFileService.CloseMultipart(audioFile)
+
+	if( getAudioErr != nil ){
+		self.FailJson(getAudioErr)
+		return
+	}
+
+	//获取图片信息 ， 图片信息可为空
+	var imageFile , imageHeader , getImageErr = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_IMAGE )
+
+
+	var audioFilename = audioHeader.Filename
+
+	var resourceAudioService = service.GetResourceAudioServiceInstance()
+	var resourceImageService = service.GetResourceImageServiceInstance()
+
+	var _ , transacErr =ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var resourceAudio , uploadAudioErr = resourceAudioService.UploadAudio(o, audioFilename, audioFile)
+		if uploadAudioErr != nil {
+			self.FailJson( uploadAudioErr )
+			return nil, nil
+		}
+		audio.ResourceAudioId = resourceAudio.Id
+
+		if getImageErr == nil { //仅仅当有图片的时候才开始进行的操作
+			var imageFilename = imageHeader.Filename
+			var resourceImage , uploadImageErr = resourceImageService.UploadImage( o , imageFilename , imageFile )
+
+			if uploadImageErr != nil {
+				return nil, uploadImageErr
+			}
+
+			audio.ResourceImageId = resourceImage.Id
+		}
+
+		return o.Insert(audio)
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+	//若程序能到底此处，那么便说明程序的已经成功
+	self.Json( audio )
+
+}
+
+/**
+	新建修改的接口
+ */
+
+/**
+	我们穿件新的上传接口
+*/
+func ( self *AudioController ) NewAudioUpdate(){
+	var httpFileService = service.GetHttpFileServiceInstance()
+
+	var audioId , getAudioIdErr = self.GetInt64(AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_ID)
+	var ormService = db.GetOrmServiceInstance()
+	var audio = bean.Audio{}
+	audio.Id=audioId
+
+	if getAudioIdErr != nil {
+		self.FailJson( getAudioIdErr )
+		return
+	}
+
+	var audioFile, audioHeader, getAudioErr = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO )
+
+	defer httpFileService.CloseMultipart(audioFile)
+
+	//获取图片信息 ， 图片信息可为空
+	var imageFile , imageHeader , getImageErr = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_IMAGE )
+
+
+
+	var resourceAudioService = service.GetResourceAudioServiceInstance()
+	var resourceImageService = service.GetResourceImageServiceInstance()
+
+	var _ , transacErr =ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var readAudioErr = o.Read(&audio)
+		if readAudioErr != nil {
+			return nil , readAudioErr
+		}
+
+		if getAudioErr == nil {
+			var audioFilename = audioHeader.Filename
+			var resourceAudio= &bean.ResourceAudio{}
+			resourceAudio.Id = audio.ResourceAudioId
+
+			var readResourceAudioErr= o.Read(resourceAudio)
+
+			if readResourceAudioErr != nil {
+				return nil, readResourceAudioErr
+			}
+
+			var _, updateAudioErr= resourceAudioService.UpdateAudio(o, resourceAudio, audioFilename, audioFile)
+			if updateAudioErr != nil {
+				self.FailJson(updateAudioErr)
+				return nil, nil
+			}
+
+			var length , _ = self.GetInt( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_LENGTH )
+			audio.TimeLength = length
+			audio.ResourceAudioId = resourceAudio.Id
+		}
+
+		if getImageErr == nil { //仅仅当有图片的时候才开始进行的操作
+			var resourceImage = &bean.ResourceImage{}
+			resourceImage.Id = audio.ResourceImageId
+
+			var readResourceImageErr = o.Read(resourceImage)
+			var imageFilename= imageHeader.Filename
+			if readResourceImageErr != nil {
+				var uploadImageErr error
+				resourceImage , uploadImageErr = resourceImageService.UploadImage(o,imageFilename,imageFile)
+
+				if uploadImageErr != nil {
+					return nil , uploadImageErr
+				}
+
+			}else {
+
+
+				var updateImageErr error
+				resourceImage, updateImageErr = resourceImageService.UpdateImage(o, resourceImage, imageFilename, imageFile)
+
+				if updateImageErr != nil {
+					return nil, updateImageErr
+				}
+			}
+
+			audio.ResourceImageId = resourceImage.Id
+		}
+
+	var name = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_NAME)
+
+
+
+	var introduction = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION)
+
+	//获取对应相对应的 信息
+
+	//下面输入对应的信息
+	audio.Name = name
+	audio.Introduction = introduction
+	audio.Refresh()
+
+	//直接获取对应的 信息
+
+		return o.Update(&audio)
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+	//若程序能到底此处，那么便说明程序的已经成功
+	self.Json( audio )
+
+}
+
+
+/**
+	负责上传的信息
+*/
+func ( self *AudioController ) AudioUploadAmr(){
+
+	var httpFileService = service.GetHttpFileServiceInstance()
+	var fileService = service.GetFileServiceInstance()
+
+	var audio = new(bean.Audio)
+
+	var name = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_NAME)
+
+	var length , _ = self.GetInt( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_LENGTH )
+
+	var introduction = self.GetString(AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_INTRODUCTION)
+
+	//获取对应的 userId 的 信息
+	var userId , getUserIdErr = self.GetInt64( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_USERID )
+
+	if getUserIdErr != nil {
+		//当出现 getUserId 的错误 ,
+		self.FailJson( getUserIdErr )
+		return
+	}
+
+	//获取对应相对应的 信息
+
+	var instance = db.GetOrmServiceInstance()
+
+	//下面输入对应的信息
+	audio.Name = name
+	audio.Image = ""
+	audio.UserId = userId
+	audio.Url = ""
+	audio.TimeLength = length
+	audio.Introduction = introduction
+	audio.New()
+
+	//直接获取对应的 信息
+
+	var file , fileHeader ,  err = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARMTER_AUDIO )
+
+	defer httpFileService.CloseMultipart( file )
+
+	if( err != nil ){
+		self.FailJson( err )
+		return
+	}
+
+	var fileName = httpFileService.BuildAudioFileName(audio , fileHeader)
+
+	var audioUrl , uploadAudioErr = httpFileService.UploadAudio( fileName , file )
+
+	if uploadAudioErr != nil {
+		self.FailJson( err )
+		return
+	}
+
+	var onlyFileName = fileService.OnlyFileName( audioUrl ) // 获取对应的 only file 的名字
+
+	/**
+		注意这个与其他所不同的主要便是下面的代码
+		//想得到对应的两个路径（绝对） ，
+		 第一个 目标文件的路径 ，
+		 第二个 下载到文件的路径
+	 */
+	var mp3Rela = onlyFileName + ".mp3" //获取mp3 的相对应的路径
+
+	var amrAbs = httpFileService.BuildServerPath( audioUrl ) //获取对应的 amr 文件路径
+	var mp3Abs = httpFileService.BuildServerPath( mp3Rela )
+	var toErr = ffmpeg.AmrToMp3( amrAbs , mp3Abs )
+	if toErr != nil {
+		self.FailJson( toErr )
+		return
+	}
+
+	audio.Url = mp3Rela
+
+	// 暂时默认上传地址为默认的录音图片
+	audio.Image = "resources/image/voice.jpg"
+	/*
+	var imageFile , imageHeader , getImageErr = self.GetFile( AUDIO_CONTROL_AUDIOUPLOAD_PARAMTER_IMAGE )
+
+	//倘若 getImageErr 不为空 ， 才会顺便上传图片
+	if getImageErr == nil {
+
+		var newFileName = httpFileService.BuildAudioFileName(audio , imageHeader )
+
+		var uploadFilePath , uploadFileErr = httpFileService.UploadImage( newFileName , imageFile )
+
+		if uploadFileErr != nil {
+			self.FailJson(uploadFileErr)
+			return
+		}
+
+		audio.Image = uploadFilePath
+	}
+
+	*/
+
+
+
+	var audioService = service.GetAudioServiceInstance()
+
+	var _ , transacErr = instance.Transaction(func(o orm.Ormer) (interface{}, error) {
+		var newErr = audioService.New( o , audio )
+		return audio , newErr
+	})
+
+	if transacErr != nil {
+		self.FailJson( transacErr )
+		return
+	}
+
+	self.Json(audio);
+}
+
 
 func ( self *AudioController ) AudioUpdate() {
 	var httpFileService = service.GetHttpFileServiceInstance()
@@ -283,8 +589,6 @@ func ( self *AudioController ) AudioUpdate() {
 		//倘若不存在 ， 那么 ， 我们就跳过
 
 		var audioName = httpFileService.BuildAudioFileName( audio , audioFileHeader);
-
-		//var audioUrl = "audio/" + audioName
 
 		var audioUrl , _ = httpFileService.UploadAudio( audioName , audioFile )
 
@@ -339,6 +643,8 @@ func (self *AudioController) AudioUploadPage() {
 func( self * AudioController ) AudioUpdatePage(){
 	self.Resource("upload/demo_2.html")
 }
+
+
 
 //获取目标用户的
 func( self *AudioController) SearchAudioByUserId(){
@@ -597,3 +903,10 @@ func ( self *AudioController ) SearchMostBrowseAudio(){
 	//输出结果
 	self.Json( audioArr )
 }
+
+/**
+ 上传政策页面
+ */
+ func (self *AudioController) AudioPolice(){
+ 	self.Resource("police.html")
+ }

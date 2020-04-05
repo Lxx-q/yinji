@@ -62,6 +62,18 @@ func ( self *LoginController ) RegisterByAccount(){
 	//下面便开始数据库操作
 	var _ , transactionErr = ormService.Transaction(func(o orm.Ormer) (interface{}, error) {
 
+		var loginTemp = bean.Login{}
+
+		loginTemp.Acount = login.Acount
+
+		var readErr = o.Read( &loginTemp , "account")
+
+		if readErr == nil {
+			//倘若查找到了 ， 则直接退出
+			var err = errors.New(" account is exist ")
+			return nil , err
+		}
+
 		var _ , insertUserError = o.Insert( &user )
 
 		if insertUserError != nil {

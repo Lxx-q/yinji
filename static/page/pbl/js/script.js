@@ -12,7 +12,8 @@ new Vue({
 		//对应的分组信息
 		groups:[
 			{ name:"默认分组" , "id":null }
-		]
+		],page:0,
+		count:10
 	},methods:{
 
 		toAudioDetailsPage:function( item ){ //根据目标的 信息 ， 将结果导向目标页面的方法
@@ -26,8 +27,7 @@ new Vue({
 				return ;
 			}
 
-			//进入下一页
-			this.nextPage();
+			
 			//$.ajax({
 			window.AJAX_ENGINE.ajax({
 				url:"/yinji/api/audio/user",
@@ -35,8 +35,8 @@ new Vue({
 				dataType:"json",
 				data:{
 					userId:vue.userId,
-					startLimit:vue.startLimit,
-					endLimit:vue.endLimit
+					page:vue.page,
+					count:vue.count
 				},success:function( result , status , xhr ){
 
 					if( result.length != vue.space ){
@@ -46,6 +46,8 @@ new Vue({
 					var newItems = vue.loadAudio( result );
 
 					vue.items = vue.items.concat(newItems);
+					//进入下一页
+					vue.nextPage();
 
 				},error:function( xhr , status , error ){
 					alert("hello , world")
@@ -85,12 +87,21 @@ new Vue({
 		},intoPage:function( item ,  index ){
 			var id = item.id;
 			//暂时使用对应的方法 ， 来进行操作，主要是方便测试
-			window.open("/yinji/page/upload/update" + "?" + "id=" + id + "&" + "userId" + "=" + this.userId); 
+			window.open("/yinji/page/uploadnew/template.html" + "?" + "audioId=" + id + "&" + "userId" + "=" + this.userId); 
 		},nextPage:function(){
-			this.startLimit = this.endLimit;
-			this.endLimit = this.startLimit + this.space;
+			//this.startLimit = this.endLimit;
+			//this.endLimit = this.startLimit + this.space;
+			this.page = this.page + 1 ;
 		},initEvent:function(){
 			//初始化事件
+		},backIndex:function(){
+			//回到主页
+			var url = "/yinji/page/index/main";
+			var userId = this.userId;
+			if( userId != null ){
+				url = url + "?userId=" + userId;
+			}
+			window.location.href = url;
 		}
 	},created:function(){
 		var vue = this;

@@ -72,6 +72,9 @@ func init() {
 	beego.Router(app.GetUrl("/page/upload/audio1"),audio,"*:Audio1")
 	//详细页面
 	beego.Router(app.GetUrl("/page/details/main"),audioComment , "*:PageDetails")
+	beego.Router(app.GetUrl("/page/upload/test"),test_controller,"*:TestUploadPage")
+	//政策页面
+	beego.Router(app.GetUrl("/page/upload/police"),audio,"*:AudioPolice")
 	/**
 		对应的 api的接口
 	 */
@@ -94,8 +97,14 @@ func init() {
 	beego.Router(app.GetUrl("/api/user/update"),user , "*:UpdateUser")
 	//更新用户名与用户头像
 	beego.Router(app.GetUrl("/api/user/update/image/name"),user,"*:UpdateUserNameAndImage")
+	//上传对应的 amr 文件
+	beego.Router(app.GetUrl("/api/audio/upload/amr"),audio , "*:AudioUploadAmr")
 	//进行对应的上传页面的 api
 	beego.Router(app.GetUrl("/api/audio/upload"), audio, "*:AudioUpload")
+	//最新版本的 audio 新建方法
+	beego.Router(app.GetUrl("/api/audio/upload/new"),audio,"*:NewAudioUpload")
+	//最新版本的上传方法
+	beego.Router(app.GetUrl("/api/audio/update/new"),audio,"*:NewAudioUpdate")
 	//对应的修改页面的api
 	beego.Router(app.GetUrl("/api/audio/update"), audio, "*:AudioUpdate")
 	//进行目标用户下的 所有音频文件的信息
@@ -169,6 +178,14 @@ func init() {
 	beego.Router(app.GetUrl("/api/resource/image/path"),resource,"*:ResourcePath")
 	//输出音频资源文件
 	beego.Router( app.GetUrl("/api/resource/audio") , resource , "*:Audio")
+	//根据hostResource 资源文件
+	beego.Router( app.GetUrl( "/api/resource/host"),resource,"*:HostResource")
+	//根据对应的 resource 来进行搜索
+	beego.Router( app.GetUrl("/api/resource/id"),resource,"*:ResourceById")
+	//获取其对应的信息
+	beego.Router( app.GetUrl("/api/resource/image"),resource,"*:ResourceImage")
+	//根据对应的表来进行获取对应的信息
+	beego.Router( app.GetUrl( "/api/resource/audio/t"),resource,"*:ResourceAudio")
 	//api测试输出
 	beego.Router(app.GetUrl("/api/test"),test_controller,"*:ApiTest")
 	//根据id来进行查询对应的信息
@@ -194,5 +211,7 @@ func init() {
 	beego.Router(app.GetUrl("/test/audio/comments"),test_controller,"*:ApiAudioComment")
 	beego.Router(app.GetUrl("/test/resource/redirec"),test_controller,"*:TestResourceRedirect")
 	beego.Router(app.GetUrl("/test/dashboard/add"),test_controller,"*:TestDashboard")
+	beego.Router(app.GetUrl("/test/audio/change"),test_controller,"*:AudioFormatChange")
+	beego.Router(app.GetUrl("/test/resource/image/change"),test_controller,"*:ChangeResourceAudioFormatChange")
 
 }

@@ -1,79 +1,79 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Text Input Effects | Set 1</title>
-		<meta name="description" content="Simple ideas for enhancing text input interactions" />
-		<meta name="keywords" content="input, text, effect, focus, transition, interaction, inspiration, web design" />
-		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
-		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/demo.css" />
-		<link rel="stylesheet" type="text/css" href="css/set1.css" />
-		<script src="js/vue.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.filer.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.filer-dragdropbox-theme.css">
-    <link rel="stylesheet" type="text/css" href="css/tomorrow.css">
-    <link rel="stylesheet" type="text/css" href="css/custom.css">
-    <script type="text/javascript" src="/yinji/js/utils.js"></script>
-  	<script type="text/javascript" src="/yinji/js/protocal.js"></script>
-		<!--[if IE]>
+ <head> 
+  <meta charset="UTF-8" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+  <title>Text Input Effects | Set 1</title> 
+  <meta name="description" content="Simple ideas for enhancing text input interactions" /> 
+  <meta name="keywords" content="input, text, effect, focus, transition, interaction, inspiration, web design" /> 
+  <link rel="stylesheet" type="text/css" href="css/normalize.css" /> 
+  <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/demo.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/set1.css" /> 
+  <script src="js/vue.min.js"></script> 
+  <link rel="stylesheet" type="text/css" href="css/reset.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/jquery.filer.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/jquery.filer-dragdropbox-theme.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/tomorrow.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/custom.css" /> 
+  <script type="text/javascript" src="/yinji/js/utils.js"></script> 
+  <script type="text/javascript" src="/yinji/js/protocal.js"></script> 
+  <script src="js/jquery-2.1.1.min.js"></script> 
+  <!--[if IE]>
   		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<style>
+		<![endif]--> 
+  <style>
 			.file-label{
 				text-align: left;
 				font-weight: 700;
 				margin: 10px 20px;
 			}
-		</style>
-	</head>
-	<body>
-	
-		<div class="container container-fluid " id="app">
-			<template v-if="userId!=null">
-
-			<div class="file-label" style="font-size: 26px"> 请输入信息 </div>
-			<section class="content">
-				<form id="upload_form">
-				<span class="input input--ichiro" >
-					<input class="input__field input__field--ichiro" type="text" id="input-25" name="name" />
-					<label class="input__label input__label--ichiro" for="input-25">
-						<span class="input__label-content input__label-content--ichiro">{{ label.name.html }}</span>
-					</label>
-				</span>
-				<span class="input input--ichiro">
-					<input class="input__field input__field--ichiro" type="text" id="input-26" name="introduction" />
-					<label class="input__label input__label--ichiro" for="input-26">
-						<span class="input__label-content input__label-content--ichiro">{{ label.introduction.html }}</span>
-					</label>
-				</span>
-
-				<div class="row" >
-					<div class="col-md-12 col-sm-12 file-label">{{ label.image.html }}</div>
-					<input type="file" name="image" id="uploadImage" >
-				</div>
-				<div class="row">
-					<div class="col-md-12 col-sm-12 file-label">{{ label.voice.html }}</div>
-					<input type="file" name="audio[]" id="uploadVoice" >
-				</div>
-
-				<div class="row">
-					<input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.submit.html" @click="clickBtnSub">
-				</div>
-				</form>
-			</section>
-			</template>
-			<template v-else>
-				<div class="file-label" style="font-size: 26px;">信息错误， 您暂未登录</div>
-			</template>
-			
-		</div><!-- /container -->
-		<script src="js/classie.js"></script>
-		<script>
+		</style> 
+ </head> 
+ <body> 
+  <div class="container container-fluid " id="app"> 
+   <template v-if="userId!=null"> 
+    <div class="file-label" style="font-size: 26px">
+      请输入信息 
+    </div> 
+    <section class="content"> 
+     <form id="upload_form"> 
+      <span class="input input--ichiro"> <input class="input__field input__field--ichiro" type="text" id="input-25" name="name" :value="audio.name" /> <label class="input__label input__label--ichiro" for="input-25"> <span class="input__label-content input__label-content--ichiro">{{ label.name.html }}</span> </label> </span> 
+      <span class="input input--ichiro"> <input class="input__field input__field--ichiro" type="text" id="input-26" name="introduction" :value="audio.introduction" /> <label class="input__label input__label--ichiro" for="input-26"> <span class="input__label-content input__label-content--ichiro">{{ label.introduction.html }}</span> </label> </span> 
+      <div class="row"> 
+       <div class="col-md-12 col-sm-12 file-label">
+        {{ label.image.html }}
+       </div> 
+       <input type="file" name="image" id="uploadImage" /> 
+      </div> 
+      <div class="row"> 
+       <div class="col-md-12 col-sm-12 file-label">
+        {{ label.voice.html }}
+       </div> 
+       <input type="file" name="audio[]" id="uploadVoice" /> 
+      </div> 
+      <div class="row">
+      	<div class="col-md-12 col-sm-12 file-label">
+      		上传前请先查看<a target="_blank" href="/yinji/page/upload/police">《音迹上传政策》</a>
+      	</div>
+      </div>
+      <div class="row"> 
+       <input type="button" style="width: 80%;height:40px;margin: 30px 0px" class="btn-custom green" :value="label.submit.html" @click="clickBtnSub" /> 
+      </div> 
+     </form> 
+    </section> 
+   </template> 
+   <template v-else=""> 
+    <div class="file-label" style="font-size: 26px;">
+     信息错误， 您暂未登录
+    </div> 
+   </template> 
+  </div>
+  <!-- /container --> 
+  <script src="js/classie.js"></script> 
+  <script>
 			(function() {
 				// trim polyfill : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
 				if (!String.prototype.trim) {
@@ -107,8 +107,8 @@
 					}
 				}
 			})();
-		</script>
-		<script>
+		</script> 
+  <script>
 			new Vue({
 				el:"#app",
 				data:{
@@ -130,9 +130,14 @@
 						},submit:{
 							html:"提交"
 						}
-					},uploadAudioUrl:getServerUrl('api/audio/upload'),
-					updateAuidoUrl:getServerUrl('api/audio/update'),
-					formId:"upload_form"
+					},uploadAudioUrl:getServerUrl('api/audio/upload/new'),
+					updateAuidoUrl:getServerUrl('api/audio/update/new'),
+					findAudioUrl:getServerUrl("api/audio/find/id"),
+					formId:"upload_form",
+					audio:{
+						name:"",
+						introduction:""
+					}
 				},methods:{
 					ajaxUploadAudio:function( formData ){ //上传音频
 						var userId = this.userId;
@@ -149,6 +154,7 @@
                         	async:true,
                         	success:function( res , status , xhr ){
                         		//成功输出结果成功
+                        		vue.leave();
 
                         	}
 
@@ -158,11 +164,22 @@
 						var formEle = document.getElementById(id);
 						console.log(formEle)
 						var formData = new FormData( formEle );
-						console.log( formData)
+
+						var name = formData.get("name");
+
+						if(name == "" ){
+							alert("请输入名称");
+							return ;
+						}
+
 						var audio = document.getElementById("uploadVoice");
+						/*var filesLen = audio.files.length;
+						if ( filesLen == 0 ){
+							alert("至少需要上传一个文件资源");
+						}*/
+						var audioFile = audio.files[0];
 						//接着我们使用下面的方法， 来获取， 该上传的音频文件的长度为多少 ， 并且将其上传 。 长度无法精确到毫秒， 因此只能精确到秒为止
-                    	var audioUrl = window.URL.createObjectURL(audio.files[0]);
-                    	console.log( audioUrl )
+                    	var audioUrl = window.URL.createObjectURL(audioFile);
                     	var audioObject = new Audio( audioUrl );
 
                     	var vue = this;
@@ -192,17 +209,16 @@
                         	async:true,
                         	success:function( res , status , xhr ){
                         		//成功输出结果成功
-
+                        		vue.leave();
                         	}
 
 						})
 					},clickBtnUpdate:function(){
 						var id = this.formId;
 						var formEle = document.getElementById(id);
-						console.log(formEle)
 						var formData = new FormData( formEle );
-						console.log( formData)
 						var audio = document.getElementById("uploadVoice");
+						var vue = this;
 						//接着我们使用下面的方法， 来获取， 该上传的音频文件的长度为多少 ， 并且将其上传 。 长度无法精确到毫秒， 因此只能精确到秒为止
 						var auidoFiles = audio.files;
 						if( auidoFiles.length != 0 ){
@@ -230,6 +246,29 @@
 						}else{
 							this.clickBtnUpdate();
 						}
+					},findAudio:function(){
+						//获取对应的
+						var audioId = this.audioId;
+						var url = this.findAudioUrl;
+						var vue = this;
+						$(document).ready(function(){
+
+							window.AJAX_ENGINE.ajax({
+							url:url,
+							data:{
+								id:audioId
+							},async:true,
+							success:function( res , status , xhr ){
+								vue.audio = res;
+							},fail:function(){
+								vue.isUpload = true;
+							}
+							});
+						});
+						
+
+					},leave:function(){
+						window.location.href = "/yinji/page/pbl/main"+ "?" + "userId" + "=" + this.userId;
 					}
 				},created:function(){
 					this.label = this.chineseLabel;
@@ -239,17 +278,18 @@
 
 					if( this.audioId != null ){
 						this.isUpload = false;
+						// 如果不是 isupload  , 那么我们就可以访问对应的upload 信息
+						this.findAudio();
 					}else{
 						this.isUpload = true;
 					}
 				}
 			})
-		</script>
-	<script src="js/jquery-2.1.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.filer.min.js" type="text/javascript"></script>
-    <script src="js/prettify.js" type="text/javascript"></script>
-    <script src="js/scripts.js" type="text/javascript"></script>
-    <script src="js/custom.js" type="text/javascript"></script>
-	</body>
+		</script> 
+  <script src="js/bootstrap.min.js"></script> 
+  <script src="js/jquery.filer.min.js" type="text/javascript"></script> 
+  <script src="js/prettify.js" type="text/javascript"></script> 
+  <script src="js/scripts.js" type="text/javascript"></script> 
+  <script src="js/custom.js" type="text/javascript"></script>   
+ </body>
 </html>
